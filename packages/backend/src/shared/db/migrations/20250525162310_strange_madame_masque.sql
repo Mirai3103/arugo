@@ -1,0 +1,1 @@
+ALTER TABLE "submissions" ADD COLUMN "running_testcase_count" integer DEFAULT 0 NOT NULL;

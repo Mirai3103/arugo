@@ -1,0 +1,25 @@
+{
+	"name": "server",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"devDependencies": {
+		"@repo/eslint-config": "workspace:*",
+		"@repo/trpc": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@repo/auth": "workspace:*",
+		"@types/bun": "latest"
+	},
+	"scripts": {
+		"dev": "bun run src/index.ts",
+		"build": "bun build src/index.ts --outdir dist --target bun",
+		"start": "bun dist/index.js"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@hono/trpc-server": "^0.3.4",
+		"hono": "^4.7.10"
+	}
+}
