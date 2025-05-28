@@ -17,13 +17,13 @@ export const env = createEnv({
 		NATS_SERVER_URL: z.string().url(),
 	},
 	client: {
-		PUBLIC_SERVER_URL: z.string().url().default("http://localhost:8080"),
+		VITE_SERVER_URL: z.string().url().default("http://localhost:8080"),
 	},
 	/**
 	 * The prefix that client-side variables must have. This is enforced both at
 	 * a type-level and at runtime.
 	 */
-	clientPrefix: "PUBLIC_",
+	clientPrefix: "VITE_",
 
 	// client: {
 	// 	VITE_APP_TITLE: z.string().min(1).optional(),

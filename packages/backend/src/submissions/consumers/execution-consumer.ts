@@ -1,7 +1,7 @@
-import { executionResultSchema } from "@/validations/executionSchema";
+import { executionResultSchema } from "../validations/executionSchema";
 import submissionService from "../submissionService";
-import { natsClient } from "@/server/shared/nats/nats-client";
-import { EVENT_TYPES } from "@/server/shared/constants/event-types";
+import { natsClient } from "@/shared/nats/nats-client";
+import { EVENT_TYPES } from "@/shared/constants/event-types";
 
 export function startExecutionSubscriber() {
 	console.log("startExecutionSubscriber");

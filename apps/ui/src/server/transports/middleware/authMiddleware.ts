@@ -1,0 +1,31 @@
+import { getSession } from "@/libs/auth/client";
+import { createMiddleware } from "@tanstack/react-start";
+import { getHeaders } from "@tanstack/react-start/server";
+
+export const authMiddleware = createMiddleware().server(async ({ next }) => {
+	const session = await getSession({
+		fetchOptions: {
+			headers: getHeaders() as HeadersInit,
+		},
+	});
+	return await next({
+		context: {
+			user: session.data?.user
+				? {
+						id: session.data.user.id,
+						email: session.data.user.email,
+					}
+				: null,
+		},
+	});
+});
+
+export const requireMiddleware = createMiddleware()
+	.middleware([authMiddleware])
+	.server(async ({ next, context }) => {
+		const { user } = context;
+		if (!user) throw new Error("Unauthorized");
+		return await next({
+			context,
+		});
+	});

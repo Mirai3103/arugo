@@ -5,7 +5,8 @@
 	"private": true,
 	"exports": {
 		"./db": "./src/shared/db/index.ts",
-		"./schema": "./src/shared/db/schema/index.ts"
+		"./schema": "./src/shared/db/schema/index.ts",
+		"./*": "./src/*.ts"	
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.27.0",

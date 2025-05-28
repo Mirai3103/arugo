@@ -3,14 +3,17 @@
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import type { AuthType } from "@repo/auth/server";
 
 
 
-export const createTRPCContext = async (/*opts: { headers: Headers }*/) => {
-//   return {
-//     ...opts,
-//   };
+export const createTRPCContext = async (opts: { headers: Headers, auth:AuthType }) => {
+  return {
+    ...opts
+  };
 };
+export type CreateTRPCContext = ReturnType<typeof createTRPCContext>;
+export type CreateTRPCContextOptions = Parameters<typeof createTRPCContext>[0];
 
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
