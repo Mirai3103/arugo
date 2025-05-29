@@ -19,7 +19,7 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
-import { Link, createFileRoute, redirect } from "@tanstack/react-router";
+import { Link, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import {
@@ -253,7 +253,7 @@ function SignupPage() {
 	);
 }
 
-export const Route = createFileRoute("/_home/signup")({
+export const Route = createFileRoute({
 	component: SignupPage,
 	async beforeLoad() {
 		const session = await getServerSession();

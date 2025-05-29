@@ -22,7 +22,7 @@ import {
 	chakra,
 	useBreakpointValue,
 } from "@chakra-ui/react";
-import { createFileRoute } from "@tanstack/react-router";
+import { } from "@tanstack/react-router";
 import type React from "react"; // Ensure React is imported
 import { FaCrown, FaMedal } from "react-icons/fa"; // For medals
 import {
@@ -588,7 +588,7 @@ function ContestPage() {
 }
 // --- END: Contest Page Component ---
 
-export const Route = createFileRoute("/_home/contests")({
+export const Route = createFileRoute({
 	// Adjust route as needed
 	component: ContestPage,
 });

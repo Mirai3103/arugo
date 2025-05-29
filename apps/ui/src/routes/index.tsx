@@ -1,5 +1,4 @@
-import {
-	Box,
+import { Box,
 	Button,
 	Container,
 	Separator as Divider,
@@ -14,7 +13,7 @@ import {
 	VStack,
 	chakra,
 } from "@chakra-ui/react";
-import { Link, createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { getServerSession } from "@/server/transports/server-functions/auth";
@@ -503,7 +502,7 @@ function Landing() {
 	);
 }
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute({
 	component: Landing,
 
 	loader: async () => {

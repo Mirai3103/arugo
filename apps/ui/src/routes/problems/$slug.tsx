@@ -34,7 +34,7 @@ import {
 	Wrap,
 	useBreakpointValue,
 } from "@chakra-ui/react";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { generateHTML } from "@tiptap/html";
 import React from "react";
 import {
@@ -579,7 +579,7 @@ function RouteComponent() {
 	);
 }
 
-export const Route = createFileRoute("/problems/$slug")({
+export const Route = createFileRoute({
 	loader: async ({ params, context }) => {
 		const { slug } = params;
 		const session = await getServerSession();

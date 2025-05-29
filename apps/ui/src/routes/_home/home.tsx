@@ -25,7 +25,7 @@ import {
 	chakra,
 	useBreakpointValue,
 } from "@chakra-ui/react";
-import { createFileRoute } from "@tanstack/react-router";
+import { } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { Suspense } from "react";
 import {
@@ -522,7 +522,7 @@ function HomePage() {
 		</Container>
 	);
 }
-export const Route = createFileRoute("/_home/home")({
+export const Route = createFileRoute({
 	validateSearch: zodValidator(problemQuerySchema),
 	loaderDeps: ({ search }) => search,
 	async loader({ context, deps }) {

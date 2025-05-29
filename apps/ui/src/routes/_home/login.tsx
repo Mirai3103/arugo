@@ -19,7 +19,7 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
-import { Link, createFileRoute, redirect } from "@tanstack/react-router";
+import { Link, redirect } from "@tanstack/react-router";
 import { useState } from "react"; // Added React import
 import { FaGoogle } from "react-icons/fa";
 import {
@@ -203,7 +203,7 @@ function LoginPage() {
 	);
 }
 
-export const Route = createFileRoute("/_home/login")({
+export const Route = createFileRoute({
 	// Assuming '/login' is the route
 	component: LoginPage,
 	async beforeLoad(_ctx) {

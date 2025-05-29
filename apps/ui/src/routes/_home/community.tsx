@@ -34,7 +34,7 @@ import {
 	createListCollection,
 	useBreakpointValue,
 } from "@chakra-ui/react";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import type React from "react";
 import { useState } from "react";
 import { FaAward, FaCrown, FaMedal, FaRegCommentDots } from "react-icons/fa";
@@ -860,7 +860,7 @@ function CommunityPage() {
 	);
 }
 
-export const Route = createFileRoute("/_home/community")({
+export const Route = createFileRoute({
 	// Adjust this route as needed
 	component: CommunityPage,
 });
