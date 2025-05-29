@@ -3,7 +3,7 @@ import CodeEditorArea from "@/components/features/solving/CodeEditorArea";
 import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode"; // Assuming this path is correct for the project
 import { Prose } from "@/components/ui/prose";
 import { DEFAULT_EXTENSIONS } from "@/libs/tiptap/extension";
-import type { ProblemSampleTestCase } from "@/server/modules/problems/problemService";
+import type { ProblemSampleTestCase } from "@repo/backend/problems/problemService";
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import { getProblemBySlug } from "@/server/transports/server-functions/problem";
 import {
@@ -99,7 +99,7 @@ const PageHeader = () => {
 const ProblemDescriptionPanel = () => {
 	const { problem } = Route.useLoaderData();
 	const problemStatement = React.useMemo(() => {
-		return generateHTML(problem.statement, DEFAULT_EXTENSIONS);
+		return generateHTML(problem.statement as JSON, DEFAULT_EXTENSIONS);
 	}, [problem.statement]);
 	const editorial = React.useMemo(() => {
 		return generateHTML(
@@ -155,12 +155,12 @@ const ProblemDescriptionPanel = () => {
 									</Text>
 									<Badge
 										colorPalette={
-											DIFFICULTY_COLORS_PALATE[problem.difficultyLevel]
+											DIFFICULTY_COLORS_PALATE[problem.difficultyLevel!]
 										}
 										variant="solid"
 										fontSize="xs"
 									>
-										{DIFFICULTY_LABELS[problem.difficultyLevel]}
+										{DIFFICULTY_LABELS[problem.difficultyLevel!]}
 									</Badge>
 								</HStack>
 								<HStack justifyContent="space-between">

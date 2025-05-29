@@ -8,7 +8,6 @@
      "outputs": [
         "dist/**",      
         "build/**",   
-        "dist/**",      
         "!.turbo/**"    
       ]
     },
@@ -18,9 +17,15 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+	 "build:dev": {
+      "dependsOn": ["^build:dev"],
+      "outputs": ["dist/**"]
+    },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+	  "dependsOn": ["build:dev"]
+	
     }
   }
 }

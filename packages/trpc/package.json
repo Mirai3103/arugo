@@ -32,5 +32,10 @@
     "server-only": "^0.0.1",
     "superjson": "^2.2.2",
     "zod": "^3.25.32"
-  }
+  },
+
+	"scripts": {
+		"build": "mkdir -p dist",
+		"build:dev": "mkdir -p dist"
+	}
 }

@@ -18,5 +18,9 @@
 	},
 	"dependencies": {
 		"better-auth": "^1.2.8"
+	},
+	"scripts": {
+		"build": "mkdir -p dist",
+		"build:dev": "mkdir -p dist"
 	}
 }

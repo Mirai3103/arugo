@@ -1,6 +1,6 @@
 import { toaster } from "@/components/ui/toaster";
 import { getTestSubmissionMutationOptions } from "@/libs/queries/submission";
-import type { FullProblem } from "@/server/modules/problems/problemService";
+import type { FullProblem } from "@repo/backend/problems/problemService";
 import { usePromiseStore } from "@/stores/usePromiseStore";
 import { useMutation } from "@tanstack/react-query";
 

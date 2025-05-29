@@ -5,7 +5,8 @@
     "**/*.tsx",
   ],
   "exclude": [
-    "node_modules"
+    "node_modules","dist",
+    "build",
   ],
   "compilerOptions": {
      "paths": {
@@ -13,7 +14,6 @@
     },
     "baseUrl": ".",
     "outDir": "./dist",
-    "rootDir": "./src",
     "module": "esnext",
     "moduleResolution": "bundler",
     "target": "esnext",

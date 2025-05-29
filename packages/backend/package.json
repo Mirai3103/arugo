@@ -6,10 +6,23 @@
 	"types": "dist/index.d.ts",
 	"private": true,
 	"exports": {
-		"./db": "./src/shared/db/index.ts",
-		"./schema": "./src/shared/db/schema/index.ts",
-		"./*": "./src/*.ts"	
+		"./db": {
+			"import": "./dist/shared/db/index.js",
+			"types": "./dist/shared/db/index.d.ts"
+		},
+		"./schema": {
+			"import": "./dist/shared/db/schema/index.js",
+			"types": "./dist/shared/db/schema/index.d.ts"
+		},
+		"./*": {
+			"import": "./dist/*.js",
+			"types": "./dist/*.d.ts"
+		}
 	},
+	"files": [
+		"dist",
+		"src"
+	],
 	"devDependencies": {
 		"@eslint/js": "^9.27.0",
 		"@faker-js/faker": "^9.8.0",
@@ -40,7 +53,9 @@
 		"drizzle:generate": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts generate",
 		"drizzle:migrate": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts migrate",
 		"drizzle:studio": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts studio",
-		"build": "tsc --build --verbose"
+		"build": "tsup",
+		"build:dev": "tsup "
+		
 	},
 	"imports": {
 		"#/*": "./src/*"
