@@ -1,5 +1,5 @@
 import tagService from "@repo/backend/problems/tagService";
-import { createTagSchema, updateTagSchema } from "@/validations/tag";
+import { createTagSchema, updateTagSchema } from "@repo/backend/problems/validations/tag";
 import { createServerFn } from "@tanstack/react-start";
 
 import { z } from "zod";

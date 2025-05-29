@@ -1,14 +1,14 @@
-import db from "@/shared/db";
+import db from "#/shared/db";
 import type { ProblemFields, ProblemQuerySchema } from "./validations/problem";
 import {
-	type Tag,
-	languages,
-	problemLanguages,
-	problemTags,
-	problems,
-	tags,
-	testcases,
-} from "@/shared/db/schema";
+    type Tag,
+    languages,
+    problemLanguages,
+    problemTags,
+    problems,
+    tags,
+    testcases,
+} from "#/shared/db/schema";
 import { and, asc, count, desc, eq, ilike, inArray, sql } from "drizzle-orm";
 
 async function getAllProblems(params: ProblemQuerySchema) {

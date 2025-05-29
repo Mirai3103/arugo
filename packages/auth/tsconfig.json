@@ -8,9 +8,7 @@
     "node_modules"
   ],
   "compilerOptions": {
-     "paths": {
-      "@/*": ["./src/*"],
-     }
+   
   }
   
 }

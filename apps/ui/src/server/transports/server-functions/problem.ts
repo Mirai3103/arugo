@@ -1,5 +1,5 @@
 import problemService from "@repo/backend/problems/problemService";
-import { problemQuerySchema } from "@/validations/problem";
+import { problemQuerySchema } from "@repo/backend/problems/validations/problem";
 import { createServerFn } from "@tanstack/react-start";
 
 import { z } from "zod";

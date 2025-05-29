@@ -1,11 +1,11 @@
-import { EVENT_TYPES } from "@/shared/constants/event-types";
-import db from "@/shared/db";
+import { EVENT_TYPES } from "#/shared/constants/event-types";
+import db from "#/shared/db";
 import {
-	type SubmissionTestcase,
-	submissionTestcases,
-	submissions,
-} from "@/shared/db/schema";
-import { natsClient } from "@/shared/nats/nats-client";
+    type SubmissionTestcase,
+    submissionTestcases,
+    submissions,
+} from "#/shared/db/schema";
+import { natsClient } from "#/shared/nats/nats-client";
 import { SubmissionStatus, SubmissionTestcaseStatus } from "./validations/enum";
 import type { ExecutionResult } from "./validations/executionSchema";
 import type { CreateSubmission } from "./validations/submission";

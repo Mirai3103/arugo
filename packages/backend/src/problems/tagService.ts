@@ -1,5 +1,5 @@
-import db from "@/shared/db";
-import { tags } from "@/shared/db/schema";
+import db from "#/shared/db";
+import { tags } from "#/shared/db/schema";
 import type { CreateTagSchema, UpdateTagSchema } from "./validations/tag";
 import { eq } from "drizzle-orm";
 

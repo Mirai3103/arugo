@@ -1,4 +1,4 @@
-import { createSubmissionSchema } from "@/validations/submission";
+import { createSubmissionSchema } from "@repo/backend/submissions/validations/submission";
 import { createServerFn } from "@tanstack/react-start";
 import { requireMiddleware } from "../middleware/authMiddleware";
 

@@ -9,8 +9,14 @@
   ],
   "compilerOptions": {
      "paths": {
-      "@/*": ["./src/*"],
-     }
+      "#/*": ["./src/*"]
+    },
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "esnext",
   }
   
 }

@@ -3,7 +3,7 @@ import ProblemsTableSkeleton from "@/components/features/problem/ProblemsTable/P
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { getAllProblemsQueryOptions } from "@/libs/queries/problems";
 import { getAllTagsQueryOptions } from "@/libs/queries/tag";
-import { problemQuerySchema } from "@/validations/problem";
+import { problemQuerySchema } from "@repo/backend/problems/validations/problem";
 import {
 	Avatar,
 	Box,

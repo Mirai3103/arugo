@@ -1,6 +1,6 @@
 // src/shared/nats/nats-client.ts
-import { env } from "@/env";
-import { connect, NatsConnection, StringCodec } from "nats";
+import { env } from "@repo/env";
+import { connect, type NatsConnection, StringCodec } from "nats";
 
 type ListenerFn<T> = (data: T) => void;
 export class NatsClient {

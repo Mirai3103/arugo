@@ -1,4 +1,3 @@
-import { QUERY_CONSTANTS } from "@/utils/constants/query";
 import z from "zod";
 
 export const createPaginationQuerySchema = <T extends z.ZodRawShape>(
@@ -10,7 +9,7 @@ export const createPaginationQuerySchema = <T extends z.ZodRawShape>(
 			.number()
 			.int()
 			.positive()
-			.default(QUERY_CONSTANTS.DEFAULT_PAGE_SIZE),
+			.default(20),
 		order: z.enum(["asc", "desc"]).nullish(),
 	});
 };

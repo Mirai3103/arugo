@@ -2,6 +2,8 @@
 	"name": "@repo/backend",
 	"module": "index.ts",
 	"type": "module",
+	"main": "/dist/index.js",
+	"types": "dist/index.d.ts",
 	"private": true,
 	"exports": {
 		"./db": "./src/shared/db/index.ts",
@@ -37,6 +39,10 @@
 		"drizzle:push": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts push",
 		"drizzle:generate": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts generate",
 		"drizzle:migrate": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts migrate",
-		"drizzle:studio": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts studio"
+		"drizzle:studio": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts studio",
+		"build": "tsc --build --verbose"
+	},
+	"imports": {
+		"#/*": "./src/*"
 	}
 }

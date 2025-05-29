@@ -1,6 +1,6 @@
-import type { problems } from "@/server/shared/db/schema";
+import type { problems } from "#/shared/db/schema";
 import z from "zod";
-import { createPaginationQuerySchema } from "./paginationQuerySchema";
+import { createPaginationQuerySchema } from "#/shared/schemas/paginationQuerySchema";
 export type ProblemFields = keyof typeof problems._.columns;
 
 export const problemQuerySchema = createPaginationQuerySchema(
