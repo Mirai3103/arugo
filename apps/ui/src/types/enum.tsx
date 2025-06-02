@@ -1,3 +1,4 @@
+import { Spinner } from "@chakra-ui/react";
 import { LuCircle, LuCircleCheck, LuCircleX } from "react-icons/lu";
 
 export enum SubmissionTestcaseStatus {
@@ -32,7 +33,7 @@ export const SubmissionTestcaseStatusColor: Record<
 	[SubmissionTestcaseStatus.Success]: "green", // Thành công
 	[SubmissionTestcaseStatus.CompileError]: "orange", // Lỗi biên dịch
 	[SubmissionTestcaseStatus.RuntimeError]: "red", // Lỗi khi chạy
-	[SubmissionTestcaseStatus.WrongAnswer]: "red.400", // Kết quả sai
+	[SubmissionTestcaseStatus.WrongAnswer]: "red", // Kết quả sai
 	[SubmissionTestcaseStatus.TimeLimitExceeded]: "yellow", // Vượt quá thời gian
 	[SubmissionTestcaseStatus.MemoryLimitExceeded]: "purple", // Vượt quá bộ nhớ
 	[SubmissionTestcaseStatus.Running]: "blue", // Đang chạy
@@ -46,7 +47,7 @@ export const SubmissionTestcaseStatusIcon = {
 	[SubmissionTestcaseStatus.WrongAnswer]: <LuCircleX />,
 	[SubmissionTestcaseStatus.TimeLimitExceeded]: <LuCircleX />,
 	[SubmissionTestcaseStatus.MemoryLimitExceeded]: <LuCircleX />,
-	[SubmissionTestcaseStatus.Running]: <LuCircle />,
+	[SubmissionTestcaseStatus.Running]: <Spinner size="xs" />,
 	[SubmissionTestcaseStatus.None]: <LuCircle />,
 };
 

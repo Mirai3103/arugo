@@ -27,6 +27,7 @@ import {
 	Heading,
 	Icon,
 	IconButton,
+	Skeleton,
 	Tabs,
 	Tag,
 	Text,
@@ -36,7 +37,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "@tanstack/react-router";
 import { generateHTML } from "@tiptap/html";
-import React from "react";
+import React, { useMemo } from "react";
 import {
 	FiBookOpen,
 	FiCode,
@@ -46,6 +47,9 @@ import {
 	FiThumbsUp,
 } from "react-icons/fi";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { usePromiseStore } from "@/stores/usePromiseStore";
+import { useQuery } from "@tanstack/react-query";
+import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
 const PageHeader = () => {
 	const bg = useColorModeValue("white", "gray.800");
 	const color = useColorModeValue("gray.800", "white");
@@ -66,21 +70,39 @@ const PageHeader = () => {
 					<Link to="/">
 						<HStack gap={2}>
 							<Icon as={FiCode} w={8} h={8} color="teal.500" />
-							<Heading as="h1" size="md" color={color} letterSpacing="tight">
+							<Heading
+								as="h1"
+								size="md"
+								color={color}
+								letterSpacing="tight"
+							>
 								CodeMaster
 							</Heading>
 						</HStack>
 					</Link>
 					<HStack gap={4}>
-						<Button asChild variant="ghost" colorPalette="teal" size="sm">
+						<Button
+							asChild
+							variant="ghost"
+							colorPalette="teal"
+							size="sm"
+						>
 							<Link to="/home">Trang chủ</Link>
 						</Button>
 						<ColorModeButton />
 						{session.data?.user ? (
-							<UserMenu isPending={false} user={session.data?.user} />
+							<UserMenu
+								isPending={false}
+								user={session.data?.user}
+							/>
 						) : (
 							<HStack gap={2}>
-								<Button asChild variant="ghost" colorScheme="teal" size="sm">
+								<Button
+									asChild
+									variant="ghost"
+									colorScheme="teal"
+									size="sm"
+								>
 									<Link to="/login">Đăng nhập</Link>
 								</Button>
 								<Button asChild colorScheme="teal" size="sm">
@@ -104,7 +126,7 @@ const ProblemDescriptionPanel = () => {
 	const editorial = React.useMemo(() => {
 		return generateHTML(
 			(problem.description as JSON) ?? {},
-			DEFAULT_EXTENSIONS,
+			DEFAULT_EXTENSIONS
 		);
 	}, [problem.description]);
 	const bgColor = useColorModeValue("white", "gray.800");
@@ -150,21 +172,33 @@ const ProblemDescriptionPanel = () => {
 									Thông tin thêm
 								</Heading>
 								<HStack justifyContent="space-between">
-									<Text fontSize="sm" color={subduedTextColor}>
+									<Text
+										fontSize="sm"
+										color={subduedTextColor}
+									>
 										Độ khó:
 									</Text>
 									<Badge
 										colorPalette={
-											DIFFICULTY_COLORS_PALATE[problem.difficultyLevel!]
+											DIFFICULTY_COLORS_PALATE[
+												problem.difficultyLevel!
+											]
 										}
 										variant="solid"
 										fontSize="xs"
 									>
-										{DIFFICULTY_LABELS[problem.difficultyLevel!]}
+										{
+											DIFFICULTY_LABELS[
+												problem.difficultyLevel!
+											]
+										}
 									</Badge>
 								</HStack>
 								<HStack justifyContent="space-between">
-									<Text fontSize="sm" color={subduedTextColor}>
+									<Text
+										fontSize="sm"
+										color={subduedTextColor}
+									>
 										Thẻ:
 									</Text>
 									<Wrap gap={1}>
@@ -175,13 +209,18 @@ const ProblemDescriptionPanel = () => {
 												variant="subtle"
 												key={tag.id}
 											>
-												<Tag.Label>{tag.name}</Tag.Label>
+												<Tag.Label>
+													{tag.name}
+												</Tag.Label>
 											</Tag.Root>
 										))}
 									</Wrap>
 								</HStack>
 								<HStack justifyContent="space-between">
-									<Text fontSize="sm" color={subduedTextColor}>
+									<Text
+										fontSize="sm"
+										color={subduedTextColor}
+									>
 										Lượt chấp nhận:
 									</Text>
 									<Text fontSize="sm" fontWeight="medium">
@@ -228,17 +267,29 @@ const ProblemDescriptionPanel = () => {
 					<Text fontSize="sm" color={subduedTextColor}>
 						{/* {problem.} */}
 					</Text>
-					<IconButton aria-label="Không thích" variant="ghost" size="sm">
+					<IconButton
+						aria-label="Không thích"
+						variant="ghost"
+						size="sm"
+					>
 						<FiThumbsDown />
 					</IconButton>
 				</HStack>
 				<HStack gap={1}>
-					<IconButton aria-label="Thêm vào danh sách" variant="ghost" size="sm">
+					<IconButton
+						aria-label="Thêm vào danh sách"
+						variant="ghost"
+						size="sm"
+					>
 						<FiBookOpen />
 					</IconButton>
 				</HStack>
 				<HStack gap={1}>
-					<IconButton aria-label="Bình luận" variant="ghost" size="sm">
+					<IconButton
+						aria-label="Bình luận"
+						variant="ghost"
+						size="sm"
+					>
 						<FiMessageCircle />
 					</IconButton>
 					<Text fontSize="sm" color={subduedTextColor}>
@@ -252,14 +303,67 @@ const ProblemDescriptionPanel = () => {
 		</Flex>
 	);
 };
+type TestcaseDetails = ProblemSampleTestCase & {
+		stdout?: string;
+		status?: SubmissionTestcaseStatus;
+	}
+interface TestcaseItemProps {
+	testcase: TestcaseDetails;
+}
 
-const TestcaseItem = ({ testcase }: { testcase: ProblemSampleTestCase }) => {
+const TestcaseItem: React.FC<TestcaseItemProps> = ({ testcase }) => {
 	const bgColor = useColorModeValue("gray.50", "gray.700");
 	const borderColor = useColorModeValue("gray.200", "gray.600");
-	const statusColor =
-		SubmissionTestcaseStatusColor[SubmissionTestcaseStatus.None];
-	const testcaseStatus = SubmissionTestcaseStatus.None;
+	const testcaseStatus = testcase.status || SubmissionTestcaseStatus.None;
+	const isRunning = testcaseStatus === SubmissionTestcaseStatus.Running;
+	console.log("isRunning", isRunning, testcaseStatus);
+const colors = {
+    gray: {
+      bg: useColorModeValue("gray.100", "gray.800"),
+      text: useColorModeValue("gray.800", "gray.200")
+    },
+    green: {
+      bg: useColorModeValue("green.50", "green.900"),
+      text: useColorModeValue("green.800", "green.200")
+    },
+    red: {
+      bg: useColorModeValue("red.50", "red.900"),
+      text: useColorModeValue("red.800", "red.200")
+    }
+  };
 
+  // Use useMemo for computed values
+  const resultBackground = useMemo(() => {
+    if (isRunning) return colors.gray.bg;
+
+    switch (testcaseStatus) {
+      case SubmissionTestcaseStatus.Success:
+        return colors.green.bg;
+      case SubmissionTestcaseStatus.CompileError:
+      case SubmissionTestcaseStatus.RuntimeError:
+      case SubmissionTestcaseStatus.MemoryLimitExceeded:
+      case SubmissionTestcaseStatus.WrongAnswer:
+        return colors.red.bg;
+      default:
+        return colors.gray.bg;
+    }
+  }, [isRunning, testcaseStatus, colors]);
+
+  const resultTextColor = useMemo(() => {
+    if (isRunning) return colors.gray.text;
+
+    switch (testcaseStatus) {
+      case SubmissionTestcaseStatus.Success:
+        return colors.green.text;
+      case SubmissionTestcaseStatus.CompileError:
+      case SubmissionTestcaseStatus.RuntimeError:
+      case SubmissionTestcaseStatus.MemoryLimitExceeded:
+      case SubmissionTestcaseStatus.WrongAnswer:
+        return colors.red.text;
+      default:
+        return colors.gray.text;
+    }
+  }, [isRunning, testcaseStatus, colors]);
 	return (
 		<Box
 			w="full"
@@ -269,128 +373,169 @@ const TestcaseItem = ({ testcase }: { testcase: ProblemSampleTestCase }) => {
 			borderColor={borderColor}
 			bg={bgColor}
 		>
-			<Box p={4}>
-				{/* <Text fontSize="sm" color="gray.500" mb={4}>
-          abc
-        </Text> */}
+			<VStack align="stretch" gap={4} p={4}>
+				<Box>
+					<Text fontWeight="medium" mb={2}>
+						Đầu vào:
+					</Text>
+					<Code
+						p={3}
+						borderRadius="md"
+						w="full"
+						fontSize="sm"
+						bg={useColorModeValue("gray.100", "gray.800")}
+					>
+						{testcase.inputData}
+					</Code>
+				</Box>
 
-				<VStack align="stretch" gap={4}>
+				<Box>
+					<Text fontWeight="medium" mb={2}>
+						Kết quả mong đợi:
+					</Text>
+					<Code
+						p={3}
+						borderRadius="md"
+						w="full"
+						fontSize="sm"
+						bg={useColorModeValue("gray.100", "gray.800")}
+					>
+						{testcase.expectedOutput}
+					</Code>
+				</Box>
+
+				{(testcase.stdout || isRunning) && (
 					<Box>
 						<Text fontWeight="medium" mb={2}>
-							Đầu vào:
+							Kết quả thực tế:
 						</Text>
 						<Code
 							p={3}
 							borderRadius="md"
+							fontSize="sm"
 							w="full"
-							size={"lg"}
-							bg={useColorModeValue("gray.100", "gray.800")}
+							bg={resultBackground}
+							color={resultTextColor}
 						>
-							{testcase.inputData}
+							{isRunning ? (
+								<Skeleton height="20px" width="100%" />
+							) : (
+								testcase.stdout
+							)}
 						</Code>
 					</Box>
-
-					<Box>
-						<Text fontWeight="medium" mb={2}>
-							Kết quả mong đợi:
-						</Text>
-						<Code
-							p={3}
-							borderRadius="md"
-							w="full"
-							size={"lg"}
-							bg={useColorModeValue("gray.100", "gray.800")}
-						>
-							{testcase.expectedOutput}
-						</Code>
-					</Box>
-
-					{/* <Box>
-            <Text fontWeight="medium" mb={2}>
-              Kết quả thực tế:
-            </Text>
-            <Code
-              p={3}
-              borderRadius="md"
-              size={"lg"}
-              w="full"
-              bg={useColorModeValue(
-                testcaseStatus === SubmissionTestcaseStatus.Success
-                  ? "green.50"
-                  : "red.50",
-                testcaseStatus === SubmissionTestcaseStatus.Success
-                  ? "green.900"
-                  : "red.900"
-              )}
-              color={useColorModeValue(
-                testcaseStatus === SubmissionTestcaseStatus.Success
-                  ? "green.800"
-                  : "red.800",
-                testcaseStatus === SubmissionTestcaseStatus.Success
-                  ? "green.200"
-                  : "red.200"
-              )}
-            >
-              {testcase.}
-            </Code>
-          </Box> */}
-				</VStack>
-			</Box>
+				)}
+			</VStack>
 		</Box>
 	);
 };
 
-const TestAndResultPanel = () => {
-	const { problem } = Route.useLoaderData();
-	const testcases = problem.sampleTestCases || [];
-	return (
-		<Box w="full" shadow="md" borderRadius="lg" overflow="hidden">
-			<Tabs.Root
-				lazyMount
-				defaultValue="members"
-				variant="enclosed"
-				width={"100%"}
-			>
-				<Box
-					bg={useColorModeValue("gray.100", "gray.700")}
-					borderTopRadius="lg"
-				>
-					<Tabs.List
-						bg="bg.muted"
-						rounded="l3"
-						p="2"
-						width={"100%"}
-						defaultValue={testcases?.[0]?.id}
-					>
-						{testcases.map((testcase) => (
-							<Tabs.Trigger
-								value={testcase.id}
-								key={testcase.id}
-								colorPalette={
-									SubmissionTestcaseStatusColor[SubmissionTestcaseStatus.None]
-								}
-							>
-								<Icon
-									colorPalette={
-										SubmissionTestcaseStatusColor[SubmissionTestcaseStatus.None]
-									}
-								>
-									{SubmissionTestcaseStatusIcon[SubmissionTestcaseStatus.None]}
-								</Icon>
-								{testcase.label}
-							</Tabs.Trigger>
-						))}
-						<Tabs.Indicator rounded="l2" />
-					</Tabs.List>
-				</Box>
-				{testcases.map((testcase) => (
-					<Tabs.Content value={testcase.id} key={testcase.id} p={2}>
-						<TestcaseItem testcase={testcase} />
-					</Tabs.Content>
-				))}
-			</Tabs.Root>
-		</Box>
-	);
+const TestAndResultPanel: React.FC = () => {
+  const { problem } = Route.useLoaderData();
+  const testcases = React.useMemo(() => 
+    problem.sampleTestCases || [], 
+    [problem.sampleTestCases]
+  );
+  
+  const { id } = usePromiseStore();
+  const firstPending = id;
+  
+  const submissionQuery = useQuery({
+    ...getSubmissionByIdQueryOptions(firstPending || ""),
+    enabled: !!firstPending,
+    refetchInterval: 3000,
+  });
+
+  const [cachedSubmission, setCachedSubmission] = React.useState(submissionQuery.data);
+  
+  React.useEffect(() => {
+    if (submissionQuery.data) {
+      setCachedSubmission(submissionQuery.data);
+    }
+  }, [submissionQuery.data]);
+
+  const finalTestcases = React.useMemo<TestcaseDetails[]>(() => {
+    if (!cachedSubmission) return testcases;
+    
+    const submissionTestcases = cachedSubmission.submissionTestcases || [];
+    
+    return testcases.map((testcase) => {
+      const submissionTestcase = submissionTestcases.find(
+        (tc) => tc.testcaseId === testcase.id
+      );
+      
+      return {
+        ...testcase,
+        status: submissionTestcase?.status || SubmissionTestcaseStatus.None,
+        stdout: submissionTestcase?.stdout || "",
+      } ;
+    });
+  }, [cachedSubmission, testcases]);
+
+  const getTabColor = (testcaseId: string) => {
+    const testcase = finalTestcases.find(tc => tc.id === testcaseId);
+    if (!testcase) return SubmissionTestcaseStatusColor[SubmissionTestcaseStatus.None];
+    
+    const status = testcase.status || SubmissionTestcaseStatus.None;
+    return SubmissionTestcaseStatusColor[status];
+  };
+
+  const getTabIcon = (testcaseId: string) => {
+    const testcase = finalTestcases.find(tc => tc.id === testcaseId);
+    if (!testcase) return SubmissionTestcaseStatusIcon[SubmissionTestcaseStatus.None];
+    
+    const status = testcase.status || SubmissionTestcaseStatus.None;
+    return SubmissionTestcaseStatusIcon[status];
+  };
+  const boxBg = useColorModeValue("gray.100", "gray.700");
+  if (!testcases.length) return null;
+
+  return (
+    <Box w="full" shadow="md" borderRadius="lg" overflow="hidden">
+      <Tabs.Root
+        lazyMount
+        defaultValue={testcases[0]?.id}
+        variant="enclosed"
+        width="100%"
+      >
+        <Box
+          bg={boxBg}
+          borderTopRadius="lg"
+        >
+          <Tabs.List
+            bg="bg.muted"
+            rounded="lg"
+            p={2}
+            width="100%"
+          >
+            {testcases.map((testcase) => (
+              <Tabs.Trigger
+                key={testcase.id}
+                value={testcase.id}
+                colorPalette={getTabColor(testcase.id)}
+              >
+                <Icon colorPalette={getTabColor(testcase.id)}>
+                  {getTabIcon(testcase.id)}
+                </Icon>
+                {testcase.label}
+              </Tabs.Trigger>
+            ))}
+            <Tabs.Indicator rounded="md" />
+          </Tabs.List>
+        </Box>
+        
+        {finalTestcases.map((testcase) => (
+          <Tabs.Content 
+            key={testcase.id}
+            value={testcase.id} 
+            p={2}
+          >
+            <TestcaseItem testcase={testcase} />
+          </Tabs.Content>
+        ))}
+      </Tabs.Root>
+    </Box>
+  );
 };
 // Unauthenticated Right Panel - shows login prompt
 const UnAuthRightResizablePanel = () => {
@@ -419,8 +564,9 @@ const UnAuthRightResizablePanel = () => {
 					</Heading>
 
 					<Text color={textColor} fontSize="md" lineHeight="1.6">
-						Bạn cần đăng nhập để có thể viết code, chạy thử và nộp bài giải. Hãy
-						tạo tài khoản miễn phí để bắt đầu hành trình coding của bạn!
+						Bạn cần đăng nhập để có thể viết code, chạy thử và nộp
+						bài giải. Hãy tạo tài khoản miễn phí để bắt đầu hành
+						trình coding của bạn!
 					</Text>
 				</VStack>
 
@@ -464,7 +610,12 @@ const RightResizablePanel = () => {
 			overflow="hidden"
 		>
 			<PanelGroup direction="vertical">
-				<Panel defaultSize={70} minSize={30} collapsible collapsedSize={31}>
+				<Panel
+					defaultSize={70}
+					minSize={30}
+					collapsible
+					collapsedSize={31}
+				>
 					<CodeEditorArea problem={problem} />
 				</Panel>
 				<PanelResizeHandle>
@@ -487,7 +638,12 @@ const RightResizablePanel = () => {
 						/>
 					</Flex>
 				</PanelResizeHandle>
-				<Panel defaultSize={30} minSize={20} collapsible collapsedSize={21}>
+				<Panel
+					defaultSize={30}
+					minSize={20}
+					collapsible
+					collapsedSize={21}
+				>
 					<Box h="100%" overflowY="auto">
 						<TestAndResultPanel />
 					</Box>

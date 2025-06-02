@@ -44,7 +44,7 @@ export function useCodeTesting(
 				// 'res' parameter removed as it wasn't used
 				const promise = new Promise((resolve, reject) => {
 					// Type the promise
-					promiseStore.addPending(newId, { resolve, reject });
+					promiseStore.addPending(newId, { resolve, reject },'test');
 				});
 				toaster.promise(promise, {
 					loading: { title: "Đang chạy thử code..." },

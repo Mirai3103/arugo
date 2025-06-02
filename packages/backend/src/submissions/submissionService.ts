@@ -1,9 +1,9 @@
 import { EVENT_TYPES } from "#/shared/constants/event-types";
 import db from "#/shared/db";
 import {
-    type SubmissionTestcase,
-    submissionTestcases,
-    submissions,
+	type SubmissionTestcase,
+	submissionTestcases,
+	submissions,
 } from "#/shared/db/schema";
 import { natsClient } from "#/shared/nats/nats-client";
 import { SubmissionStatus, SubmissionTestcaseStatus } from "./validations/enum";
@@ -66,8 +66,12 @@ async function checkAndUpdateSubmissionStatus(submissionId: string): Promise<voi
 			remainingTestcaseCount: submissions.runningTestcaseCount,
 		});
 
-	const remaining = result?.[0]?.remainingTestcaseCount || 100;
+	const remaining = result?.[0]?.remainingTestcaseCount ?? 100;
+	console.log(
+		`Submission ${submissionId} updated, remaining test cases: ${remaining}`,
+	);
 	if (remaining > 0) return;
+	
 
 	const submissionTests = await db.query.submissionTestcases.findMany({
 		where: (st, { eq }) => eq(st.submissionId, submissionId),

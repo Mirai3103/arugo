@@ -20,7 +20,7 @@ import { LuMaximize2 } from "react-icons/lu";
 import { MdFormatAlignJustify } from "react-icons/md";
 import { useIsClient } from "usehooks-ts";
 
-import type { FullProblem } from "@/server/modules/problems/problemService";
+import type { FullProblem } from "@repo/backend/problems/problemService";
 import { useCodeTesting } from "./hooks/useCodeTesting";
 import { useLanguageSelection } from "./hooks/useLanguageSelection";
 import { useSubmissionPolling } from "./hooks/useSubmissionPolling";

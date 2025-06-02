@@ -13,7 +13,7 @@ export function useSubmissionPolling(
 	const submissionQuery = useQuery({
 		// Specify QueryData type
 		...getSubmissionByIdQueryOptions(submissionId || ""),
-		enabled: promiseStore.isPending(submissionId || ""),
+		enabled: promiseStore.isPending(),
 		refetchInterval: 3000,
 	});
 
@@ -29,12 +29,12 @@ export function useSubmissionPolling(
 		}
 
 		if (status === SubmissionTestcaseStatus.Success) {
-			promiseStore.resolvePending(submissionId, {
+			promiseStore.resolvePending( {
 				status: "success",
-				data: submissionQuery.data,
+				data: submissionQuery.data
 			});
 		} else {
-			promiseStore.rejectPending(submissionId, {
+			promiseStore.rejectPending({
 				status: "error",
 				error: submissionQuery.data?.status, // Or a more descriptive error from submissionQuery.data
 			});
@@ -44,6 +44,6 @@ export function useSubmissionPolling(
 	return {
 		isPolling:
 			(submissionQuery.isFetching && !!submissionId) ||
-			promiseStore.isPending(submissionId || ""),
+			promiseStore.isPending(),
 	};
 }
