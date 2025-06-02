@@ -54,7 +54,7 @@
 		"drizzle:migrate": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts migrate",
 		"drizzle:studio": "drizzle-kit --config=src/server/shared/db/drizzle.config.ts studio",
 		"build": "tsup",
-		"build:dev": "tsup "
+		"build:dev": "tsup --watch --clean"
 		
 	},
 	"imports": {

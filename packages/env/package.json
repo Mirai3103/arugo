@@ -5,9 +5,8 @@
 	"private": true,
 	"exports": {
 		".": {
-			"import":"./dist/index.js",
+			"import": "./dist/index.js",
 			"types": "./dist/index.d.ts"
-			
 		}
 	},
 	"devDependencies": {
@@ -19,12 +18,11 @@
 		"typescript": "^5"
 	},
 	"dependencies": {
-	
-		"@t3-oss/env-core": "^0.13.6",	
+		"@t3-oss/env-core": "^0.13.6",
 		"zod": "^3.25.32"
 	},
 	"scripts": {
-	"build": "tsup",
-		"build:dev": "tsup "
+		"build": "tsup",
+		"build:dev": "tsup --watch --clean"
 	}
 }

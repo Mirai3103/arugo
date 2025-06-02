@@ -66,6 +66,7 @@
 		"babel-plugin-react-compiler": "19.1.0-rc.2",
 		"better-auth": "^1.2.8",
 		"crossws": "^0.4.1",
+		"dayjs": "^1.11.13",
 		"dotenv": "^16.5.0",
 		"drizzle-orm": "^0.43.1",
 		"https-proxy-agent": "^7.0.6",

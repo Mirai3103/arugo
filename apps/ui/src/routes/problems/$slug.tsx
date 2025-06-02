@@ -1,8 +1,6 @@
 import { UserMenu } from "@/components/common/UserMenu";
 import CodeEditorArea from "@/components/features/solving/CodeEditorArea";
 import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode"; // Assuming this path is correct for the project
-import { Prose } from "@/components/ui/prose";
-import { DEFAULT_EXTENSIONS } from "@/libs/tiptap/extension";
 import type { ProblemSampleTestCase } from "@repo/backend/problems/problemService";
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import { getProblemBySlug } from "@/server/transports/server-functions/problem";
@@ -12,11 +10,6 @@ import {
 	SubmissionTestcaseStatusIcon,
 } from "@/types/enum";
 import {
-	DIFFICULTY_COLORS_PALATE,
-	DIFFICULTY_LABELS,
-} from "@/utils/constants/difficulties";
-import {
-	Badge,
 	Box,
 	Button,
 	Code,
@@ -25,31 +18,20 @@ import {
 	Flex,
 	HStack,
 	Heading,
-	Icon,
-	IconButton,
-	Skeleton,
-	Tabs,
-	Tag,
-	Text,
-	VStack,
-	Wrap,
-	useBreakpointValue,
+	Icon, Skeleton,
+	Tabs, Text,
+	VStack, useBreakpointValue
 } from "@chakra-ui/react";
 import { Link } from "@tanstack/react-router";
-import { generateHTML } from "@tiptap/html";
 import React, { useMemo } from "react";
 import {
-	FiBookOpen,
-	FiCode,
-	FiMessageCircle,
-	FiShare2,
-	FiThumbsDown,
-	FiThumbsUp,
+	FiCode
 } from "react-icons/fi";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { usePromiseStore } from "@/stores/usePromiseStore";
 import { useQuery } from "@tanstack/react-query";
 import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
+import { ProblemDescriptionPanel } from "@/components/features/solving/ProblemDescriptionPanel";
 const PageHeader = () => {
 	const bg = useColorModeValue("white", "gray.800");
 	const color = useColorModeValue("gray.800", "white");
@@ -118,191 +100,7 @@ const PageHeader = () => {
 };
 
 // Problem Description Panel
-const ProblemDescriptionPanel = () => {
-	const { problem } = Route.useLoaderData();
-	const problemStatement = React.useMemo(() => {
-		return generateHTML(problem.statement as JSON, DEFAULT_EXTENSIONS);
-	}, [problem.statement]);
-	const editorial = React.useMemo(() => {
-		return generateHTML(
-			(problem.description as JSON) ?? {},
-			DEFAULT_EXTENSIONS
-		);
-	}, [problem.description]);
-	const bgColor = useColorModeValue("white", "gray.800");
-	const textColor = useColorModeValue("gray.700", "gray.200");
-	const subduedTextColor = useColorModeValue("gray.500", "gray.400");
 
-	return (
-		<Flex
-			direction="column"
-			h="100%"
-			bg={bgColor}
-			rounded={{ md: "lg" }}
-			overflowY="auto" // Allow scrolling within this panel
-		>
-			<Box p={{ base: 4, md: 6 }} flexGrow={1}>
-				<Heading as="h1" size="lg" mb={4}>
-					{problem.title}
-				</Heading>
-				<Tabs.Root
-					variant="line"
-					colorPalette="teal"
-					size="sm"
-					defaultValue="desc"
-				>
-					<Tabs.List mb={4}>
-						<Tabs.Trigger value="desc">Mô tả</Tabs.Trigger>
-						<Tabs.Trigger value="editorial">Hướng dẫn</Tabs.Trigger>
-						<Tabs.Trigger value="solutions">Giải pháp</Tabs.Trigger>
-						<Tabs.Trigger value="submissions">Bài nộp</Tabs.Trigger>
-					</Tabs.List>
-					<Tabs.Content value="desc" p={0}>
-						<VStack align="stretch" gap={5}>
-							<Prose size={"lg"} maxWidth={"99%"}>
-								<div
-									// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-									dangerouslySetInnerHTML={{
-										__html: problemStatement,
-									}}
-								/>
-							</Prose>
-							<VStack align="stretch" gap={3} pt={4}>
-								<Heading as="h3" size="sm" mb={1}>
-									Thông tin thêm
-								</Heading>
-								<HStack justifyContent="space-between">
-									<Text
-										fontSize="sm"
-										color={subduedTextColor}
-									>
-										Độ khó:
-									</Text>
-									<Badge
-										colorPalette={
-											DIFFICULTY_COLORS_PALATE[
-												problem.difficultyLevel!
-											]
-										}
-										variant="solid"
-										fontSize="xs"
-									>
-										{
-											DIFFICULTY_LABELS[
-												problem.difficultyLevel!
-											]
-										}
-									</Badge>
-								</HStack>
-								<HStack justifyContent="space-between">
-									<Text
-										fontSize="sm"
-										color={subduedTextColor}
-									>
-										Thẻ:
-									</Text>
-									<Wrap gap={1}>
-										{problem.tags.map((tag) => (
-											<Tag.Root
-												size="sm"
-												colorPalette="purple"
-												variant="subtle"
-												key={tag.id}
-											>
-												<Tag.Label>
-													{tag.name}
-												</Tag.Label>
-											</Tag.Root>
-										))}
-									</Wrap>
-								</HStack>
-								<HStack justifyContent="space-between">
-									<Text
-										fontSize="sm"
-										color={subduedTextColor}
-									>
-										Lượt chấp nhận:
-									</Text>
-									<Text fontSize="sm" fontWeight="medium">
-										75.2%
-									</Text>
-								</HStack>
-							</VStack>
-						</VStack>
-					</Tabs.Content>
-					<Tabs.Content value="editorial" p={1}>
-						<Prose size={"lg"}>
-							<div
-								// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-								dangerouslySetInnerHTML={{
-									__html: editorial,
-								}}
-							/>
-						</Prose>
-					</Tabs.Content>
-					<Tabs.Content value="solutions" p={4}>
-						<Text color={textColor}>
-							Các giải pháp từ cộng đồng sẽ được hiển thị ở đây.
-						</Text>
-					</Tabs.Content>
-					<Tabs.Content value="submissions" p={4}>
-						<Text color={textColor}>
-							Lịch sử các lần nộp bài của bạn cho bài toán này.
-						</Text>
-					</Tabs.Content>
-				</Tabs.Root>
-			</Box>
-			<Divider />
-			<HStack
-				p={{ base: 3, md: 4 }}
-				gap={3}
-				justifyContent="space-between"
-				bg={useColorModeValue("gray.50", "gray.850")}
-				borderBottomRadius={{ md: "lg" }}
-			>
-				<HStack gap={1}>
-					<IconButton aria-label="Thích" variant="ghost" size="sm">
-						<FiThumbsUp />
-					</IconButton>
-					<Text fontSize="sm" color={subduedTextColor}>
-						{/* {problem.} */}
-					</Text>
-					<IconButton
-						aria-label="Không thích"
-						variant="ghost"
-						size="sm"
-					>
-						<FiThumbsDown />
-					</IconButton>
-				</HStack>
-				<HStack gap={1}>
-					<IconButton
-						aria-label="Thêm vào danh sách"
-						variant="ghost"
-						size="sm"
-					>
-						<FiBookOpen />
-					</IconButton>
-				</HStack>
-				<HStack gap={1}>
-					<IconButton
-						aria-label="Bình luận"
-						variant="ghost"
-						size="sm"
-					>
-						<FiMessageCircle />
-					</IconButton>
-					<Text fontSize="sm" color={subduedTextColor}>
-						{/* {problem.comments} */}
-					</Text>
-				</HStack>
-				<IconButton aria-label="Chia sẻ" variant="ghost" size="sm">
-					<FiShare2 />
-				</IconButton>
-			</HStack>
-		</Flex>
-	);
-};
 type TestcaseDetails = ProblemSampleTestCase & {
 		stdout?: string;
 		status?: SubmissionTestcaseStatus;
@@ -658,14 +456,14 @@ function RouteComponent() {
 	const panelBg = useColorModeValue("gray.100", "gray.900"); // Background for the panel group area
 	const handleBg = useColorModeValue("gray.300", "gray.600");
 	const handleActiveBg = useColorModeValue("gray.400", "gray.500");
-	const { session } = Route.useLoaderData();
+	const { session,problem } = Route.useLoaderData();
 	if (isMobile) {
 		return (
 			<Flex direction="column" minH="100vh" bg={panelBg}>
 				<PageHeader />
 				<VStack gap={0} flex="1" overflowY="auto" className="con cac">
 					<Box w="100%">
-						<ProblemDescriptionPanel />
+						<ProblemDescriptionPanel problem={problem} />
 					</Box>
 					<Divider borderColor={handleBg} my={0} />
 					<Box w="100%">
@@ -696,7 +494,7 @@ function RouteComponent() {
 				>
 					<Panel defaultSize={50} minSize={30}>
 						<Box h="100%" px={{ base: 1, md: 2 }} overflow="hidden">
-							<ProblemDescriptionPanel />
+							<ProblemDescriptionPanel problem={problem} />
 						</Box>
 					</Panel>
 					<PanelResizeHandle>

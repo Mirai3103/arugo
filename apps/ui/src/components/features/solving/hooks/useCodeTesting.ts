@@ -1,5 +1,5 @@
 import { toaster } from "@/components/ui/toaster";
-import { getTestSubmissionMutationOptions } from "@/libs/queries/submission";
+import { getCreateSubmissionMutationOptions, getTestSubmissionMutationOptions } from "@/libs/queries/submission";
 import type { FullProblem } from "@repo/backend/problems/problemService";
 import { usePromiseStore } from "@/stores/usePromiseStore";
 import { useMutation } from "@tanstack/react-query";
@@ -13,9 +13,11 @@ export function useCodeTesting(
 	const { mutateAsync: testCodeAsync, isPending: isTestingCode } = useMutation(
 		getTestSubmissionMutationOptions(),
 	);
+	const {mutateAsync: submitSubmission, isPending:isSubmittingCode} = useMutation(getCreateSubmissionMutationOptions());
+
 	const promiseStore = usePromiseStore();
 
-	const handleTestCode = async () => {
+	const handleRunCode = async (type:"test"|"submit") => {
 		const code = getEditorCode();
 		if (!code) {
 			toaster.error({ title: "Vui lòng nhập code " });
@@ -32,31 +34,29 @@ export function useCodeTesting(
 		}
 
 		const newId = renewSubmissionId();
-
-		testCodeAsync({
-			code,
-			isTest: true,
-			languageId: language.id,
+		const payload = {
 			problemId: problem.id,
+			languageId: language.id,
+			code,
+			isTest: type === "test",
 			id: newId,
-		})
+		};
+		const func:any = type === "test" ? testCodeAsync : submitSubmission;
+		func(payload)
 			.then(() => {
-				// 'res' parameter removed as it wasn't used
 				const promise = new Promise((resolve, reject) => {
-					// Type the promise
-					promiseStore.addPending(newId, { resolve, reject },'test');
+					promiseStore.addPending(newId, { resolve, reject }, type);
 				});
 				toaster.promise(promise, {
-					loading: { title: "Đang chạy thử code..." },
+					loading: { title: type === "test" ? "Đang test code..." : "Đang nộp bài..." },
 					success: { title: "Code đã pass tất cả testcase" },
-					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 					error: (error: any) => ({
 						title: "Code không pass tất cả testcase",
 						description: error.message || String(error.error || error), // Try to get a more specific error message
 					}),
 				});
 			})
-			.catch((apiError) => {
+			.catch((apiError:any) => {
 				toaster.error({
 					title: "Lỗi khi gửi code để test",
 					description:
@@ -69,7 +69,8 @@ export function useCodeTesting(
 	};
 
 	return {
-		handleTestCode,
-		isTestingCode, // This reflects the mutation's pending state
+		handleTestCode: () => handleRunCode("test"),
+		handleSubmitCode: () => handleRunCode("submit"),
+		isRunningCode: isTestingCode || isSubmittingCode,
 	};
 }

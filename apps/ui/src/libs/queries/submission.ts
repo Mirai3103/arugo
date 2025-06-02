@@ -3,7 +3,7 @@ import {
 	getSubmissionById,
 	testSubmission,
 } from "@/server/transports/server-functions/submission";
-import type { CreateSubmission } from "@/validations/submission";
+import type { CreateSubmission } from "@repo/backend/submissions/validations/submission";
 
 export const getCreateSubmissionMutationOptions = () => {
 	return {

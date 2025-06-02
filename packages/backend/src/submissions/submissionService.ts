@@ -185,9 +185,40 @@ async function createSubmission(input: CreateSubmission): Promise<string> {
 
 async function getSubmission(id: string) {
 	return db.query.submissions.findFirst({
+		columns: {
+			id: true,
+			problemId: true,
+			languageId: true,
+			code: false,
+			executionTimeMs: true,
+			memoryUsageKb: true,
+			status: true,
+			submittedAt: true,
+			userId: true,
+			isTest: true,
+			runningTestcaseCount: true,
+		},
 		where: (submissions, { eq }) => eq(submissions.id, id),
 		with: {
-			submissionTestcases: true,
+
+			submissionTestcases: {
+				columns:{
+					testcaseId: true,
+					status: true,
+					stdout: true,
+					runtimeMs: true,
+					memoryUsedKb: true,
+				},
+				with:{
+					testcase:{
+						columns:{
+							id: true,
+							label: true,
+							points: true,
+						}
+					}
+				}
+			},
 		},
 	});
 }

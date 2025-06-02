@@ -24,8 +24,11 @@ import type { FullProblem } from "@repo/backend/problems/problemService";
 import { useCodeTesting } from "./hooks/useCodeTesting";
 import { useLanguageSelection } from "./hooks/useLanguageSelection";
 import { useSubmissionPolling } from "./hooks/useSubmissionPolling";
-
-const CodeEditorArea = ({ problem }: { problem: FullProblem }) => {
+interface CodeEditorAreaProps {
+	problem: FullProblem;
+	allowTest?: boolean;
+}
+const CodeEditorArea = ({problem, allowTest = true}: CodeEditorAreaProps) => {
 	const isClient = useIsClient();
 	const { theme } = useTheme();
 
@@ -43,7 +46,7 @@ const CodeEditorArea = ({ problem }: { problem: FullProblem }) => {
 
 	const getEditorCode = () => editorRef.current?.getModel()?.getValue() || "";
 
-	const { handleTestCode, isTestingCode } = useCodeTesting(
+	const { handleTestCode, isRunningCode,handleSubmitCode } = useCodeTesting(
 		problem,
 		selectedLanguage,
 		getEditorCode,
@@ -61,7 +64,7 @@ const CodeEditorArea = ({ problem }: { problem: FullProblem }) => {
 		monacoRef.current = monacoInstance;
 		setInitialEditorLanguage();
 	}
-
+	const borderColor = useColorModeValue("gray.200", "gray.700")
 	if (!isClient) {
 		return null;
 	}
@@ -75,12 +78,16 @@ const CodeEditorArea = ({ problem }: { problem: FullProblem }) => {
 						variant="subtle"
 						size="sm"
 						onClick={handleTestCode}
-						loading={isTestingCode || isPolling}
+						loading={isRunningCode || isPolling}
+						disabled={!selectedLanguage || isRunningCode || isPolling || !allowTest}
 					>
 						Chạy thử
 						<Icon as={FiPlay} />
 					</Button>
-					<Button colorPalette="green" size="sm">
+					<Button colorPalette="green" size="sm"
+						loading={isRunningCode || isPolling}
+						onClick={handleSubmitCode} disabled={!selectedLanguage || isRunningCode || isPolling}
+					>
 						Nộp bài
 						<Icon as={FiCheckSquare} />
 					</Button>
@@ -89,7 +96,7 @@ const CodeEditorArea = ({ problem }: { problem: FullProblem }) => {
 			<HStack
 				p={1}
 				borderBottomWidth="1px"
-				borderColor={useColorModeValue("gray.200", "gray.700")}
+				borderColor={borderColor}
 				flexShrink={0}
 			>
 				<Select.Root
