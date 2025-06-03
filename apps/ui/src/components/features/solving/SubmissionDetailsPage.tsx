@@ -1,37 +1,37 @@
 import {
-    Box,
-    Button, Flex,
-    Heading,
-    HStack,
-    Icon,
-    Text,
-    VStack, // Assuming Avatar might be used for user if submission has user info
-    Tabs,
-    Badge,
-    Progress,
-    SimpleGrid,
-    Card, // For syntax highlighting block
-    Grid, // For PENDING state or loading
-    Tooltip,
-    Code
+	Box,
+	Button, Flex,
+	Heading,
+	HStack,
+	Icon,
+	Text,
+	VStack, // Assuming Avatar might be used for user if submission has user info
+	Tabs,
+	Badge,
+	Progress,
+	SimpleGrid,
+	Card, // For syntax highlighting block
+	Grid, // For PENDING state or loading
+	Tooltip,
+	Code
 } from "@chakra-ui/react";
 import { chakra } from "@chakra-ui/react";
 import {
-    FiCheckCircle,
-    FiXCircle,
-    FiClock,
-    FiDatabase, // For Memory Limit
-    FiActivity, // For Pending
-    FiBarChart2, // For Overview Tab
-    FiList, // For Test Cases Tab
-    FiCode, // For Source Code Tab
-    FiChevronLeft,
-    FiUploadCloud, // For Resubmit
-    FiPlay, // For Continue/Next Problem
-    FiCpu, // For Time Execution
-    FiDownload, // For Download Source
-    FiRefreshCw, // For Running Test Case
-    FiAlertTriangle, // For Runtime Error
+	FiCheckCircle,
+	FiXCircle,
+	FiClock,
+	FiDatabase, // For Memory Limit
+	FiActivity, // For Pending
+	FiBarChart2, // For Overview Tab
+	FiList, // For Test Cases Tab
+	FiCode, // For Source Code Tab
+	FiChevronLeft,
+	FiUploadCloud, // For Resubmit
+	FiPlay, // For Continue/Next Problem
+	FiCpu, // For Time Execution
+	FiDownload, // For Download Source
+	FiRefreshCw, // For Running Test Case
+	FiAlertTriangle, // For Runtime Error
 } from "react-icons/fi";
 import dayjs from "dayjs"; // For date formatting, user needs to install: npm install dayjs
 import React from "react";
@@ -91,7 +91,7 @@ const sampleSubmission: SubmissionDetailsData = {
 	submissionId: "123",
 	problemId: "two-sum",
 	problemTitle: "Two Sum",
-	status: "ACCEPTED", // Change this to test different states: PENDING, WRONG_ANSWER etc.
+	status: "TIME_LIMIT_EXCEEDED", // Change this to test different states: PENDING, WRONG_ANSWER etc.
 	languageId: "C++",
 	languageVersion: "17",
 	timeExecutionInMs: "15 ms",

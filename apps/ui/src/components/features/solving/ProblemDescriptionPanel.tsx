@@ -1,39 +1,29 @@
 import { useColorModeValue } from "@/components/ui/color-mode"; // Assuming this path is correct for the project
-import { Prose } from "@/components/ui/prose";
-import { DEFAULT_EXTENSIONS } from "@/libs/tiptap/extension";
 import type { FullProblem } from "@repo/backend/problems/problemService";
 import {
-    DIFFICULTY_COLORS_PALATE,
-    DIFFICULTY_LABELS,
-} from "@/utils/constants/difficulties";
-import {
-    Badge,
-    Box,
-    Separator as Divider,
-    Flex,
-    HStack,
-    Heading,
-    IconButton,
-    Tabs,
-    Tag,
-    Text,
-    VStack,
-    Wrap,
+	Box,
+	Separator as Divider,
+	Flex,
+	HStack,
+	Heading,
+	IconButton,
+	Tabs,
+	Text,
 } from "@chakra-ui/react";
-import { generateHTML } from "@tiptap/html";
+import { Link, useLocation, useParams } from "@tanstack/react-router";
 import React from "react";
 import {
-    FiBookOpen,
-    FiMessageCircle,
-    FiShare2,
-    FiThumbsDown,
-    FiThumbsUp,
+	FiBookOpen,
+	FiMessageCircle,
+	FiShare2,
+	FiThumbsDown,
+	FiThumbsUp,
 } from "react-icons/fi";
 import { usePromiseStore } from "@/stores/usePromiseStore";
 import { useQuery } from "@tanstack/react-query";
 import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
+import { Outlet } from "@tanstack/react-router";
 import { LuX } from "react-icons/lu";
-import { SubmissionDetails } from "./SubmissionDetailsPage";
 interface ProblemDescriptionPanelProps {
 	problem: FullProblem;
 }
@@ -41,21 +31,47 @@ interface ProblemDescriptionPanelProps {
 export const ProblemDescriptionPanel = ({
 	problem,
 }: ProblemDescriptionPanelProps) => {
-	const problemStatement = React.useMemo(() => {
-		return generateHTML(problem.statement as JSON, DEFAULT_EXTENSIONS);
-	}, [problem.statement]);
-	const editorial = React.useMemo(() => {
-		return generateHTML(
-			(problem.description as JSON) ?? {},
-			DEFAULT_EXTENSIONS
-		);
-	}, [problem.description]);
+	const tab = useLocation({
+		select: ({ pathname }) => {
+			const TABS_PATTERNS = [
+				{
+					regex: /^\/problems\/[^/]+\/description$/,
+					value: "desc",
+				},
+				{
+					regex: /^\/problems\/[^/]+\/editorial$/,
+					value: "editorial",
+				},
+				{
+					regex: /^\/problems\/[^/]+\/solutions$/,
+					value: "solutions",
+				},
+				{
+					regex: /^\/problems\/[^/]+\/histories$/,
+					value: "histories",
+				},
+				{
+					regex: /^\/problems\/[^/]+\/submissions\/[^/]+$/,
+					value: "submission",
+				},
+			];
+			for (const { regex, value } of TABS_PATTERNS) {
+				if (regex.test(pathname)) {
+					return value;
+				}
+			}
+			return "desc"; // Default value if no match found
+		},
+	});
+	const params = useParams({
+		from: "/problems/$slug/_layout",
+	});
 	const bgColor = useColorModeValue("white", "gray.800");
-	const textColor = useColorModeValue("gray.700", "gray.200");
+
 	const subduedTextColor = useColorModeValue("gray.500", "gray.400");
 	const [isShowSubmissionPanel, setIsShowSubmissionPanel] =
 		React.useState(true);
-	const [value, setValue] = React.useState<string | null>("desc");
+
 	const { id, type } = usePromiseStore();
 	const submissionQuery = useQuery({
 		...getSubmissionByIdQueryOptions(id || ""),
@@ -92,140 +108,79 @@ export const ProblemDescriptionPanel = ({
 					variant="line"
 					colorPalette="teal"
 					size="sm"
-					defaultValue="desc"
-					value={value}
-					onValueChange={({ value: newVal }) => {
-						setValue(newVal);
-						
-					}}
+					defaultValue={tab}
+				value={tab}
 				>
 					<Tabs.List mb={4}>
-						<Tabs.Trigger value="desc">Mô tả</Tabs.Trigger>
-						<Tabs.Trigger value="editorial">Hướng dẫn</Tabs.Trigger>
-						<Tabs.Trigger value="solutions">Giải pháp</Tabs.Trigger>
-						<Tabs.Trigger value="histories">Lịch sử </Tabs.Trigger>
-						{isShowSubmissionPanel && (
-							<Tabs.Trigger value="submission">
+						<Tabs.Trigger asChild value="desc">
+							<Link
+								to="/problems/$slug/description"
+								params={{
+									slug: params.slug || "",
+								}}
+							>
+								Mô tả
+							</Link>
+						</Tabs.Trigger>
+						<Tabs.Trigger asChild value="editorial">
+							<Link
+								to="/problems/$slug/editorial"
+								params={{
+									slug: params.slug || "",
+								}}
+							>
+								Hướng dẫn
+							</Link>
+						</Tabs.Trigger>
+						<Tabs.Trigger asChild value="solutions">
+							<Link
+								to="/problems/$slug/solutions"
+								params={{
+									slug: params.slug || "",
+								}}
+							>
+								Giải pháp
+							</Link>
+						</Tabs.Trigger>
+						<Tabs.Trigger asChild value="histories">
+							<Link
+								to="/problems/$slug/histories"
+								params={{
+									slug: params.slug || "",
+								}}
+							>
+								Lịch sử
+							</Link>
+						</Tabs.Trigger>
+
+						{tab === "submission" && (
+							<Tabs.Trigger  value="submission">
 								Bài nộp
 								<IconButton
 									variant={"ghost"}
 									size={"xs"}
 									rounded={"full"}
 									colorPalette={"red"}
-									onClick={() => {
-										setIsShowSubmissionPanel(false);
-                                        if( value === "submission") {
-                                            setValue("desc");
-                                        }
-									}}
+									asChild
 								>
+									<Link
+										to={"/problems/$slug/description"}
+										params={(pre)=>{
+											return {
+												slug: pre.slug || "",
+												id: "",
+											};
+										}}
+										>
 									<LuX />
+									</Link>
 								</IconButton>
 							</Tabs.Trigger>
 						)}
 					</Tabs.List>
-					<Tabs.Content value="desc" p={0}>
-						<VStack align="stretch" gap={5}>
-							<Prose size={"lg"} maxWidth={"99%"}>
-								<div
-									// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-									dangerouslySetInnerHTML={{
-										__html: problemStatement,
-									}}
-								/>
-							</Prose>
-							<VStack align="stretch" gap={3} pt={4}>
-								<Heading as="h3" size="sm" mb={1}>
-									Thông tin thêm
-								</Heading>
-								<HStack justifyContent="space-between">
-									<Text
-										fontSize="sm"
-										color={subduedTextColor}
-									>
-										Độ khó:
-									</Text>
-									<Badge
-										colorPalette={
-											DIFFICULTY_COLORS_PALATE[
-												problem.difficultyLevel!
-											]
-										}
-										variant="solid"
-										fontSize="xs"
-									>
-										{
-											DIFFICULTY_LABELS[
-												problem.difficultyLevel!
-											]
-										}
-									</Badge>
-								</HStack>
-								<HStack justifyContent="space-between">
-									<Text
-										fontSize="sm"
-										color={subduedTextColor}
-									>
-										Thẻ:
-									</Text>
-									<Wrap gap={1}>
-										{problem.tags.map((tag) => (
-											<Tag.Root
-												size="sm"
-												colorPalette="purple"
-												variant="subtle"
-												key={tag.id}
-											>
-												<Tag.Label>
-													{tag.name}
-												</Tag.Label>
-											</Tag.Root>
-										))}
-									</Wrap>
-								</HStack>
-								<HStack justifyContent="space-between">
-									<Text
-										fontSize="sm"
-										color={subduedTextColor}
-									>
-										Lượt chấp nhận:
-									</Text>
-									<Text fontSize="sm" fontWeight="medium">
-										75.2%
-									</Text>
-								</HStack>
-							</VStack>
-						</VStack>
+					<Tabs.Content value={tab} p={0}>
+						<Outlet />
 					</Tabs.Content>
-					<Tabs.Content value="editorial" p={1}>
-						<Prose size={"lg"}>
-							<div
-								// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-								dangerouslySetInnerHTML={{
-									__html: editorial,
-								}}
-							/>
-						</Prose>
-					</Tabs.Content>
-					<Tabs.Content value="solutions" p={4}>
-						<Text color={textColor}>
-							Các giải pháp từ cộng đồng sẽ được hiển thị ở đây.
-						</Text>
-					</Tabs.Content>
-					<Tabs.Content value="histories" p={4}>
-						<Text color={textColor}>
-							Lịch sử các lần nộp bài của bạn cho bài toán này.
-						</Text>
-					</Tabs.Content>
-					{isShowSubmissionPanel && (
-						<Tabs.Content value="submission" p={1}>
-							{cachedSubmission ? (
-								<SubmissionDetails/>
-							) : (
-								<SubmissionDetails/>
-							)}
-						</Tabs.Content>
-					)}
 				</Tabs.Root>
 			</Box>
 			<Divider />

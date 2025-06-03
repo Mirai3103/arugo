@@ -223,9 +223,17 @@ async function getSubmission(id: string) {
 	});
 }
 
+async function getMySubmissionsOfProblem(userId: string, problemId: string) {
+	return db.query.submissions.findMany({
+		where: (submissions, { eq, and }) =>
+			and(eq(submissions.userId, userId), eq(submissions.problemId, problemId)),
+	});
+}
+
 export default {
 	updateResult,
 	checkAndUpdateSubmissionStatus,
 	createSubmission,
 	getSubmission,
+	getMySubmissionsOfProblem,
 };

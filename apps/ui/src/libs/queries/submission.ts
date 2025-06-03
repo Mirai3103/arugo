@@ -1,5 +1,6 @@
 import {
 	createSubmission,
+	getMySubmissionsOfProblem,
 	getSubmissionById,
 	testSubmission,
 } from "@/server/transports/server-functions/submission";
@@ -24,3 +25,10 @@ export const getSubmissionByIdQueryOptions = (id: string) => {
 		queryFn: () => getSubmissionById({ data: { id } }),
 	};
 };
+
+export const getMySubmissionsOfProblemQueryOptions = (problemId: string) => {
+	return {
+		queryKey: ["mySubmissionsOfProblem", problemId],
+		queryFn: () => getMySubmissionsOfProblem({ data: { problemId } }),
+	};
+}
