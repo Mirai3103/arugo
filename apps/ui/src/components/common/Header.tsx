@@ -1,4 +1,4 @@
-import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode"; // Assuming this path
+import { ColorModeButton } from "@/components/ui/color-mode"; // Assuming this path
 import { signOut, useSession } from "@/libs/auth/client"; // Assuming this path
 import {
 	Box,
@@ -29,8 +29,8 @@ import {
 import { UserMenu } from "./UserMenu";
 
 export const Header = () => {
-	const bg = useColorModeValue("white", "gray.800");
-	const color = useColorModeValue("gray.800", "white");
+const bg = { "base": "white", "_dark": "gray.800" };
+const color = { "base": "gray.800", "_dark": "white" };
 	const { open: isOpen, onOpen, onClose } = useDisclosure();
 	const btnRef = React.useRef<HTMLButtonElement>(null);
 	const { data: session, isPending } = useSession();

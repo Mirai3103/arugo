@@ -1,11 +1,10 @@
-import { useColorModeValue } from "@/components/ui/color-mode"; // Assuming this path is correct for the project
 import { Prose } from "@/components/ui/prose";
 import { DEFAULT_EXTENSIONS } from "@/libs/tiptap/extension";
 import {
-    Badge, HStack,
-    Heading, Tag, Text,
-    VStack,
-    Wrap
+  Badge, HStack,
+  Heading, Tag, Text,
+  VStack,
+  Wrap
 } from "@chakra-ui/react";
 import { generateHTML } from "@tiptap/html";
 import React from "react";
@@ -23,7 +22,7 @@ function RouteComponent() {
    const problemStatement = React.useMemo(() => {
     return generateHTML(problem.statement as JSON, DEFAULT_EXTENSIONS);
   }, [problem.statement]); 
-    const subduedTextColor = useColorModeValue("gray.500", "gray.400");
+ const subduedTextColor = { "base": "gray.500", "_dark": "gray.400" };
   
   return  <VStack align="stretch" gap={5}>
                 <Prose size={"lg"} maxWidth={"99%"}>

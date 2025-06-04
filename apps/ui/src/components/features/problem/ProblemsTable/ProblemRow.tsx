@@ -1,4 +1,3 @@
-import { useColorModeValue } from "@/components/ui/color-mode";
 import type { BriefProblem } from "@/server/modules/problems/problemService";
 import {
 	DIFFICULTY_COLORS,
@@ -16,7 +15,7 @@ interface ProblemRowProps {
 export const ProblemRow: React.FC<ProblemRowProps> = ({ problem, onClick }) => (
 	<Table.Row
 		_hover={{
-			bg: useColorModeValue("gray.50", "gray.700"),
+			bg: { base: "gray.50", _dark: "gray.700" },
 			cursor: "pointer",
 		}}
 		onClick={() => onClick(problem.slug)}

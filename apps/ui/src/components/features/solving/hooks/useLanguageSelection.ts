@@ -1,8 +1,7 @@
 import { createListCollection } from "@chakra-ui/react";
-import type { Monaco } from "@monaco-editor/react";
-import type { editor } from "monaco-editor";
 import type { ValueChangeDetails } from "node_modules/@chakra-ui/react/dist/types/components/select/namespace"; // Verify this path
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
+import { useEditorContext } from "../contexts/EditorContext";
 
 type LanguageItem = {
 	value: string;
@@ -17,9 +16,8 @@ type Langs = {
 }[];
 export function useLanguageSelection(
 	initialLanguages: Langs,
-	editorRef: React.RefObject<editor.IStandaloneCodeEditor | null>,
-	monacoRef: React.RefObject<Monaco | null>,
 ) {
+	const {editor:editorRef,monaco:monacoRef, language:selectedLanguage,setLanguage:setSelectedLanguage} = useEditorContext();
 	const languageCollection = useMemo(
 		() =>
 			createListCollection<LanguageItem>({
@@ -32,9 +30,7 @@ export function useLanguageSelection(
 		[initialLanguages],
 	);
 
-	const [selectedLanguage, setSelectedLanguage] = useState<string>(
-		initialLanguages?.[0]?.id?.toString() || "",
-	);
+	
 
 	const setInitialEditorLanguage = useCallback(() => {
 		const initialLangItem = languageCollection.items.find(
@@ -50,7 +46,7 @@ export function useLanguageSelection(
 				);
 			}
 		}
-	}, [initialLanguages, editorRef, monacoRef, languageCollection]);
+	}, [languageCollection.items, initialLanguages, setSelectedLanguage, monacoRef, editorRef]);
 
 	const handleLanguageChange = useCallback(
 		(details: ValueChangeDetails<LanguageItem>) => {
@@ -77,7 +73,7 @@ export function useLanguageSelection(
 				);
 			}
 		},
-		[editorRef, monacoRef, languageCollection],
+		[languageCollection.items, setSelectedLanguage, monacoRef, editorRef],
 	);
 
 	return {

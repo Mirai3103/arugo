@@ -1,4 +1,5 @@
-import { Box,
+import {
+	Box,
 	Button,
 	Container,
 	Separator as Divider,
@@ -15,7 +16,6 @@ import { Box,
 } from "@chakra-ui/react";
 import { Link, useLoaderData } from "@tanstack/react-router";
 
-import { useColorModeValue } from "@/components/ui/color-mode";
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import {
@@ -32,8 +32,8 @@ import {
 
 // Header Component
 const Header = () => {
-	const bg = useColorModeValue("white", "gray.800");
-	const color = useColorModeValue("gray.800", "white");
+	const bg = { base: "white", _dark: "gray.800" };
+	const color = { base: "gray.800", _dark: "white" };
 	const { session } = useLoaderData({
 		from: "/",
 	});
@@ -53,19 +53,34 @@ const Header = () => {
 					<Link to="/">
 						<HStack borderSpacing={2}>
 							<Icon as={FiCode} w={8} h={8} color="teal.500" />
-							<Heading as="h1" size="lg" color={color} letterSpacing="tight">
+							<Heading
+								as="h1"
+								size="lg"
+								color={color}
+								letterSpacing="tight"
+							>
 								CodeMaster
 							</Heading>
 						</HStack>
 					</Link>
 					<HStack borderSpacing={{ base: 2, md: 4 }}>
 						{session.data?.user ? (
-							<Button asChild variant="ghost" colorScheme="teal" size="sm">
+							<Button
+								asChild
+								variant="ghost"
+								colorScheme="teal"
+								size="sm"
+							>
 								<Link to="/home">Trang chủ</Link>
 							</Button>
 						) : (
 							<>
-								<Button asChild variant="ghost" colorScheme="teal" size="sm">
+								<Button
+									asChild
+									variant="ghost"
+									colorScheme="teal"
+									size="sm"
+								>
 									<Link to="/login">Đăng nhập</Link>
 								</Button>
 								<Button asChild colorScheme="teal" size="sm">
@@ -109,11 +124,11 @@ const HeroSection = () => {
 					</Heading>
 					<Text
 						fontSize={{ base: "lg", md: "xl" }}
-						color={useColorModeValue("gray.600", "gray.300")}
+						color={{ base: "gray.600", _dark: "gray.300" }}
 					>
-						Thực hành giải thuật, tham gia thử thách code, và chinh phục các
-						cuộc thi lập trình. Xây dựng một cộng đồng vững mạnh và đạt được mục
-						tiêu của bạn!
+						Thực hành giải thuật, tham gia thử thách code, và chinh
+						phục các cuộc thi lập trình. Xây dựng một cộng đồng vững
+						mạnh và đạt được mục tiêu của bạn!
 					</Text>
 					<Stack
 						direction={{ base: "column", sm: "row" }}
@@ -162,7 +177,7 @@ interface FeatureCardProps {
 const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
 	return (
 		<VStack
-			bg={useColorModeValue("gray.50", "gray.700")}
+			bg={{ base: "gray.50", _dark: "gray.700" }}
 			p={6}
 			rounded="lg"
 			borderSpacing={4}
@@ -175,7 +190,7 @@ const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
 			<Heading as="h3" size="md" fontWeight="semibold">
 				{title}
 			</Heading>
-			<Text color={useColorModeValue("gray.600", "gray.300")}>
+			<Text color={{ base: "gray.600", _dark: "gray.300" }}>
 				{description}
 			</Text>
 		</VStack>
@@ -224,21 +239,23 @@ const FeaturesSection = () => {
 
 	return (
 		<Box
-			bg={useColorModeValue("gray.100", "gray.900")}
+			bg={{ base: "gray.100", _dark: "gray.900" }}
 			py={{ base: 12, md: 20 }}
 		>
 			<Container maxW="container.xl">
 				<VStack borderSpacing={4} textAlign="center" mb={10}>
 					<Heading as="h2" size="xl" fontWeight="bold">
-						Tại Sao Chọn <chakra.span color="teal.500">CodeMaster</chakra.span>?
+						Tại Sao Chọn{" "}
+						<chakra.span color="teal.500">CodeMaster</chakra.span>?
 					</Heading>
 					<Text
 						fontSize="lg"
-						color={useColorModeValue("gray.600", "gray.300")}
+						color={{ base: "gray.600", _dark: "gray.300" }}
 						maxW="2xl"
 					>
-						CodeMaster cung cấp một nền tảng toàn diện để bạn không chỉ học lập
-						trình mà còn trở thành một chuyên gia giải quyết vấn đề.
+						CodeMaster cung cấp một nền tảng toàn diện để bạn không
+						chỉ học lập trình mà còn trở thành một chuyên gia giải
+						quyết vấn đề.
 					</Text>
 				</VStack>
 				<SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={8}>
@@ -270,7 +287,7 @@ const ProblemItem = ({ title, difficulty, tags }: ProblemItemProps) => {
 			justifyContent="space-between"
 			alignItems="center"
 			p={4}
-			bg={useColorModeValue("white", "gray.700")}
+			bg={{ base: "white", _dark: "gray.700" }}
 			rounded="md"
 			boxShadow="sm"
 			_hover={{ boxShadow: "md" }}
@@ -325,9 +342,12 @@ const ProblemsPreviewSection = () => {
 				<Heading as="h2" size="xl" fontWeight="bold">
 					Thử Thách Bản Thân Với Các Bài Tập Nổi Bật
 				</Heading>
-				<Text fontSize="lg" color={useColorModeValue("gray.600", "gray.300")}>
-					Khám phá một vài ví dụ về các dạng bài tập bạn có thể tìm thấy trên
-					CodeMaster.
+				<Text
+					fontSize="lg"
+					color={{ base: "gray.600", _dark: "gray.300" }}
+				>
+					Khám phá một vài ví dụ về các dạng bài tập bạn có thể tìm
+					thấy trên CodeMaster.
 				</Text>
 			</VStack>
 			<Stack borderSpacing={4}>
@@ -358,23 +378,28 @@ const CTASection = () => {
 		<Box bg="teal.500" color="white" py={{ base: 12, md: 20 }}>
 			<Container maxW="container.md" textAlign="center">
 				<VStack borderSpacing={6}>
-					<Heading as="h2" size={{ base: "lg", md: "xl" }} fontWeight="bold">
+					<Heading
+						as="h2"
+						size={{ base: "lg", md: "xl" }}
+						fontWeight="bold"
+					>
 						Sẵn Sàng Chinh Phục Thử Thách?
 					</Heading>
 					<Text fontSize={{ base: "md", md: "lg" }}>
-						Tham gia CodeMaster ngay hôm nay để bắt đầu hành trình trở thành một
-						chuyên gia lập trình. Đăng ký miễn phí và trải nghiệm!
+						Tham gia CodeMaster ngay hôm nay để bắt đầu hành trình
+						trở thành một chuyên gia lập trình. Đăng ký miễn phí và
+						trải nghiệm!
 					</Text>
 					<Button
 						as={Link}
 						// @ts-ignore
 						to="/signup"
-						bg={useColorModeValue("white", "gray.800")}
-						color={useColorModeValue("teal.500", "white")}
+						bg={{ base: "white", _dark: "gray.800" }}
+						color={{ base: "teal.500", _dark: "white" }}
 						size="lg"
 						px={10}
 						_hover={{
-							bg: useColorModeValue("gray.100", "gray.700"),
+							bg: { base: "gray.100", _dark: "gray.700" },
 						}}
 						leftIcon={<FiStar />}
 					>
@@ -391,8 +416,8 @@ const Footer = () => {
 	const year = new Date().getFullYear();
 	return (
 		<Box
-			bg={useColorModeValue("gray.100", "gray.900")}
-			color={useColorModeValue("gray.700", "gray.200")}
+			bg={{ base: "gray.100", _dark: "gray.900" }}
+			color={{ base: "gray.700", _dark: "gray.200" }}
 		>
 			<Container maxW="container.xl" py={10}>
 				<Stack
@@ -416,8 +441,8 @@ const Footer = () => {
 							maxW="sm"
 							textAlign={{ base: "center", md: "left" }}
 						>
-							Nền tảng hàng đầu cho việc học và rèn luyện kỹ năng lập trình,
-							giải thuật.
+							Nền tảng hàng đầu cho việc học và rèn luyện kỹ năng
+							lập trình, giải thuật.
 						</Text>
 					</VStack>
 
@@ -466,16 +491,16 @@ const Footer = () => {
 						&copy; {year} CodeMaster. Đã đăng ký bản quyền.
 					</Text>
 					<HStack borderSpacing={4}>
-						<Link href="#">
+						<Link to="#">
 							<Icon as={FaGithub} boxSize={5} />
 						</Link>
-						<Link href="#">
+						<Link to="#">
 							<Icon as={FaTwitter} boxSize={5} />
 						</Link>
-						<Link href="#">
+						<Link to="#">
 							<Icon as={FaLinkedin} boxSize={5} />
 						</Link>
-						<Link href="#">
+						<Link to="#">
 							<Icon as={FaFacebook} boxSize={5} />
 						</Link>
 					</HStack>

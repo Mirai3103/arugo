@@ -1,4 +1,3 @@
-import { useColorModeValue } from "@/components/ui/color-mode"; // Assuming this path is correct for the project
 import type { FullProblem } from "@repo/backend/problems/problemService";
 import {
 	Box,
@@ -66,9 +65,9 @@ export const ProblemDescriptionPanel = ({
 	const params = useParams({
 		from: "/problems/$slug/_layout",
 	});
-	const bgColor = useColorModeValue("white", "gray.800");
+	const bgColor = { base: "white", _dark: "gray.800" };
 
-	const subduedTextColor = useColorModeValue("gray.500", "gray.400");
+	const subduedTextColor = { base: "gray.500", _dark: "gray.400" };
 	const [isShowSubmissionPanel, setIsShowSubmissionPanel] =
 		React.useState(true);
 
@@ -109,7 +108,7 @@ export const ProblemDescriptionPanel = ({
 					colorPalette="teal"
 					size="sm"
 					defaultValue={tab}
-				value={tab}
+					value={tab}
 				>
 					<Tabs.List mb={4}>
 						<Tabs.Trigger asChild value="desc">
@@ -154,7 +153,7 @@ export const ProblemDescriptionPanel = ({
 						</Tabs.Trigger>
 
 						{tab === "submission" && (
-							<Tabs.Trigger  value="submission">
+							<Tabs.Trigger value="submission">
 								Bài nộp
 								<IconButton
 									variant={"ghost"}
@@ -165,14 +164,14 @@ export const ProblemDescriptionPanel = ({
 								>
 									<Link
 										to={"/problems/$slug/description"}
-										params={(pre)=>{
+										params={(pre) => {
 											return {
 												slug: pre.slug || "",
 												id: "",
 											};
 										}}
-										>
-									<LuX />
+									>
+										<LuX />
 									</Link>
 								</IconButton>
 							</Tabs.Trigger>
@@ -188,7 +187,7 @@ export const ProblemDescriptionPanel = ({
 				p={{ base: 3, md: 4 }}
 				gap={3}
 				justifyContent="space-between"
-				bg={useColorModeValue("gray.50", "gray.850")}
+				bg={{ base: "gray.50", _dark: "gray.850" }}
 				borderBottomRadius={{ md: "lg" }}
 			>
 				<HStack gap={1}>

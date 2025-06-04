@@ -6,10 +6,11 @@ import {
 	Icon,
 	Button,
 	Flex,
-	Alert, Skeleton,
+	Alert,
+	Skeleton,
 	Separator,
 	Tooltip,
-	Heading
+	Heading,
 } from "@chakra-ui/react";
 import {
 	FiCheckCircle,
@@ -31,7 +32,6 @@ import { useSession } from "@/libs/auth/client";
 import { getMySubmissionsOfProblemQueryOptions } from "@/libs/queries/submission";
 import { useQuery } from "@tanstack/react-query"; // Added QueryObserverResult for type clarity
 import React from "react"; // Ensure React is imported
-import { useColorModeValue } from "@/components/ui/color-mode";
 import { Link } from "@tanstack/react-router";
 
 dayjs.extend(relativeTime);
@@ -155,10 +155,10 @@ const SubmissionRow: React.FC<SubmissionRowProps> = ({
 	submission,
 	onViewDetails,
 }) => {
-	const cardBg = useColorModeValue("white", "gray.750");
-	const hoverBg = useColorModeValue("gray.50", "gray.700");
-	const textColor = useColorModeValue("gray.700", "gray.100");
-	const subduedTextColor = useColorModeValue("gray.500", "gray.300");
+	const cardBg = { base: "white", _dark: "gray.750" };
+	const hoverBg = { base: "gray.50", _dark: "gray.700" };
+	const textColor = { base: "gray.700", _dark: "gray.100" };
+	const subduedTextColor = { base: "gray.500", _dark: "gray.300" };
 	const statusPresentation = getStatusPresentation(submission.status);
 	const langInfo = languageMap[submission.languageId] || {
 		name: `ID ${submission.languageId}`,
@@ -173,7 +173,7 @@ const SubmissionRow: React.FC<SubmissionRowProps> = ({
 			boxShadow="sm"
 			alignItems="center"
 			justifyContent="space-between"
-			_hover={{ bg: hoverBg, cursor: "pointer"}}
+			_hover={{ bg: hoverBg, cursor: "pointer" }}
 			onClick={() => onViewDetails(submission.id)}
 			transition="background-color 0.2s, box-shadow 0.2s"
 		>
@@ -293,10 +293,8 @@ export default function SubmissionHistory({
 		isError: submissionsError,
 		error: submissionFetchError,
 	} = useQuery(getMySubmissionsOfProblemQueryOptions(problemId)); // Pass enabled flag
-
-	const containerBg = useColorModeValue("gray.50", "gray.800");
-	const titleColor = useColorModeValue("gray.700", "white");
-
+	const containerBg = { base: "gray.50", _dark: "gray.800" };
+	const titleColor = { base: "gray.700", _dark: "white" };
 	if (isSessionPending || areSubmissionsPending) {
 		return (
 			<VStack
@@ -376,7 +374,7 @@ export default function SubmissionHistory({
 			<Box borderRadius="lg" boxShadow="base">
 				<Text
 					textAlign="center"
-					color={useColorModeValue("gray.600", "gray.400")}
+					color={{ base: "gray.600", _dark: "gray.400" }}
 					fontSize="sm"
 				>
 					Bạn chưa có bài nộp nào cho thử thách này.
@@ -386,31 +384,20 @@ export default function SubmissionHistory({
 	}
 
 	return (
-		<VStack
-			gap={5}
-			borderRadius="lg"
-			boxShadow="base"
-			align="stretch"
-		>
+		<VStack gap={5} borderRadius="lg" boxShadow="base" align="stretch">
 			<Flex justifyContent="space-between" alignItems="center">
 				<Heading as="h3" size="md" color={titleColor}>
 					Lịch sử bài nộp của bạn
 				</Heading>
 				<Text
 					fontSize="sm"
-					color={useColorModeValue("gray.500", "gray.400")}
+					color={{ base: "gray.500", _dark: "gray.400" }}
 				>
 					Tổng số: {submissionsData.length}
 				</Text>
 			</Flex>
 			<Separator />
-			<VStack
-				gap={3}
-				align="stretch"
-				overflowY="auto"
-				pr={2}
-				
-			>
+			<VStack gap={3} align="stretch" overflowY="auto" pr={2}>
 				{submissionsData.map((submission) => (
 					<SubmissionRow
 						key={submission.id}

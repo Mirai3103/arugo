@@ -13,7 +13,6 @@ import {
 import { Link as RouterLink } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
 import { FiHelpCircle, FiLogOut, FiSettings, FiUser } from "react-icons/fi";
-import { useColorModeValue } from "../ui/color-mode";
 
 interface User {
 	name?: string | null;
@@ -27,15 +26,15 @@ interface UserMenuProps {
 }
 
 export const UserMenu = ({ user, isPending }: UserMenuProps) => {
-	const menuBg = useColorModeValue("white", "gray.700");
-	const menuItemHoverBg = useColorModeValue("gray.100", "gray.600");
-	const menuItemFocusBg = useColorModeValue("gray.100", "gray.650");
-	const menuItemColor = useColorModeValue("gray.800", "white");
-	const textColor = useColorModeValue("gray.800", "white");
-	const mutedTextColor = useColorModeValue("gray.600", "gray.400");
-	const dividerColor = useColorModeValue("gray.200", "gray.600");
-	const logoutHoverBgLight = useColorModeValue("red.50", "red.800");
-	const logoutHoverColorLight = useColorModeValue("red.600", "red.300");
+const menuBg = { "base": "white", "_dark": "gray.700" };
+    const menuItemHoverBg = { "base": "gray.100", "_dark": "gray.600" };
+    const menuItemFocusBg = { "base": "gray.100", "_dark": "gray.650" };
+    const menuItemColor = { "base": "gray.800", "_dark": "white" };
+    const textColor = { "base": "gray.800", "_dark": "white" };
+    const mutedTextColor = { "base": "gray.600", "_dark": "gray.400" };
+    const dividerColor = { "base": "gray.200", "_dark": "gray.600" };
+    const logoutHoverBgLight = { "base": "red.50", "_dark": "red.800" };
+    const logoutHoverColorLight = { "base": "red.600", "_dark": "red.300" };
 	const navigate = useNavigate();
 	if (isPending) {
 		return (

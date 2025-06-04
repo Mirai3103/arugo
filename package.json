@@ -2,7 +2,7 @@
   "name": "code-stack",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter='./apps/ui'",
     "dev": "turbo run dev --filter='./apps/ui'",
     "package:dev": "turbo run build:dev --filter='./packages/*'",
     "lint": "turbo run lint",
