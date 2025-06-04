@@ -10,7 +10,6 @@ import {
 	Text,
 } from "@chakra-ui/react";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
-import React from "react";
 import {
 	FiBookOpen,
 	FiMessageCircle,
@@ -18,9 +17,6 @@ import {
 	FiThumbsDown,
 	FiThumbsUp,
 } from "react-icons/fi";
-import { usePromiseStore } from "@/stores/usePromiseStore";
-import { useQuery } from "@tanstack/react-query";
-import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
 import { Outlet } from "@tanstack/react-router";
 import { LuX } from "react-icons/lu";
 interface ProblemDescriptionPanelProps {
@@ -68,28 +64,6 @@ export const ProblemDescriptionPanel = ({
 	const bgColor = { base: "white", _dark: "gray.800" };
 
 	const subduedTextColor = { base: "gray.500", _dark: "gray.400" };
-	const [isShowSubmissionPanel, setIsShowSubmissionPanel] =
-		React.useState(true);
-
-	const { id, type } = usePromiseStore();
-	const submissionQuery = useQuery({
-		...getSubmissionByIdQueryOptions(id || ""),
-		enabled: !!id && type === "submit",
-		refetchInterval: 3000,
-	});
-	const [cachedSubmission, setCachedSubmission] = React.useState(
-		submissionQuery.data || null
-	);
-	React.useEffect(() => {
-		if (submissionQuery.data) {
-			setCachedSubmission(submissionQuery.data);
-		}
-	}, [submissionQuery.data]);
-	React.useEffect(() => {
-		if (id && type === "submit") {
-			setIsShowSubmissionPanel(true);
-		}
-	}, [id, type]);
 
 	return (
 		<Flex

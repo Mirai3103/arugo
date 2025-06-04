@@ -23,6 +23,7 @@ import { useCodeTesting } from "./hooks/useCodeTesting";
 import { useLanguageSelection } from "./hooks/useLanguageSelection";
 import { useSubmissionPolling } from "./hooks/useSubmissionPolling";
 import { useEditorContext } from "./contexts/EditorContext";
+import { useNavigate } from "@tanstack/react-router";
 interface CodeEditorAreaProps {
 	problem: FullProblem;
 	allowTest?: boolean;
@@ -66,8 +67,23 @@ const CodeEditorArea = ({ problem, allowTest = true }: CodeEditorAreaProps) => {
 		setInitialEditorLanguage();
 	}
 	const borderColor = { base: "gray.200", _dark: "gray.700" };
+	const navigate = useNavigate();
+
 	if (!isClient || !editorRef || !monacoRef) {
 		return null;
+	}
+	const submitCode = () => {
+		handleSubmitCode()
+		.then((newId) => {
+			navigate({
+				to:"/problems/$slug/submissions/$id",
+				params:{
+					slug: problem.slug!,
+					id: newId,
+				}
+			})
+		}
+		);
 	}
 
 	return (
@@ -99,7 +115,7 @@ const CodeEditorArea = ({ problem, allowTest = true }: CodeEditorAreaProps) => {
 						colorPalette="green"
 						size="sm"
 						loading={isRunningCode || isPolling}
-						onClick={handleSubmitCode}
+						onClick={submitCode}
 						disabled={
 							!selectedLanguage || isRunningCode || isPolling
 						}

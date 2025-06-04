@@ -42,7 +42,7 @@ export function useCodeTesting(
 			id: newId,
 		};
 		const func:any = type === "test" ? testCodeAsync : submitSubmission;
-		func(payload)
+		return func(payload)
 			.then(() => {
 				const promise = new Promise((resolve, reject) => {
 					promiseStore.addPending(newId, { resolve, reject }, type);
@@ -55,6 +55,7 @@ export function useCodeTesting(
 						description: error.message || String(error.error || error), // Try to get a more specific error message
 					}),
 				});
+				return newId;
 			})
 			.catch((apiError:any) => {
 				toaster.error({
@@ -65,7 +66,7 @@ export function useCodeTesting(
 				// Note: If testCodeAsync fails, the promise might not be in promiseStore.
 				// The renewUuid() was called, so polling might start for an ID that never made it.
 				// The original clearUuid() in the polling effect will eventually clear it.
-			});
+			})
 	};
 
 	return {

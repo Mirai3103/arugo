@@ -38,184 +38,67 @@ import dayjs from "dayjs"; // For date formatting, user needs to install: npm in
 import React from "react";
 import { Link } from "@tanstack/react-router";
 import { useEditorContext } from "./contexts/EditorContext";
+import { SubmissionTestcaseStatus, SubmissionTestcaseStatusLabel } from "@/types/enum";
+import type { SubmissionDetails } from "@repo/backend/submissions/submissionService";
+import { SubmissionStatus } from "@repo/backend/submissions/validations/enum";
 
 // --- START: Types and Sample Data ---
-type SubmissionStatus =
-	| "ACCEPTED"
-	| "WRONG_ANSWER"
-	| "TIME_LIMIT_EXCEEDED"
-	| "MEMORY_LIMIT_EXCEEDED"
-	| "PENDING"
-	| "COMPILE_ERROR"
-	| "RUNTIME_ERROR"
-	| "DRAFT";
 
-type TestCaseStatus =
-	| "Success"
-	| "WrongAnswer"
-	| "TimeLimitExceeded"
-	| "MemoryLimitExceeded"
-	| "RuntimeError"
-	| "CompileError"
-	| "RUNNING"
-	| "NONE"; // For not yet run testcases
-
-interface TestCase {
-	testcaseId: string;
-	label?: string; // Optional label for sample test cases
-	status: TestCaseStatus;
-	runtimeInMs?: string;
-	memoryUsedInKb?: string;
-	isSample: boolean;
-	input?: string; // For detailed view
-	output?: string; // For detailed view
-	expectedOutput?: string; // For detailed view
-}
-
-interface SubmissionDetailsData {
-	submissionId: string;
-	problemId: string;
-	problemTitle: string; // Added for clarity
-	status: SubmissionStatus;
-	languageId: string; // e.g., "C++", "Python"
-	timeExecutionInMs: string;
-	memoryUsageInKb: string;
-	testcases: TestCase[];
-	createdAt: string; // ISO Date string
-	code: string;
-	languageVersion?: string; // e.g., "17" for C++17
-	totalTestCases?: number; // For progress bar if not all testcases are in the array initially
-	passedTestCases?: number; // For progress bar
-}
-
-const sampleSubmission: SubmissionDetailsData = {
-	submissionId: "123",
-	problemId: "two-sum",
-	problemTitle: "Two Sum",
-	status: "TIME_LIMIT_EXCEEDED", // Change this to test different states: PENDING, WRONG_ANSWER etc.
-	languageId: "C++",
-	languageVersion: "17",
-	timeExecutionInMs: "15 ms",
-	memoryUsageInKb: "12 MB",
-	createdAt: "2025-06-03T01:29:00+07:00",
-	code: ` #include <vector>\n #include <unordered_map>\n \n class Solution {\n public:\n  std::vector<int> twoSum(std::vector<int>& nums, int target) {\n    std::unordered_map<int, int> numMap;\n    for (int i = 0; i < nums.size(); ++i) {\n      int complement = target - nums[i];\n      if (numMap.count(complement)) {\n        return {numMap[complement], i};\n      }\n      numMap[nums[i]] = i;\n    }\n    return {}; // Should not happen based on problem description\n  }\n };`,
-	testcases: [
-		{
-			testcaseId: "1",
-			label: "Sample 1",
-			status: "Success",
-			runtimeInMs: "5 ms",
-			memoryUsedInKb: "4 MB",
-			isSample: true,
-			input: "[2,7,11,15], 9",
-			output: "[0,1]",
-			expectedOutput: "[0,1]",
-		},
-		{
-			testcaseId: "2",
-			label: "Sample 2",
-			status: "Success",
-			runtimeInMs: "6 ms",
-			memoryUsedInKb: "5 MB",
-			isSample: true,
-			input: "[3,2,4], 6",
-			output: "[1,2]",
-			expectedOutput: "[1,2]",
-		},
-		{
-			testcaseId: "3",
-			status: "Success",
-			runtimeInMs: "4 ms",
-			memoryUsedInKb: "3 MB",
-			isSample: false,
-		},
-		{
-			testcaseId: "4",
-			status: "WRONG_ANSWER",
-			runtimeInMs: "4 ms",
-			memoryUsedInKb: "3 MB",
-			isSample: false,
-			input: "[0,0], 1",
-			output: "[]",
-			expectedOutput: "[0,1] (example)",
-		},
-		{
-			testcaseId: "5",
-			status: "TIME_LIMIT_EXCEEDED",
-			runtimeInMs: "2001 ms",
-			memoryUsedInKb: "3 MB",
-			isSample: false,
-		},
-		{
-			testcaseId: "6",
-			status: "MEMORY_LIMIT_EXCEEDED",
-			runtimeInMs: "10 ms",
-			memoryUsedInKb: "256 MB",
-			isSample: false,
-		},
-		{
-			testcaseId: "7",
-			status: "RUNTIME_ERROR",
-			runtimeInMs: "N/A",
-			memoryUsedInKb: "N/A",
-			isSample: false,
-		},
-		// Add more test cases to see scrolling and grid layout
-		...Array.from({ length: 10 }, (_, i) => ({
-			testcaseId: `${8 + i}`,
-			status: "NONE" as TestCaseStatus,
-			isSample: false,
-		})),
-	],
-	totalTestCases: 17, // Example: 7 detailed + 10 NONE
-	passedTestCases: 3, // Example: 3 Success
-};
 // --- END: Types and Sample Data ---
 
 // --- START: Helper Components & Functions ---
 interface StatusBadgeProps {
-	status: SubmissionStatus;
+	status: SubmissionTestcaseStatus;
 }
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
 	const statusConfig = {
-		ACCEPTED: {
+		[SubmissionTestcaseStatus.Success]: {
 			label: "Chấp nhận",
 			colorScheme: "green",
 			icon: FiCheckCircle,
 		},
-		WRONG_ANSWER: {
+		[SubmissionTestcaseStatus.WrongAnswer]: {
 			label: "Sai kết quả",
 			colorScheme: "red",
 			icon: FiXCircle,
 		},
-		TIME_LIMIT_EXCEEDED: {
+		[SubmissionTestcaseStatus.TimeLimitExceeded]: {
 			label: "Quá thời gian",
 			colorScheme: "orange",
 			icon: FiClock,
 		},
-		MEMORY_LIMIT_EXCEEDED: {
+		[SubmissionTestcaseStatus.MemoryLimitExceeded]: {
 			label: "Quá bộ nhớ",
 			colorScheme: "purple",
 			icon: FiDatabase,
 		},
-		PENDING: {
+		[SubmissionTestcaseStatus.Running]: {
 			label: "Đang chấm",
 			colorScheme: "blue",
 			icon: FiActivity,
 			animate: true,
 		},
-		COMPILE_ERROR: {
+		[SubmissionTestcaseStatus.CompileError]: {
 			label: "Lỗi biên dịch",
 			colorScheme: "red",
 			icon: FiXCircle,
 		},
-		RUNTIME_ERROR: {
+		[SubmissionTestcaseStatus.RuntimeError]: {
 			label: "Lỗi thực thi",
 			colorScheme: "red",
 			icon: FiAlertTriangle,
 		},
-		DRAFT: { label: "Bản nháp", colorScheme: "gray", icon: FiClock },
+		[SubmissionTestcaseStatus.None]: {
+			label: "Bản nháp",
+			colorScheme: "gray",
+			icon: FiClock,
+		},
+		[SubmissionStatus.Failed]: {
+			label: "Không thành công",
+			colorScheme: "red",
+			icon: FiXCircle,
+		},
 		DEFAULT: {
 			label: "Không xác định",
 			colorScheme: "gray",
@@ -242,25 +125,25 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
 	);
 };
 
-const getTestCaseIcon = (status: TestCaseStatus) => {
+const getTestCaseIcon = (status: SubmissionTestcaseStatus) => {
 	switch (status) {
-		case "Success":
+		case SubmissionTestcaseStatus.Success:
 			return { icon: FiCheckCircle, color: "green.500" };
-		case "RUNNING":
+		case SubmissionTestcaseStatus.Running:
 			return {
 				icon: FiRefreshCw,
 				color: "blue.500",
 				animate: "spin 1s linear infinite",
 			};
-		case "WrongAnswer":
+		case SubmissionTestcaseStatus.WrongAnswer:
 			return { icon: FiXCircle, color: "red.500" };
-		case "TimeLimitExceeded":
+		case SubmissionTestcaseStatus.TimeLimitExceeded:
 			return { icon: FiClock, color: "orange.500" };
-		case "MemoryLimitExceeded":
+		case SubmissionTestcaseStatus.MemoryLimitExceeded:
 			return { icon: FiDatabase, color: "purple.500" };
-		case "RuntimeError":
+		case SubmissionTestcaseStatus.RuntimeError:
 			return { icon: FiAlertTriangle, color: "red.500" };
-		case "CompileError":
+		case SubmissionTestcaseStatus.CompileError:
 			return { icon: FiXCircle, color: "red.500" };
 		default:
 			return { icon: FiClock, color: "gray.400" };
@@ -269,37 +152,41 @@ const getTestCaseIcon = (status: TestCaseStatus) => {
 // --- END: Helper Components & Functions ---
 
 // --- START: Main Component ---
-interface SubmissionDetailsPageProps {
-	submissionData?: SubmissionDetailsData; // Make it optional for easy testing
+
+export interface SubmissionDetailsPageProps {
+	submissionData: Exclude<SubmissionDetails, undefined>;
 }
 
-export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
-	submissionData = sampleSubmission,
+export const SubmissionDetailPanel: React.FC<SubmissionDetailsPageProps> = ({
+	submissionData,
 }) => {
 	const {
-		submissionId,
+		id: submissionId,
 		problemId,
-		problemTitle,
+		executionTimeMs: timeExecutionInMs,
+		memoryUsageKb: memoryUsageInKb,
 		status,
-		languageId,
-		languageVersion,
-		timeExecutionInMs,
-		memoryUsageInKb,
-		testcases,
-		createdAt,
+		language: {
+			id: languageId,
+			version: languageVersion,
+			name: languageName,
+		},
+		submittedAt: createdAt,
+		submissionTestcases: testcases,
 		code,
-		totalTestCases = testcases.length,
-		passedTestCases = testcases.filter((tc) => tc.status === "Success")
-			.length,
-	} = submissionData;
+	} = submissionData!;
+	const totalTestCases = testcases.length;
+	const passedTestCases = testcases.filter(
+		(tc) => tc.status === SubmissionTestcaseStatus.Success
+	).length;
 
 	const cardBg = { base: "white", _dark: "gray.800" };
 
 	const subduedTextColor = { base: "gray.500", _dark: "gray.400" };
 	const progressPercent =
-		status === "PENDING" && totalTestCases > 0
+		status === SubmissionTestcaseStatus.Running && totalTestCases > 0
 			? Math.round(((passedTestCases || 0) / totalTestCases) * 100)
-			: status === "ACCEPTED"
+			: status === SubmissionTestcaseStatus.Success
 				? 100
 				: 0;
 
@@ -307,16 +194,13 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 	const timeLimitMs = 200;
 	const memoryLimitKb = 32 * 1024; // 32MB in KB
 
-	const parseValue = (valueStr: string) =>
-		parseFloat(valueStr.split(" ")[0]) || 0;
-
 	const timeUsagePercent = Math.min(
 		100,
-		(parseValue(timeExecutionInMs) / timeLimitMs) * 100
+		(timeExecutionInMs / timeLimitMs) * 100
 	);
 	const memoryUsagePercent = Math.min(
 		100,
-		(parseValue(memoryUsageInKb) / (memoryLimitKb / 1024)) * 100
+		(memoryUsageInKb / (memoryLimitKb / 1024)) * 100
 	);
 	const { editor, setLanguage } = useEditorContext();
 	React.useEffect(() => {
@@ -342,32 +226,12 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 				boxShadow="md"
 			>
 				<VStack align="flex-start" gap={1}>
-					<Heading as="h1" size="lg">
+					<Heading as="h1" size="lg">1
 						Bài nộp #{submissionId}
 					</Heading>
-					<Text fontSize="sm" color={subduedTextColor}>
-						Bài tập:
-						<chakra.span fontWeight="medium">
-							{problemTitle}
-						</chakra.span>
-						(
-						<chakra.div
-							color={{ base: "teal.600", _dark: "teal.300" }}
-						>
-							<Link
-								to={`/problems/${problemId}`}
-								style={{
-									textDecoration: "underline",
-								}}
-							>
-								{problemId}
-							</Link>
-						</chakra.div>
-						)
-					</Text>
 				</VStack>
 				<Box mt={{ base: 3, md: 0 }}>
-					<StatusBadge status={status} />
+					<StatusBadge status={status as SubmissionTestcaseStatus} />
 				</Box>
 			</Flex>
 
@@ -659,14 +523,16 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 								>
 									{testcases.map((tc) => {
 										const { icon, color, animate } =
-											getTestCaseIcon(tc.status);
+											getTestCaseIcon(
+												tc.status as SubmissionTestcaseStatus
+											);
 										return (
 											<Tooltip.Root key={tc.testcaseId}>
 												<Tooltip.Content>
 													`Test Case #$
 													{tc.testcaseId}$
-													{tc.label
-														? ` (${tc.label})`
+													{tc.testcase.label
+														? ` (${tc.testcase.label})`
 														: ""}
 													: ${tc.status}`
 												</Tooltip.Content>
@@ -679,7 +545,7 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 														bg={{
 															_light: "gray.100",
 															_dark: "gray.700",
-														}} 
+														}}
 														borderRadius="md"
 														h="50px"
 														transition="background-color 0.2s"
@@ -688,7 +554,7 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 																_light: "gray.200",
 																_dark: "gray.600",
 															},
-														}} 
+														}}
 													>
 														<Icon
 															as={icon}
@@ -703,11 +569,10 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 															}
 															mt={1}
 														>
-															#{tc.testcaseId}
+															{tc.testcase.label}
 														</Text>
 													</Flex>
 												</Tooltip.Trigger>
-												<Tooltip.Arrow />
 											</Tooltip.Root>
 										);
 									})}
@@ -729,17 +594,21 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 						<VStack gap={3} align="stretch">
 							{testcases.map((tc) => {
 								const { icon, color } = getTestCaseIcon(
-									tc.status
+									tc.status as SubmissionTestcaseStatus
 								);
 								const itemBgConditional = // Logic bg được đưa trực tiếp vào prop
-									tc.status === "Success"
+									tc.status ===
+									SubmissionTestcaseStatus.Success
 										? {
 												_light: "green.50",
 												_dark: "green.800",
 											}
-										: tc.status === "WrongAnswer" ||
-											  tc.status === "CompileError" ||
-											  tc.status === "RuntimeError"
+										: tc.status ===
+													SubmissionTestcaseStatus.WrongAnswer ||
+											  tc.status ===
+													SubmissionTestcaseStatus.CompileError ||
+											  tc.status ===
+													SubmissionTestcaseStatus.RuntimeError
 											? {
 													_light: "red.50",
 													_dark: "red.800",
@@ -776,7 +645,7 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 														Test Case #
 														{tc.testcaseId}
 													</Text>
-													{tc.isSample && (
+													{tc.testcase.isSample && (
 														<Badge
 															colorPalette="purple"
 															variant="solid"
@@ -786,8 +655,8 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 														</Badge>
 													)}
 													{/* colorScheme -> colorPalette */}
-													{!tc.isSample &&
-														tc.label ===
+													{!tc.testcase.isSample &&
+														tc.testcase.label ===
 															undefined && (
 															<Badge
 																colorPalette="gray"
@@ -805,27 +674,27 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 													fontSize="sm"
 												>
 													<Icon as={icon} />
-													<Text>{tc.status}</Text>
+													<Text>{SubmissionTestcaseStatusLabel[tc.status as SubmissionTestcaseStatus]}</Text>
 												</HStack>
 											</Flex>
-											{(tc.runtimeInMs ||
-												tc.memoryUsedInKb) && (
+											{(tc.runtimeMs ||
+												tc.memoryUsedKb) && (
 												<HStack
 													mt={1.5}
 													gap={4}
 													fontSize="xs"
 													color={subduedTextColor}
 												>
-													{tc.runtimeInMs && (
+													{tc.runtimeMs && (
 														<Text>
-															Thời gian:
-															{tc.runtimeInMs}
+															Thời gian:{" "}
+															{tc.runtimeMs}ms
 														</Text>
 													)}
-													{tc.memoryUsedInKb && (
+													{tc.memoryUsedKb && (
 														<Text>
-															Bộ nhớ:
-															{tc.memoryUsedInKb}
+															Bộ nhớ:{" "}
+															{tc.memoryUsedKb}KB
 														</Text>
 													)}
 												</HStack>
@@ -839,8 +708,8 @@ export const SubmissionDetails: React.FC<SubmissionDetailsPageProps> = ({
 					<Tabs.Content value="sourcecode" p={{ base: 4, md: 6 }}>
 						<HStack justifyContent="space-between" mb={3}>
 							<Heading size="sm">
-								Mã nguồn ({languageId}
-								{languageVersion && languageVersion})
+								Mã nguồn: ({languageName}
+								{" "}{languageVersion && `v${languageVersion}`})
 							</Heading>
 							<Button size="xs" variant="outline">
 								{/* leftIcon được chuyển thành children */}

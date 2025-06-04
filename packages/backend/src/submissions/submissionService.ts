@@ -20,20 +20,32 @@ const FAILED_STATUSES = [
 	SubmissionTestcaseStatus.WrongAnswer,
 ];
 
-function calculateSubmissionStatus(testcases: SubmissionTestcase[]): SubmissionStatus {
+function calculateSubmissionStatus(
+	testcases: SubmissionTestcase[]
+): SubmissionStatus {
 	const failedTestcases = testcases.filter((tc) =>
-		FAILED_STATUSES.includes(tc.status as SubmissionTestcaseStatus),
+		FAILED_STATUSES.includes(tc.status as SubmissionTestcaseStatus)
 	);
 	if (failedTestcases.length > 0) return SubmissionStatus.Failed;
 
-	const pendingTestcases = testcases.filter((tc) => tc.status === SubmissionTestcaseStatus.Running);
+	const pendingTestcases = testcases.filter(
+		(tc) => tc.status === SubmissionTestcaseStatus.Running
+	);
 	if (pendingTestcases.length > 0) return SubmissionStatus.Running;
 
 	return SubmissionStatus.Success;
 }
 
 async function updateResult(result: ExecutionResult): Promise<void> {
-	const { error, memoryUsedInKb, output, status, submissionId, testCaseId, timeUsedInMs } = result;
+	const {
+		error,
+		memoryUsedInKb,
+		output,
+		status,
+		submissionId,
+		testCaseId,
+		timeUsedInMs,
+	} = result;
 
 	await db
 		.update(submissionTestcases)
@@ -48,14 +60,16 @@ async function updateResult(result: ExecutionResult): Promise<void> {
 		.where(
 			and(
 				eq(submissionTestcases.submissionId, submissionId),
-				eq(submissionTestcases.testcaseId, testCaseId),
-			),
+				eq(submissionTestcases.testcaseId, testCaseId)
+			)
 		);
 
 	await checkAndUpdateSubmissionStatus(submissionId);
 }
 
-async function checkAndUpdateSubmissionStatus(submissionId: string): Promise<void> {
+async function checkAndUpdateSubmissionStatus(
+	submissionId: string
+): Promise<void> {
 	const result = await db
 		.update(submissions)
 		.set({
@@ -68,18 +82,21 @@ async function checkAndUpdateSubmissionStatus(submissionId: string): Promise<voi
 
 	const remaining = result?.[0]?.remainingTestcaseCount ?? 100;
 	console.log(
-		`Submission ${submissionId} updated, remaining test cases: ${remaining}`,
+		`Submission ${submissionId} updated, remaining test cases: ${remaining}`
 	);
 	if (remaining > 0) return;
-	
 
 	const submissionTests = await db.query.submissionTestcases.findMany({
 		where: (st, { eq }) => eq(st.submissionId, submissionId),
 	});
 
 	const overallStatus = calculateSubmissionStatus(submissionTests);
-	const maxExecutionTime = Math.max(...submissionTests.map((tc) => tc.runtimeMs));
-	const maxMemoryUsage = Math.max(...submissionTests.map((tc) => tc.memoryUsedKb));
+	const maxExecutionTime = Math.max(
+		...submissionTests.map((tc) => tc.runtimeMs)
+	);
+	const maxMemoryUsage = Math.max(
+		...submissionTests.map((tc) => tc.memoryUsedKb)
+	);
 
 	await db
 		.update(submissions)
@@ -101,7 +118,8 @@ async function createSubmission(input: CreateSubmission): Promise<string> {
 	if (!problem) throw new Error("Problem not found");
 
 	const problemLanguages = await db.query.problemLanguages.findFirst({
-		where: (pl, { eq }) => eq(pl.problemId, problemId) && eq(pl.languageId, languageId),
+		where: (pl, { eq }) =>
+			eq(pl.problemId, problemId) && eq(pl.languageId, languageId),
 		with: {
 			language: true,
 		},
@@ -115,7 +133,10 @@ async function createSubmission(input: CreateSubmission): Promise<string> {
 		where: (testcases, { eq, and }) =>
 			!isTest
 				? eq(testcases.problemId, problemId)
-				: and(eq(testcases.problemId, problemId), eq(testcases.isSample, true)),
+				: and(
+						eq(testcases.problemId, problemId),
+						eq(testcases.isSample, true)
+					),
 		columns: {
 			id: true,
 			inputData: true,
@@ -153,7 +174,7 @@ async function createSubmission(input: CreateSubmission): Promise<string> {
 			status: SubmissionTestcaseStatus.Running.toString(),
 			stdout: "",
 			testcaseId: tc.id,
-		})),
+		}))
 	);
 
 	natsClient.publish(EVENT_TYPES.SUBMISSION.CREATED, {
@@ -189,7 +210,7 @@ async function getSubmission(id: string) {
 			id: true,
 			problemId: true,
 			languageId: true,
-			code: false,
+			code: true,
 			executionTimeMs: true,
 			memoryUsageKb: true,
 			status: true,
@@ -200,24 +221,32 @@ async function getSubmission(id: string) {
 		},
 		where: (submissions, { eq }) => eq(submissions.id, id),
 		with: {
-
+			language: {
+				columns: {
+					monacoCodeLanguage: true,
+					name: true,
+					version: true,
+					id: true,
+				},
+			},
 			submissionTestcases: {
-				columns:{
+				columns: {
 					testcaseId: true,
 					status: true,
 					stdout: true,
 					runtimeMs: true,
 					memoryUsedKb: true,
 				},
-				with:{
-					testcase:{
-						columns:{
+				with: {
+					testcase: {
+						columns: {
 							id: true,
 							label: true,
 							points: true,
-						}
-					}
-				}
+							isSample: true,
+						},
+					},
+				},
 			},
 		},
 	});
@@ -226,9 +255,13 @@ async function getSubmission(id: string) {
 async function getMySubmissionsOfProblem(userId: string, problemId: string) {
 	return db.query.submissions.findMany({
 		where: (submissions, { eq, and }) =>
-			and(eq(submissions.userId, userId), eq(submissions.problemId, problemId)),
+			and(
+				eq(submissions.userId, userId),
+				eq(submissions.problemId, problemId)
+			),
 	});
 }
+export type SubmissionDetails = Awaited<ReturnType<typeof getSubmission>>;
 
 export default {
 	updateResult,
