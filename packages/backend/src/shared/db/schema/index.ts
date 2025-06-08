@@ -14,6 +14,7 @@ export * from "./discussions";
 export * from "./problemRatings";
 export * from "./notifications";
 export * from "./auditLogs";
+export * from "./gen-ai-prompts";
 
 import { auditLogs } from "./auditLogs";
 import { users } from "./auth-schema";

@@ -15,6 +15,14 @@ export const env = createEnv({
 		GITHUB_CLIENT_ID: z.string().min(1),
 		GITHUB_CLIENT_SECRET: z.string().min(1),
 		NATS_SERVER_URL: z.string().url(),
+		GEN_AI_PROVIDER:z.enum([
+			"openai",
+			"google",
+			"mistral",
+			"deepseek",
+		]).default("google"),
+		GEN_AI_MODEL: z.string().min(1).default("gemini-1.5-flash"),
+		GEN_AI_API_KEY: z.string().min(1)
 	},
 	client: {
 		VITE_SERVER_URL: z.string().url().default("http://localhost:8080"),

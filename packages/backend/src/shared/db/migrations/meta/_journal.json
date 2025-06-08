@@ -1,20 +1,27 @@
 {
-	"version": "7",
-	"dialect": "postgresql",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "7",
-			"when": 1748158701360,
-			"tag": "20250525073821_simple_boomer",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "7",
-			"when": 1748190190502,
-			"tag": "20250525162310_strange_madame_masque",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1748158701360,
+      "tag": "20250525073821_simple_boomer",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1748190190502,
+      "tag": "20250525162310_strange_madame_masque",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749379514286,
+      "tag": "20250608104514_jittery_spectrum",
+      "breakpoints": true
+    }
+  ]
 }

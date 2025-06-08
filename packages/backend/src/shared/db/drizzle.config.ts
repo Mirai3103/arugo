@@ -10,9 +10,9 @@
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-	out: "./src/server/db/migrations",
+	out: "./src/shared/db/migrations",
 	dialect: "postgresql",
-	schema: "./src/server/db/schema/index.ts",
+	schema: "./src/shared/db/schema/index.ts",
 
 	dbCredentials: {
 		url: process.env.DATABASE_URL || "postgres://localhost:5432/leetcode_clone",
