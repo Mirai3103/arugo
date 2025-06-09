@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { json } from "drizzle-orm/pg-core";
 import {
   boolean,
   integer,
@@ -29,6 +30,16 @@ export const submissions = pgTable(
     createdBy: varchar("created_by", { length: 100 })
       .default("system")
       .notNull(),
+
+    aiScore: json("ai_score").$type<{
+      correctness: number;
+      efficiency: number;
+      readability: number;
+      structure: number;
+      best_practices: number;
+      summary: string;
+    }>(),
+
     problemContestId: uuid("problem_contest_id"),
     isTest: boolean("is_test").default(false).notNull(),
     runningTestcaseCount: integer("running_testcase_count")

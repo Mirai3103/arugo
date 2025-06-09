@@ -6,3 +6,5 @@ export const genAiPrompts = pgTable("gen_ai_prompts", {
   key: varchar("key", { length: 100 }).notNull().unique(),
   description: text("description"),
 });
+
+export type GenAiPrompt = typeof genAiPrompts.$inferSelect;

@@ -301,6 +301,12 @@ importers:
       '@google/generative-ai':
         specifier: ^0.24.1
         version: 0.24.1
+      '@repo/env':
+        specifier: workspace:*
+        version: link:../env
+      '@repo/tiptap':
+        specifier: workspace:*
+        version: link:../tiptap
       ai:
         specifier: ^4.3.16
         version: 4.3.16(react@19.1.0)(zod@3.25.32)
@@ -344,9 +350,6 @@ importers:
       '@faker-js/faker':
         specifier: ^9.8.0
         version: 9.8.0
-      '@repo/env':
-        specifier: workspace:*
-        version: link:../env
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -504,6 +507,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^2.12.0
         version: 2.12.0
+      markdown-it:
+        specifier: ^14.1.0
+        version: 14.1.0
       turndown:
         specifier: ^7.2.0
         version: 7.2.0

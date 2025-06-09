@@ -49,6 +49,10 @@ export const ProblemDescriptionPanel = ({
           regex: /^\/problems\/[^/]+\/submissions\/[^/]+$/,
           value: "submission",
         },
+        {
+          regex: /^\/problems\/[^/]+\/ai-chat-help$/,
+          value: "ai-chat-help",
+        },
       ];
       for (const { regex, value } of TABS_PATTERNS) {
         if (regex.test(pathname)) {
@@ -125,7 +129,16 @@ export const ProblemDescriptionPanel = ({
                 Lịch sử
               </Link>
             </Tabs.Trigger>
-
+            <Tabs.Trigger asChild value="ai-chat-help">
+              <Link
+                to="/problems/$slug/ai-chat-help"
+                params={{
+                  slug: params.slug || "",
+                }}
+              >
+                Chat AI
+              </Link>
+            </Tabs.Trigger>
             {tab === "submission" && (
               <Tabs.Trigger value="submission">
                 Bài nộp

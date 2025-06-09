@@ -1,3 +1,4 @@
+import { scoreSubmission } from "#/gen_ai/gen-ai.service";
 import { EVENT_TYPES } from "#/shared/constants/event-types";
 import db from "#/shared/db";
 import {
@@ -197,6 +198,9 @@ async function createSubmission(input: CreateSubmission): Promise<string> {
       withWhitespace: true,
     },
   });
+  if (!input.isTest) {
+    scoreSubmission(id);
+  }
 
   return id;
 }
@@ -215,6 +219,7 @@ async function getSubmission(id: string) {
       userId: true,
       isTest: true,
       runningTestcaseCount: true,
+      aiScore: true,
     },
     where: (submissions, { eq }) => eq(submissions.id, id),
     with: {

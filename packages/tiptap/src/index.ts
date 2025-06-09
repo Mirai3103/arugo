@@ -18,7 +18,15 @@ import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import Typography from "@tiptap/extension-typography";
 import { generateHTML } from "@tiptap/html";
-import * as TurndownService from "turndown";
+import TurndownService from "turndown";
+import MarkdownIt from "markdown-it";
+
+const md = new MarkdownIt({
+  html: true, // Cho phép HTML inline nếu OpenAI trả về
+  linkify: true, // Tự link hóa URL
+  breaks: true, // Giữ xuống dòng
+});
+
 const turndownService = new TurndownService();
 export const DEFAULT_EXTENSIONS = [
   Blockquote.configure({ HTMLAttributes: { class: "blockquote" } }),
@@ -54,4 +62,8 @@ export function generateMarkdownFromJSON(
 ) {
   const html = generateHTML(json, extensions);
   return turndownService.turndown(html);
+}
+
+export function generateHTMLFromMarkdown(markdown: string) {
+  return md.render(markdown);
 }

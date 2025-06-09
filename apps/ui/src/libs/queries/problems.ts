@@ -2,7 +2,7 @@ import {
   getAllProblems,
   getProblemBySlug,
 } from "@/server/transports/server-functions/problem";
-import type { ProblemQuerySchema } from "@/validations/problem";
+import type { ProblemQuerySchema } from "@repo/backend/problems/validations/problem";
 export function getAllProblemsQueryOptions(query: ProblemQuerySchema) {
   return {
     queryKey: ["problems", query],
