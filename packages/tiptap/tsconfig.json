@@ -9,7 +9,6 @@
   ],
   "compilerOptions": {
    
-     "lib": ["DOM","ESNext"]
   }
   
 }

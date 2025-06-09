@@ -9,11 +9,11 @@ interface PromiseStore {
   pending?: PendingPromise;
   type?: "test" | "submit";
   id?: string;
-  
+
   addPending: (
     id: string,
     handlers: PendingPromise,
-    type: "test" | "submit"
+    type: "test" | "submit",
   ) => void;
   resolvePending: (result: any) => void;
   rejectPending: (error: any) => void;
@@ -48,6 +48,6 @@ export const usePromiseStore = create<PromiseStore>((set, get) => ({
   },
 
   isPending: () => !!get().pending,
-  
+
   getFirstPending: () => get().id ?? null,
 }));

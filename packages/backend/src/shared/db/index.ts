@@ -5,19 +5,18 @@ import * as schema from "./schema";
 // Disable prefetch as it is not supported for "Transaction" pool mode
 export const client = postgres(env.DATABASE_URL, { prepare: false });
 export const db = drizzle(client, {
-	logger: {
-		logQuery: (query, params) => {
-			// console.log(
-			// 	`${kleur.gray(`[${new Date().toISOString()}]`)} ${kleur.green("Executing")} ${kleur.yellow(query)} ${kleur.cyan(`[${params.join(", ")}]`)}`,
-			// );
-		},
-	},
-	schema: {
-		...schema,
-	},
+  logger: {
+    logQuery: (query, params) => {
+      // console.log(
+      // 	`${kleur.gray(`[${new Date().toISOString()}]`)} ${kleur.green("Executing")} ${kleur.yellow(query)} ${kleur.cyan(`[${params.join(", ")}]`)}`,
+      // );
+    },
+  },
+  schema: {
+    ...schema,
+  },
 });
 export default db;
-
 
 // import { env } from "@repo/env";
 // import kleur from "kleur";

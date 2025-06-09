@@ -4,15 +4,15 @@ import { Box } from "@chakra-ui/react";
 import { Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute({
-	component: RouteComponent,
+  component: RouteComponent,
 });
 
 function RouteComponent() {
-	return (
-		<Box>
-			<Header />
-			<Outlet />
-			<Footer />
-		</Box>
-	);
+  return (
+    <Box>
+      <Header />
+      <Outlet />
+      <Footer />
+    </Box>
+  );
 }

@@ -3,19 +3,19 @@ import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
 import { useQuery } from "@tanstack/react-query";
 import { redirect } from "@tanstack/react-router";
 export const Route = createFileRoute({
-	loader: async ({ params, context: { queryClient }, route }) => {
-		const { id } = params;
-		if (!id) {
-			throw redirect({
-				to: "/problems/$slug/histories",
-				params: {
-					slug: params.slug || "",
-				},
-			});
-		}
-		const res = await queryClient.ensureQueryData(
-			getSubmissionByIdQueryOptions(id || "")
-		);
+  loader: async ({ params, context: { queryClient }, route }) => {
+    const { id } = params;
+    if (!id) {
+      throw redirect({
+        to: "/problems/$slug/histories",
+        params: {
+          slug: params.slug || "",
+        },
+      });
+    }
+    const res = await queryClient.ensureQueryData(
+      getSubmissionByIdQueryOptions(id || ""),
+    );
     if (!res) {
       throw redirect({
         to: "/problems/$slug/histories",
@@ -24,12 +24,12 @@ export const Route = createFileRoute({
         },
       });
     }
-	},
-	component: RouteComponent,
+  },
+  component: RouteComponent,
 });
 
 function RouteComponent() {
-  const params = Route.useParams()
+  const params = Route.useParams();
   const query = useQuery(getSubmissionByIdQueryOptions(params.id || ""));
-	return <SubmissionDetailPanel submissionData={query.data!}/>;
+  return <SubmissionDetailPanel submissionData={query.data!} />;
 }

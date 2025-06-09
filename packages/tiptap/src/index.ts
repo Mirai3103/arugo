@@ -17,24 +17,41 @@ import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import Typography from "@tiptap/extension-typography";
+import { generateHTML } from "@tiptap/html";
+import * as TurndownService from "turndown";
+const turndownService = new TurndownService();
 export const DEFAULT_EXTENSIONS = [
-	Blockquote.configure({ HTMLAttributes: { class: "blockquote" } }),
-	Bold,
-	BulletList,
-	Code,
-	CodeBlock.configure({ HTMLAttributes: { class: "code-block" } }),
-	Color,
-	Document,
-	HardBreak,
-	Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
-	HorizontalRule,
-	Italic,
-	ListItem,
-	OrderedList,
-	Paragraph,
-	Strike,
-	Text,
-	TextAlign,
-	TextStyle,
-	Typography,
+  Blockquote.configure({ HTMLAttributes: { class: "blockquote" } }),
+  Bold,
+  BulletList,
+  Code,
+  CodeBlock.configure({ HTMLAttributes: { class: "code-block" } }),
+  Color,
+  Document,
+  HardBreak,
+  Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
+  HorizontalRule,
+  Italic,
+  ListItem,
+  OrderedList,
+  Paragraph,
+  Strike,
+  Text,
+  TextAlign,
+  TextStyle,
+  Typography,
 ];
+
+export function generateHTMLFromJSON(
+  json: JSON,
+  extensions = DEFAULT_EXTENSIONS,
+) {
+  return generateHTML(json, extensions);
+}
+export function generateMarkdownFromJSON(
+  json: JSON,
+  extensions = DEFAULT_EXTENSIONS,
+) {
+  const html = generateHTML(json, extensions);
+  return turndownService.turndown(html);
+}

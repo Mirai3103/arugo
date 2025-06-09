@@ -4,10 +4,7 @@
 	"type": "module",
 	"private": true,
 	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		}
+		".": "./src/index.ts"
 	},
 	"devDependencies": {
 		"@repo/eslint-config": "workspace:*",
@@ -20,9 +17,6 @@
 	"dependencies": {
 		"@t3-oss/env-core": "^0.13.6",
 		"zod": "^3.25.32"
-	},
-	"scripts": {
-		"build": "tsup",
-		"build:dev": "tsup --watch --clean"
 	}
+
 }
