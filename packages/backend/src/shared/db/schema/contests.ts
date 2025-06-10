@@ -11,9 +11,6 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import { contestStatusEnum } from "./enum";
-// import { users } from './users';
-// import { problems } from './problems';
 
 export const contests = pgTable(
   "contests",
@@ -26,15 +23,17 @@ export const contests = pgTable(
     totalParticipants: integer("total_participants").default(0).notNull(),
     startTime: timestamp("start_time", { mode: "date" }).notNull(),
     endTime: timestamp("end_time", { mode: "date" }).notNull(),
-    details: jsonb("details"),
-    prizes: jsonb("prizes"),
+    details: jsonb("details").$type<JSONObject>().notNull(),
+    prizes: jsonb("prizes").$type<JSONObject>(),
     isPublic: boolean("is_public").default(true).notNull(),
+    totalProblems: integer("total_problems").default(0).notNull(),
     image: text("image"),
-    status: contestStatusEnum("status").default("DRAFT").notNull(),
+    status: varchar({ length: 100 }).default("DRAFT").notNull(),
     createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
     createdBy: varchar("created_by", { length: 100 })
       .default("system")
       .notNull(),
+    isFeatured: boolean("is_featured").default(false).notNull(),
   },
   (table) => [
     pgIndex("Contest_Title_idx").on(table.title),

@@ -1,11 +1,9 @@
-import { Footer } from "@/components/common/Footer";
-import { Header } from "@/components/common/Header";
+import { getPublishContestQueryOptions } from "@/libs/queries/contests";
 import {
   Avatar,
   Badge,
   Box,
   Button,
-  Card,
   Container,
   Flex,
   Grid,
@@ -13,24 +11,33 @@ import {
   HStack,
   Heading,
   Icon,
+  IconButton,
   Image,
+  Separator,
   SimpleGrid,
-  Stack,
   Text,
   VStack,
   chakra,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import {} from "@tanstack/react-router";
-import type React from "react"; // Ensure React is imported
+import { ContestStatus } from "@repo/backend/contests/validations/enum";
+import { ContestBrief } from "@repo/backend/contests/contests.service";
+import { Link } from "@tanstack/react-router";
+import React from "react"; // Ensure React is imported
 import { FaCrown, FaMedal } from "react-icons/fa"; // For medals
+
 import {
   FiActivity,
   FiArrowRight,
   FiAward,
   FiBarChart2,
   FiCalendar,
+  FiCheckCircle,
+  FiChevronLeft,
+  FiChevronRight,
   FiClock,
+  FiCode,
+  FiPlayCircle,
   FiTrendingUp,
   FiUsers,
 } from "react-icons/fi";
@@ -110,217 +117,330 @@ const ContestStatsOverview = () => {
   );
 };
 // --- END: Contest Stats Overview ---
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import dayjs from "dayjs";
 // --- START: Featured Contest ---
-const FeaturedContestCard = () => {
+const FeaturedContestCard = ({ contest }: { contest: ContestBrief }) => {
   return (
     <Box
       position="relative"
       borderRadius="lg"
       overflow="hidden"
-      boxShadow="xl"
-      minH="300px"
-      bgImage="url('https://placewaifu.com/image/800/300')"
+      boxShadow="lg"
+      h={{ base: "280px", md: "320px" }} // Chiều cao cố định cho các card
+      bgImage={`url(${contest.image || "https://placewaifu.com/image/800/600"})`}
       bgSize="cover"
       backgroundPosition="center"
       display="flex"
       flexDirection="column"
       justifyContent="flex-end"
-      p={{ base: 6, md: 8 }}
+      p={{ base: 5, md: 6 }}
       transition="transform 0.3s ease-out, box-shadow 0.3s ease-out"
-      _hover={{ transform: "scale(1.02)", boxShadow: "2xl" }}
+      color="white"
     >
+      {/* Lớp phủ gradient */}
       <Box
         position="absolute"
         top="0"
         left="0"
         right="0"
         bottom="0"
-        bgGradient="linear(to-t, blackAlpha.800 20%, blackAlpha.500 50%, transparent)"
+        background={"blackAlpha.600"}
       />
       <VStack
-        gap={3}
+        gap={2}
         alignItems="flex-start"
         position="relative"
         zIndex={1}
-        color="white"
+        px={{ base: 4, md: 14 }}
       >
         <Badge colorScheme="red" variant="solid" fontSize="xs">
           NỔI BẬT
         </Badge>
-        <Heading as="h2" size={{ base: "lg", md: "xl" }}>
-          CodePro Championship 2025
+        <Heading as="h3" size="md" lineClamp={2}>
+          {contest.title}
         </Heading>
-        <Text fontSize={{ base: "sm", md: "md" }} maxW="2xl">
-          Giải đấu lập trình lớn nhất năm với tổng giải thưởng lên đến 100 triệu
-          đồng. Thể hiện bản lĩnh và tranh tài cùng các coder hàng đầu!
-        </Text>
-        <HStack gap={4} color="gray.200" fontSize="sm" wrap="wrap">
+        <HStack gap={4} color="gray.200" fontSize="xs" wrap="wrap">
           <HStack>
-            <Icon as={FiCalendar} mr={1} />
-            <span>15 - 20 Tháng 8, 2025</span>
+            <Icon as={FiCalendar} />
+            <span>{dayjs(contest.startTime).format("D MMMM YYYY HH:mm")}</span>
           </HStack>
           <HStack>
-            <Icon as={FiUsers} mr={1} />
-            <span>Đã đăng ký: 1500+</span>
+            <Icon as={FiUsers} />
+            <span>{contest.totalParticipants}+ tham gia</span>
           </HStack>
         </HStack>
-        <Button colorScheme="yellow" mt={2}>
-          Xem Chi Tiết
-          <FiArrowRight />
+        <Button size="sm" colorScheme="yellow" mt={2} asChild>
+          <Link to={`/contests/${contest.id}`}>
+            Xem Chi Tiết
+            <FiArrowRight />
+          </Link>
         </Button>
       </VStack>
     </Box>
   );
 };
-// --- END: Featured Contest ---
 
-// --- START: Contest List ---
-interface Contest {
-  id: string;
-  name: string;
-  imageUrl: string;
-  status: "ongoing" | "upcoming";
-  timeInfo: string; // Remaining or Start time
-  participants: number;
-  type?: "Weekly" | "Biweekly" | "Monthly";
-}
+// --- END: Định nghĩa kiểu dữ liệu và Component Card ---
 
-const mockOngoingContests: Contest[] = [
-  {
-    id: "og1",
-    name: "Thử Thách Hàng Tuần #23",
-    imageUrl: "https://placewaifu.com/image/300/200?t=og1",
-    status: "ongoing",
-    timeInfo: "Còn 2 ngày 5 giờ",
-    participants: 1205,
-    type: "Weekly",
-  },
-  {
-    id: "og2",
-    name: "Đấu Trường DP Mùa Xuân",
-    imageUrl: "https://placewaifu.com/image/300/200?t=og2",
-    status: "ongoing",
-    timeInfo: "Kết thúc sau 12 giờ",
-    participants: 876,
-  },
-];
+// --- START: Component Slider chính ---
+export const FeaturedContestsSlider = () => {
+  const featuredContests = Route.useLoaderData().featuredContests;
+  const navigationButtonStyles = {
+    color: { base: "teal.600", _dark: "white" },
+    bg: { base: "whiteAlpha.800", _dark: "blackAlpha.600" },
+    _hover: { bg: { base: "white", _dark: "blackAlpha.800" } },
+    borderRadius: "full",
+    boxShadow: "lg",
+  };
 
-const mockUpcomingContests: Contest[] = [
-  {
-    id: "uc1",
-    name: "Giải Đồ Thị Mở Rộng",
-    imageUrl: "https://placewaifu.com/image/400/250?t=uc1",
-    status: "upcoming",
-    timeInfo: "Bắt đầu: 25/05/2025 09:00",
-    participants: 560,
-    type: "Monthly",
-  },
-  {
-    id: "uc2",
-    name: "Code Challenge Tháng 6",
-    imageUrl: "https://placewaifu.com/image/400/250?t=uc2",
-    status: "upcoming",
-    timeInfo: "Bắt đầu: 01/06/2025 19:00",
-    participants: 340,
-  },
-  {
-    id: "uc3",
-    name: "Summer Sprint Coding",
-    imageUrl: "https://placewaifu.com/image/400/250?t=uc3",
-    status: "upcoming",
-    timeInfo: "Bắt đầu: 10/06/2025 14:00",
-    participants: 0,
-    type: "Biweekly",
-  },
-];
+  if (!featuredContests || featuredContests.length === 0) {
+    return null; // Không hiển thị gì nếu không có cuộc thi nổi bật
+  }
 
-const ContestCard = ({ contest }: { contest: Contest }) => {
-  const cardBg = { base: "white", _dark: "gray.750" };
-  const badgeColor =
-    contest.type === "Weekly"
-      ? "pink"
-      : contest.type === "Biweekly"
-        ? "purple"
-        : "blue";
   return (
-    <Card.Root // Card được namespaced, giả sử Card.Root là component gốc
-      direction={{ base: "column", sm: "row" }}
-      overflow="hidden"
-      variant="outline"
-      bg={cardBg} // cardBg được giả định đã xử lý light/dark mode nếu cần
+    <Box position="relative" my={8}>
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        spaceBetween={24}
+        slidesPerView={1}
+        centeredSlides={true}
+        autoplay={{
+          delay: 4000,
+          disableOnInteraction: false,
+        }}
+        navigation={{
+          nextEl: ".swiper-button-next-featured",
+          prevEl: ".swiper-button-prev-featured",
+        }}
+        style={{ paddingBottom: "40px" }} // Thêm padding dưới cho pagination
+      >
+        {featuredContests.map((contest) => (
+          <SwiperSlide key={contest.id}>
+            <FeaturedContestCard contest={contest} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* Custom Navigation Buttons */}
+      <IconButton
+        aria-label="Previous slide"
+        className="swiper-button-prev-featured"
+        position="absolute"
+        left={{ base: 2, md: 4 }}
+        top="50%"
+        transform="translateY(-50%)"
+        zIndex={10}
+        {...navigationButtonStyles}
+      >
+        <FiChevronLeft />
+      </IconButton>
+      <IconButton
+        aria-label="Next slide"
+        className="swiper-button-next-featured"
+        position="absolute"
+        right={{ base: 2, md: 4 }}
+        top="50%"
+        transform="translateY(-50%)"
+        zIndex={10}
+        {...navigationButtonStyles}
+      >
+        <FiChevronRight />
+      </IconButton>
+    </Box>
+  );
+};
+
+const ContestCard = ({ contest }: { contest: ContestBrief }) => {
+  // Không cần useColorModeValue, sẽ áp dụng trực tiếp trong JSX
+
+  const statusConfig = {
+    ONGOING: {
+      label: "Đang diễn ra",
+      colorPalette: "green",
+      icon: FiPlayCircle,
+    },
+    UPCOMING: { label: "Sắp diễn ra", colorPalette: "blue", icon: FiCalendar },
+    FINISHED: {
+      label: "Đã kết thúc",
+      colorPalette: "gray",
+      icon: FiCheckCircle,
+    },
+  };
+  const status = React.useMemo(() => {
+    if (contest.startTime > new Date()) {
+      return "UPCOMING";
+    }
+    if (contest.endTime < new Date()) {
+      return "FINISHED";
+    }
+    return "ONGOING";
+  }, [contest.startTime, contest.endTime]);
+  const currentStatus = statusConfig[status] || statusConfig.UPCOMING;
+
+  const contestDuration = dayjs.duration(
+    dayjs(contest.endTime).diff(dayjs(contest.startTime)),
+  );
+  const formattedDuration = contestDuration.humanize();
+
+  return (
+    <Flex
+      bg={{ _light: "white", _dark: "gray.750" }} // useColorModeValue -> object syntax
       boxShadow="md"
-      transition="all 0.2s"
-      _hover={{ boxShadow: "lg", transform: "scale(1.02)" }}
+      borderRadius="lg"
+      overflow="hidden"
+      direction={{ base: "column", md: "row" }}
+      transition="all 0.3s"
+      _hover={{
+        boxShadow: "xl",
+        transform: "translateY(-4px)",
+      }}
+      w="full"
+      alignItems={{ md: "stretch" }}
     >
-      <Image
-        objectFit="cover"
-        maxW={{ base: "100%", sm: "200px" }}
-        src={contest.imageUrl}
-        alt={contest.name}
-      />
-      <Stack flex="1">
-        {" "}
-        {/* Stack vẫn được sử dụng cho layout */}
-        <Card.Body>
+      <Box
+        w={{ base: "100%", md: "220px" }}
+        h={{ base: "150px", md: "auto" }}
+        flexShrink={0}
+      >
+        <Image
+          w="full"
+          h="full"
+          objectFit="cover"
+          src={
+            contest.image ||
+            `https://placewaifu.com/image/400/300?id=${contest.id}`
+          }
+          alt={`Banner cuộc thi ${contest.title}`}
+        />
+      </Box>
+
+      <Flex direction="column" p={5} flex="1">
+        <VStack align="flex-start" gap={3} flex="1">
           {" "}
-          {/* CardBody được namespaced */}
-          {contest.type && (
-            <Badge colorPalette={badgeColor} mb={1}>
-              {" "}
-              {/* colorScheme -> colorPalette */}
-              {contest.type}
+          {/* spacing -> gap */}
+          <HStack gap={3}>
+            {" "}
+            {/* spacing -> gap */}
+            <Badge
+              colorPalette={currentStatus.colorPalette} // colorScheme -> colorPalette
+              variant="solid"
+              fontSize="xs"
+              py={1}
+              px={2.5}
+              borderRadius="full"
+            >
+              <HStack>
+                <Icon as={currentStatus.icon} />
+                <Text>{currentStatus.label}</Text>
+              </HStack>
             </Badge>
-          )}
-          <Heading size="md" lineClamp={2}>
+          </HStack>
+          <Heading size="md" lineClamp={2} title={contest.title}>
             {" "}
             {/* noOfLines -> lineClamp */}
-            {contest.name}
+            {contest.title}
           </Heading>
-          <HStack
-            color={{ _light: "gray.600", _dark: "gray.300" }} // useColorModeValue -> object syntax
-            fontSize="sm"
-            mt={2}
-          >
-            <Icon as={contest.status === "ongoing" ? FiClock : FiCalendar} />
-            <Text>{contest.timeInfo}</Text>
-          </HStack>
-          <HStack
-            color={{ _light: "gray.600", _dark: "gray.300" }} // useColorModeValue -> object syntax
-            fontSize="sm"
-            mt={1}
-          >
-            <Icon as={FiUsers} />
-            <Text>{contest.participants} người tham gia</Text>
-          </HStack>
-        </Card.Body>
-        <Card.Footer pt={0}>
-          {" "}
-          {/* CardFooter được namespaced */}
-          {contest.status === "ongoing" ? (
-            <Button
-              variant="solid"
-              colorPalette="green" // colorScheme -> colorPalette
-              size="sm"
+          {contest.description && (
+            <Text
+              fontSize="sm"
+              color={{ _light: "gray.600", _dark: "gray.300" }}
+              lineClamp={2}
             >
+              {" "}
+              {/* noOfLines -> lineClamp, useColorModeValue -> object syntax */}
+              {contest.description}
+            </Text>
+          )}
+          <Separator my={2} /> {/* Divider -> Separator */}
+          <HStack
+            gap={{ base: 4, md: 6 }} // spacing -> gap
+            color={{ _light: "gray.600", _dark: "gray.300" }} // useColorModeValue -> object syntax
+            fontSize="sm"
+            wrap="wrap"
+          >
+            <HStack title="Thời gian bắt đầu">
+              <Icon as={FiCalendar} />
+              <Text>
+                {dayjs(contest.startTime).format("HH:mm, DD/MM/YYYY")}
+              </Text>
+            </HStack>
+            <HStack title="Thời lượng">
+              <Icon as={FiClock} />
+              <Text>{formattedDuration}</Text>
+            </HStack>
+            <HStack title="Số bài toán">
+              <Icon as={FiCode} />
+              <Text>{contest.totalProblems} bài</Text>
+            </HStack>
+          </HStack>
+        </VStack>
+
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          mt={4}
+          pt={4}
+          borderTopWidth="1px"
+          borderColor={{ _light: "gray.200", _dark: "gray.600" }} // useColorModeValue -> object syntax
+        >
+          <HStack>
+            <Icon
+              as={FiUsers}
+              color={{ _light: "gray.600", _dark: "gray.300" }}
+            />{" "}
+            {/* useColorModeValue -> object syntax */}
+            <Text fontSize="sm" fontWeight="medium">
+              {contest.totalParticipants.toLocaleString("vi-VN")}
+              <Text
+                as="span"
+                color={{ _light: "gray.600", _dark: "gray.300" }}
+                fontWeight="normal"
+              >
+                {" "}
+                người tham gia
+              </Text>{" "}
+              {/* useColorModeValue -> object syntax */}
+            </Text>
+          </HStack>
+
+          {contest.status === "ONGOING" && (
+            <Button colorPalette="green" size="sm">
+              {" "}
+              {/* colorScheme -> colorPalette, rightIcon bị loại bỏ */}
               Tham Gia Ngay
-              <Icon as={FiArrowRight} ml={2} />{" "}
-              {/* rightIcon được chuyển thành Icon con */}
+              <Icon as={FiArrowRight} ml={1.5} />{" "}
+              {/* Icon được đặt làm con trực tiếp */}
             </Button>
-          ) : (
+          )}
+          {contest.status === "UPCOMING" && (
             <Button variant="outline" colorPalette="teal" size="sm">
               {" "}
               {/* colorScheme -> colorPalette */}
               Đăng Ký
             </Button>
           )}
-        </Card.Footer>
-      </Stack>
-    </Card.Root>
+          {contest.status === "ENDED" && (
+            <Button disabled variant="outline" colorPalette="gray" size="sm">
+              {" "}
+              {/* isDisabled -> disabled, colorScheme -> colorPalette */}
+              Xem kết quả
+            </Button>
+          )}
+        </Flex>
+      </Flex>
+    </Flex>
   );
 };
 
 const ContestListSection = () => {
+  const { ongoingContests, upcomingContests } = Route.useLoaderData();
   return (
     <VStack gap={10} align="stretch">
       <Box>
@@ -328,8 +448,8 @@ const ContestListSection = () => {
           <Icon as={FiClock} boxSize={6} color="orange.500" />
           <Heading size="lg">Đang Diễn Ra</Heading>
         </HStack>
-        <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} gap={6}>
-          {mockOngoingContests.map((contest) => (
+        <SimpleGrid columns={{ base: 1, md: 1 }} gap={6}>
+          {ongoingContests.map((contest) => (
             <ContestCard key={contest.id} contest={contest} />
           ))}
         </SimpleGrid>
@@ -339,8 +459,8 @@ const ContestListSection = () => {
           <Icon as={FiCalendar} boxSize={6} color="blue.500" />
           <Heading size="lg">Sắp Diễn Ra</Heading>
         </HStack>
-        <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} gap={6}>
-          {mockUpcomingContests.map((contest) => (
+        <SimpleGrid columns={{ base: 1, md: 1 }} gap={6}>
+          {upcomingContests.map((contest) => (
             <ContestCard key={contest.id} contest={contest} />
           ))}
         </SimpleGrid>
@@ -527,7 +647,7 @@ const RecentResultsSidebar = () => {
               >
                 {result.ratingChange >= 0
                   ? `+${result.ratingChange}`
-                  : result.ratingChange}{" "}
+                  : result.ratingChange}
                 rating
               </Text>
               <Text
@@ -552,13 +672,12 @@ function ContestPage() {
 
   return (
     <Box bg={mainContentBg}>
-      <Header />
       <Container
         maxW="container.2xl"
         py={{ base: 4, md: 8 }}
         px={{ base: 4, md: 6 }}
       >
-        <FeaturedContestCard />
+        <FeaturedContestsSlider />
 
         <ContestStatsOverview />
 
@@ -573,7 +692,6 @@ function ContestPage() {
               position={{ lg: "sticky" }}
               top={{ lg: "80px" }}
             >
-              {" "}
               {/* Sticky sidebar for desktop */}
               <TopRankersSidebar />
               <RecentResultsSidebar />
@@ -581,7 +699,6 @@ function ContestPage() {
           </GridItem>
         </Grid>
       </Container>
-      <Footer /> {/* Assuming a generic footer component */}
     </Box>
   );
 }
@@ -590,4 +707,42 @@ function ContestPage() {
 export const Route = createFileRoute({
   // Adjust route as needed
   component: ContestPage,
+  loader: async ({ context }) => {
+    const p1 = context.queryClient.ensureQueryData(
+      getPublishContestQueryOptions({
+        isFeatured: true,
+        page: 1,
+        pageSize: 10,
+        orderBy: "startTime",
+      }),
+    );
+    const p2 = context.queryClient.ensureQueryData(
+      getPublishContestQueryOptions({
+        isFeatured: undefined,
+        page: 1,
+        pageSize: 5,
+        orderBy: "startTime",
+
+        status: ContestStatus.ACTIVE,
+        isAfter: new Date(),
+      }),
+    );
+    const p3 = context.queryClient.ensureQueryData(
+      getPublishContestQueryOptions({
+        isFeatured: undefined,
+        page: 1,
+        pageSize: 5,
+        orderBy: "startTime",
+        status: ContestStatus.ACTIVE,
+        isBefore: new Date(),
+      }),
+    );
+    const [featuredContests, ongoingContests, upcomingContests] =
+      await Promise.all([p1, p2, p3]);
+    return {
+      featuredContests: featuredContests.data,
+      ongoingContests: ongoingContests.data,
+      upcomingContests: upcomingContests.data,
+    };
+  },
 });

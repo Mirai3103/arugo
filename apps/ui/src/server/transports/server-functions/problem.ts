@@ -9,7 +9,7 @@ export const getAllProblems = createServerFn({
   .validator(problemQuerySchema)
   .handler(async ({ data }) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    return problemService.getAllProblems(data);
+    return await problemService.getAllProblems(data);
   });
 
 export const getProblemBySlug = createServerFn({

@@ -21,14 +21,14 @@ export const problems = pgTable(
       .default(sql`gen_random_uuid()`),
     title: varchar("title", { length: 255 }).unique().notNull(),
     slug: varchar("slug", { length: 255 }).unique().notNull(),
-    description: json("description").$type<JSON>(),
-    statement: json("problem_statement").notNull().$type<JSON>(),
+    description: json("description").$type<JSONObject>(),
+    statement: json("problem_statement").notNull().$type<JSONObject>(),
     difficultyLevel: smallint("difficulty_level").default(1).notNull(),
     timeLimitMs: integer("time_limit_ms").default(1000).notNull(),
     memoryLimitKb: integer("memory_limit_kb").default(256000).notNull(),
     isPublic: boolean("is_public").default(true).notNull(),
-    hints: json("hints").$type<JSON>(),
-    metadata: json("metadata").$type<JSON>(),
+    hints: json("hints").$type<JSONObject>(),
+    metadata: json("metadata").$type<JSONObject>(),
     createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
     createdBy: varchar("created_by", { length: 100 })
       .default("system")

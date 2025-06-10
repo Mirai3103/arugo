@@ -1,5 +1,4 @@
 import ProblemsTable from "@/components/features/problem/ProblemsTable";
-import ProblemsTableSkeleton from "@/components/features/problem/ProblemsTable/ProblemsTableSkeleton";
 import { getAllProblemsQueryOptions } from "@/libs/queries/problems";
 import { getAllTagsQueryOptions } from "@/libs/queries/tag";
 import { problemQuerySchema } from "@repo/backend/problems/validations/problem";
@@ -26,7 +25,6 @@ import {
 } from "@chakra-ui/react";
 import {} from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { Suspense } from "react";
 import {
   FiAward,
   FiCalendar,
@@ -234,48 +232,7 @@ const RightSidebar = () => {
     </VStack>
   );
 };
-// <Box
-//                          p={6}
-//                          bg={{"base": "white", "_dark": "gray.800"}}
-//                          rounded="lg"
-//                          boxShadow="base"
-//                      >
-//                          <Heading size="lg" mb={1}>
-//                              Chào mừng trở lại, Hoàng!
-//                          </Heading>
-//                          <Text
-//                              color={{"base": "gray.600", "_dark": "gray.300"}}
-//                          >
-//                              Hãy cùng chinh phục những thử thách mới hôm
-//                              nay.
-//                          </Text>
-//                          <Progress.Root
-//                              size="sm"
-//                              colorScheme="teal"
-//                              value={60}
-//                              mt={3}
-//                              rounded="full"
-//                          >
-//                              <Progress.Track>
-//                                  <Progress.Range />
-//                              </Progress.Track>
-//                          </Progress.Root>
 
-//                          <HStack justifyContent="space-between" mt={1}>
-//                              <Text fontSize="xs" color="gray.500">
-//                                  Tiến độ mục tiêu tuần: 60%
-//                              </Text>
-//                              <Link
-//                                  to="/goals"
-//                                  style={{
-//                                      fontSize: "0.75rem",
-//                                      color: "teal",
-//                                  }}
-//                              >
-//                                  Đặt mục tiêu
-//                              </Link>
-//                          </HStack>
-//                      </Box>
 const StatsGamificationSection = () => {
   return (
     <Box py={4} mb={2} bg={{ base: "white", _dark: "gray.900" }}>
@@ -495,9 +452,7 @@ function HomePage() {
       >
         <GridItem area="main-content">
           <VStack borderSpacing={8} align="stretch">
-            <Suspense fallback={<ProblemsTableSkeleton />}>
-              <ProblemsTable />
-            </Suspense>
+            <ProblemsTable />
           </VStack>
         </GridItem>
 

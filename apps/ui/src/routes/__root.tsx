@@ -1,5 +1,12 @@
 import { Provider } from "@/components/ui/provider";
 import TanstackQueryLayout from "@/libs/tanstack-query/layout";
+import relativeTime from "dayjs/plugin/relativeTime";
+import duration from "dayjs/plugin/duration";
+import "dayjs/locale/vi";
+import dayjs from "dayjs";
+dayjs.extend(relativeTime);
+dayjs.extend(duration);
+dayjs.locale("vi");
 
 import type { QueryClient } from "@tanstack/react-query";
 import {

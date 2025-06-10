@@ -17,6 +17,12 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "target": "esnext",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types",
+      
+    ],
   }
+  
   
 }

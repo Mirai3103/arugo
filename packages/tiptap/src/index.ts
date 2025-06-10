@@ -17,7 +17,7 @@ import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import Typography from "@tiptap/extension-typography";
-import { generateHTML } from "@tiptap/html";
+import { generateHTML, generateJSON } from "@tiptap/html";
 import TurndownService from "turndown";
 import MarkdownIt from "markdown-it";
 
@@ -51,13 +51,13 @@ export const DEFAULT_EXTENSIONS = [
 ];
 
 export function generateHTMLFromJSON(
-  json: JSON,
+  json: any,
   extensions = DEFAULT_EXTENSIONS,
 ) {
   return generateHTML(json, extensions);
 }
 export function generateMarkdownFromJSON(
-  json: JSON,
+  json: any,
   extensions = DEFAULT_EXTENSIONS,
 ) {
   const html = generateHTML(json, extensions);
@@ -66,4 +66,9 @@ export function generateMarkdownFromJSON(
 
 export function generateHTMLFromMarkdown(markdown: string) {
   return md.render(markdown);
+}
+
+export function generateJSONFromMarkdown(markdown: string) {
+  const html = generateHTMLFromMarkdown(markdown);
+  return generateJSON(html, DEFAULT_EXTENSIONS) as any;
 }

@@ -1,5 +1,3 @@
-import { Footer } from "@/components/common/Footer";
-import { Header } from "@/components/common/Header";
 import {
   Avatar,
   Badge,
@@ -813,8 +811,6 @@ function CommunityPage() {
 
   return (
     <Box bg={mainContentBg} minH="100vh">
-      {/* Header is omitted as per request for this specific page component */}
-      <Header />
       <Container
         maxW="container.2xl"
         py={{ base: 4, md: 6 }}
@@ -851,7 +847,6 @@ function CommunityPage() {
           </GridItem>
         </Grid>
       </Container>
-      <Footer />
     </Box>
   );
 }
