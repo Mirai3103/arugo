@@ -17,9 +17,13 @@ import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import Typography from "@tiptap/extension-typography";
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+
 import { generateHTML, generateJSON } from "@tiptap/html";
 import TurndownService from "turndown";
 import MarkdownIt from "markdown-it";
+import { lowlight } from 'lowlight/lib/core';
+
 
 const md = new MarkdownIt({
   html: true, // Cho phép HTML inline nếu OpenAI trả về
@@ -48,6 +52,9 @@ export const DEFAULT_EXTENSIONS = [
   TextAlign,
   TextStyle,
   Typography,
+  CodeBlockLowlight.configure({
+  lowlight,
+})
 ];
 
 export function generateHTMLFromJSON(
@@ -70,5 +77,9 @@ export function generateHTMLFromMarkdown(markdown: string) {
 
 export function generateJSONFromMarkdown(markdown: string) {
   const html = generateHTMLFromMarkdown(markdown);
+  return generateJSON(html, DEFAULT_EXTENSIONS) as any;
+}
+
+export function generateJSONFromHTML(html: string) {
   return generateJSON(html, DEFAULT_EXTENSIONS) as any;
 }

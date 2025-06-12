@@ -11,12 +11,12 @@ import {
 import React from "react";
 import { generateHTMLFromJSON } from "@repo/tiptap";
 
-import { useLoaderData } from "@tanstack/react-router";
+import { useLoaderData, createFileRoute } from "@tanstack/react-router";
 import {
   DIFFICULTY_COLORS_PALATE,
   DIFFICULTY_LABELS,
 } from "@/utils/constants/difficulties";
-export const Route = createFileRoute({
+export const Route = createFileRoute("/problems/$slug/_layout/description")({
   component: RouteComponent,
 });
 

@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router"
 import {
   Flex,
   VStack,
@@ -56,7 +57,7 @@ const SuggestionCard: React.FC<SuggestionCardProps> = ({ text, icon }) => {
         color={{ _light: "gray.600", _dark: "gray.400" }}
       />
     </Card.Root>
-  );
+  )
 };
 
 // Component chính của giao diện Chat
@@ -138,6 +139,6 @@ const ChatUI = () => {
   );
 };
 
-export const Route = createFileRoute({
+export const Route = createFileRoute("/problems/$slug/_layout/ai-chat-help")({
   component: ChatUI,
 });

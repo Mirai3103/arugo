@@ -26,10 +26,11 @@
 	"devDependencies": {
 		"@eslint/js": "^9.27.0",
 		"@faker-js/faker": "^9.8.0",
-		
 		"@repo/eslint-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@types/bun": "latest",
+		"axios": "^1.9.0",
+		"cheerio": "^1.1.0",
 		"drizzle-kit": "^0.31.1",
 		"eslint": "^9.27.0"
 	},

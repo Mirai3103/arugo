@@ -1,10 +1,11 @@
+import { createFileRoute } from "@tanstack/react-router"
 import { Prose } from "@/components/ui/prose";
 
 import { generateHTMLFromJSON } from "@repo/tiptap";
 
 import React from "react";
 
-export const Route = createFileRoute({
+export const Route = createFileRoute("/problems/$slug/_layout/editorial")({
   component: RouteComponent,
 });
 

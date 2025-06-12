@@ -1,62 +1,62 @@
 import {
-  Avatar,
-  Badge,
-  Box,
-  Button,
-  Card,
-  Select as ChakraSelect,
-  Container,
-  Flex,
-  Grid,
-  GridItem,
-  HStack,
-  Heading,
-  Icon,
-  IconButton,
-  Image,
-  Input,
-  InputGroup,
-  List,
-  Menu,
-  Portal,
-  Separator,
-  SimpleGrid,
-  Stack,
-  Tabs,
-  Tag,
-  Text,
-  VStack,
-  Wrap,
-  WrapItem,
-  createListCollection,
-  useBreakpointValue,
+    Avatar,
+    Badge,
+    Box,
+    Button,
+    Card,
+    Select as ChakraSelect,
+    Container,
+    Flex,
+    Grid,
+    GridItem,
+    HStack,
+    Heading,
+    Icon,
+    IconButton,
+    Image,
+    Input,
+    InputGroup,
+    List,
+    Menu,
+    Portal,
+    Separator,
+    SimpleGrid,
+    Stack,
+    Tabs,
+    Tag,
+    Text,
+    VStack,
+    Wrap,
+    WrapItem,
+    createListCollection,
+    useBreakpointValue,
 } from "@chakra-ui/react";
-import { Link } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import type React from "react";
 import { useState } from "react";
 import { FaAward, FaCrown, FaMedal, FaRegCommentDots } from "react-icons/fa";
 import {
-  FiAward,
-  FiBookOpen,
-  FiBookmark,
-  FiCheckSquare,
-  FiClock,
-  FiCode,
-  FiEdit,
-  FiEye,
-  FiFilter,
-  FiHelpCircle,
-  FiList,
-  FiMessageSquare,
-  FiMoreHorizontal,
-  FiRss,
-  FiSearch,
-  FiShare2,
-  FiShield,
-  FiTag as FiTagIcon,
-  FiThumbsUp,
-  FiTrendingUp,
-  FiUsers,
+    FiAward,
+    FiBookOpen,
+    FiBookmark,
+    FiCheckSquare,
+    FiClock,
+    FiCode,
+    FiEdit,
+    FiEye,
+    FiFilter,
+    FiHelpCircle,
+    FiList,
+    FiMessageSquare,
+    FiMoreHorizontal,
+    FiRss,
+    FiSearch,
+    FiShare2,
+    FiShield,
+    FiTag as FiTagIcon,
+    FiThumbsUp,
+    FiTrendingUp,
+    FiUsers,
 } from "react-icons/fi";
 
 // --- START: Sample Data ---
@@ -136,7 +136,7 @@ const samplePosts: Post[] = [
       avatarUrl: "https://placewaifu.com/image/40/40?t=a4",
       rank: "Expert",
     },
-    title: "CodeMaster Contest Mùa Hè 2025 chính thức khởi động!",
+    title: "Arugo Contest Mùa Hè 2025 chính thức khởi động!",
     tags: ["contest", "announcement", "news"],
     excerpt:
       "Cuộc thi lập trình lớn nhất mùa hè đã quay trở lại với nhiều giải thưởng hấp dẫn. Đăng ký ngay hôm nay!",
@@ -262,7 +262,7 @@ const CommunityBanner = () => {
       />
       <VStack gap={4} position="relative" zIndex={1} color="white">
         <Heading as="h1" size={{ base: "xl", md: "2xl" }} fontWeight="bold">
-          Cộng Đồng CodeMaster
+          Cộng Đồng Arugo
         </Heading>
         <Text fontSize={{ base: "md", md: "lg" }} maxW="xl">
           Chia sẻ kiến thức, học hỏi và phát triển cùng nhau trong cộng đồng lập
@@ -851,7 +851,7 @@ function CommunityPage() {
   );
 }
 
-export const Route = createFileRoute({
+export const Route = createFileRoute("/_home/community")({
   // Adjust this route as needed
   component: CommunityPage,
 });

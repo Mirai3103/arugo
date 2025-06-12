@@ -15,6 +15,7 @@ export * from "./problemRatings";
 export * from "./notifications";
 export * from "./auditLogs";
 export * from "./gen-ai-prompts";
+export * from "./posts";
 
 import { auditLogs } from "./auditLogs";
 import { users } from "./auth-schema";
@@ -34,6 +35,7 @@ import { profiles } from "./profile";
 import { roles, userToRoles } from "./rbac";
 import { submissionTestcases, submissions } from "./submissions";
 import { tags } from "./tags";
+import { postComments, postLikes, posts, topics } from "./posts";
 // verificationTokens typically don't have relations to other main tables
 
 // --- Define Relations ---
@@ -53,7 +55,31 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   notifications: many(notifications),
   leaderboards: many(leaderboards), // User can be in many leaderboards
   auditLogs: many(auditLogs, { relationName: "auditLogsByUser" }), // If userId in auditLogs is a FK
+  posts: many(posts),
+  postLikes: many(postLikes),
+  postComments: many(postComments),
 }));
+
+export const postsRelations = relations(posts, ({ one, many }) => ({
+  user: one(users, { fields: [posts.authorId], references: [users.id] }),
+  comments: many(postComments),
+  likes: many(postLikes),
+}));
+
+export const postLikesRelations = relations(postLikes, ({ one }) => ({
+  user: one(users, { fields: [postLikes.userId], references: [users.id] }),
+  post: one(posts, { fields: [postLikes.postId], references: [posts.id] }),
+}));
+
+export const postCommentsRelations = relations(postComments, ({ one }) => ({
+  user: one(users, { fields: [postComments.userId], references: [users.id] }),
+  post: one(posts, { fields: [postComments.postId], references: [posts.id] }),
+}));
+
+export const topicsRelations = relations(topics, ({ many }) => ({
+  posts: many(posts),
+}));
+
 
 export const profilesRelations = relations(profiles, ({ one }) => ({
   user: one(users, { fields: [profiles.userId], references: [users.id] }),

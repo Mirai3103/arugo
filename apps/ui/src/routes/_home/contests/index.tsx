@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { ContestStatus } from "@repo/backend/contests/validations/enum";
 import { ContestBrief } from "@repo/backend/contests/contests.service";
-import { Link } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import React from "react"; // Ensure React is imported
 import { FaCrown, FaMedal } from "react-icons/fa"; // For medals
 
@@ -704,7 +704,7 @@ function ContestPage() {
 }
 // --- END: Contest Page Component ---
 
-export const Route = createFileRoute({
+export const Route = createFileRoute("/_home/contests/")({
   // Adjust route as needed
   component: ContestPage,
   loader: async ({ context }) => {

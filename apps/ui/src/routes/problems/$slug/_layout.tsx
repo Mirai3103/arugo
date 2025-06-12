@@ -5,27 +5,27 @@ import type { ProblemSampleTestCase } from "@repo/backend/problems/problemServic
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import { getProblemBySlug } from "@/server/transports/server-functions/problem";
 import {
-  SubmissionTestcaseStatus,
-  SubmissionTestcaseStatusColor,
-  SubmissionTestcaseStatusIcon,
+    SubmissionTestcaseStatus,
+    SubmissionTestcaseStatusColor,
+    SubmissionTestcaseStatusIcon,
 } from "@/types/enum";
 import {
-  Box,
-  Button,
-  Code,
-  Container,
-  Separator as Divider,
-  Flex,
-  HStack,
-  Heading,
-  Icon,
-  Skeleton,
-  Tabs,
-  Text,
-  VStack,
-  useBreakpointValue,
+    Box,
+    Button,
+    Code,
+    Container,
+    Separator as Divider,
+    Flex,
+    HStack,
+    Heading,
+    Icon,
+    Skeleton,
+    Tabs,
+    Text,
+    VStack,
+    useBreakpointValue,
 } from "@chakra-ui/react";
-import { Link } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import React, { useMemo } from "react";
 import { FiCode } from "react-icons/fi";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
@@ -55,7 +55,7 @@ const PageHeader = () => {
             <HStack gap={2}>
               <Icon as={FiCode} w={8} h={8} color="teal.500" />
               <Heading as="h1" size="md" color={color} letterSpacing="tight">
-                CodeMaster
+                Arugo
               </Heading>
             </HStack>
           </Link>
@@ -499,7 +499,7 @@ function RouteComponent() {
   );
 }
 
-export const Route = createFileRoute({
+export const Route = createFileRoute("/problems/$slug/_layout")({
   loader: async ({ params, context }) => {
     const { slug } = params;
     const session = await getServerSession();

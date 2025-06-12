@@ -1,34 +1,34 @@
 import { signIn } from "@/libs/auth/client";
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import {
-  AbsoluteCenter,
-  Box,
-  Button,
-  Link as ChakraLink,
-  Checkbox,
-  Field,
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  Input,
-  InputGroup,
-  Separator,
-  Stack,
-  Text,
-  VStack,
+    AbsoluteCenter,
+    Box,
+    Button,
+    Link as ChakraLink,
+    Checkbox,
+    Field,
+    Flex,
+    Heading,
+    Icon,
+    IconButton,
+    Input,
+    InputGroup,
+    Separator,
+    Stack,
+    Text,
+    VStack,
 } from "@chakra-ui/react";
-import { Link, redirect } from "@tanstack/react-router";
+import { Link, redirect, createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import {
-  FiEye,
-  FiEyeOff,
-  FiGithub,
-  FiLock,
-  FiMail,
-  FiUser,
-  FiUserPlus,
+    FiEye,
+    FiEyeOff,
+    FiGithub,
+    FiLock,
+    FiMail,
+    FiUser,
+    FiUserPlus,
 } from "react-icons/fi";
 function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -60,7 +60,7 @@ function SignupPage() {
             color={{ base: "gray.600", _dark: "gray.300" }}
             fontSize="sm"
           >
-            Tham gia CodeMaster để nâng cao kỹ năng lập trình của bạn!
+            Tham gia Arugo để nâng cao kỹ năng lập trình của bạn!
           </Text>
 
           <Field.Root id="username">
@@ -252,7 +252,7 @@ function SignupPage() {
   );
 }
 
-export const Route = createFileRoute({
+export const Route = createFileRoute("/_home/signup")({
   component: SignupPage,
   async beforeLoad() {
     const session = await getServerSession();

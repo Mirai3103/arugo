@@ -1,8 +1,8 @@
 import { SubmissionDetailPanel } from "@/components/features/solving/SubmissionDetailPanel";
 import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
 import { useQuery } from "@tanstack/react-query";
-import { redirect } from "@tanstack/react-router";
-export const Route = createFileRoute({
+import { redirect, createFileRoute } from "@tanstack/react-router";
+export const Route = createFileRoute("/problems/$slug/_layout/submissions/$id")({
   loader: async ({ params, context: { queryClient }, route }) => {
     const { id } = params;
     if (!id) {

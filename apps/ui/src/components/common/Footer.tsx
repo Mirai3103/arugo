@@ -9,7 +9,7 @@ export const Footer = () => {
     >
       <Container maxW="container.xl" py={8}>
         <Text textAlign="center" fontSize="sm">
-          &copy; {year} CodeMaster. Nơi tài năng lập trình tỏa sáng.
+          &copy; {year} Arugo. Nơi tài năng lập trình tỏa sáng.
         </Text>
       </Container>
     </Box>

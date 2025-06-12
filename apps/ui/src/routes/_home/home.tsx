@@ -1,38 +1,39 @@
+import { createFileRoute } from "@tanstack/react-router";
 import ProblemsTable from "@/components/features/problem/ProblemsTable";
 import { getAllProblemsQueryOptions } from "@/libs/queries/problems";
 import { getAllTagsQueryOptions } from "@/libs/queries/tag";
 import { problemQuerySchema } from "@repo/backend/problems/validations/problem";
 import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Container,
-  Grid,
-  GridItem,
-  HStack,
-  Heading,
-  Icon,
-  SimpleGrid,
-  Stat,
-  Tag,
-  Text,
-  VStack,
-  Wrap,
-  WrapItem,
-  chakra,
-  useBreakpointValue,
+    Avatar,
+    Box,
+    Button,
+    Card,
+    Container,
+    Grid,
+    GridItem,
+    HStack,
+    Heading,
+    Icon,
+    SimpleGrid,
+    Stat,
+    Tag,
+    Text,
+    VStack,
+    Wrap,
+    WrapItem,
+    chakra,
+    useBreakpointValue,
 } from "@chakra-ui/react";
-import {} from "@tanstack/react-router";
+import { } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import {
-  FiAward,
-  FiCalendar,
-  FiCheckCircle,
-  FiGift,
-  FiStar,
-  FiTrendingUp,
-  FiUsers,
+    FiAward,
+    FiCalendar,
+    FiCheckCircle,
+    FiGift,
+    FiStar,
+    FiTrendingUp,
+    FiUsers,
 } from "react-icons/fi";
 
 const sampleProblems: any[] = [
@@ -159,7 +160,7 @@ const sampleContests = [
   },
   {
     id: "c3",
-    name: "Giải Vô Địch CodeMaster 2025",
+    name: "Giải Vô Địch Arugo 2025",
     date: "01/08/2025",
     registered: 500,
     type: "Cá nhân",
@@ -468,7 +469,7 @@ function HomePage() {
     </Container>
   );
 }
-export const Route = createFileRoute({
+export const Route = createFileRoute("/_home/home")({
   validateSearch: zodValidator(problemQuerySchema),
   loaderDeps: ({ search }) => search,
   async loader({ context, deps }) {

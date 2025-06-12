@@ -1,6 +1,7 @@
+import { createFileRoute } from "@tanstack/react-router"
 import SubmissionHistory from "@/components/features/solving/SubmissionHistory";
 
-export const Route = createFileRoute({
+export const Route = createFileRoute("/problems/$slug/_layout/histories")({
   component: RouteComponent,
 });
 

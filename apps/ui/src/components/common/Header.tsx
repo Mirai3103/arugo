@@ -1,30 +1,30 @@
 import { ColorModeButton } from "@/components/ui/color-mode"; // Assuming this path
 import { signOut, useSession } from "@/libs/auth/client"; // Assuming this path
 import {
-  Box,
-  Button,
-  Container,
-  Drawer,
-  Flex,
-  HStack,
-  Heading,
-  Icon,
-  IconButton,
-  Separator,
-  Text,
-  VStack,
-  useBreakpointValue,
-  useDisclosure,
+    Box,
+    Button,
+    Container,
+    Drawer,
+    Flex,
+    HStack,
+    Heading,
+    Icon,
+    IconButton,
+    Separator,
+    Text,
+    VStack,
+    useBreakpointValue,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { Link as RouterLink, useNavigate } from "@tanstack/react-router";
 import React from "react";
 import {
-  FiBell,
-  FiCode,
-  FiLogOut,
-  FiMenu,
-  FiSettings,
-  FiUser,
+    FiBell,
+    FiCode,
+    FiLogOut,
+    FiMenu,
+    FiSettings,
+    FiUser,
 } from "react-icons/fi";
 import { UserMenu } from "./UserMenu";
 
@@ -55,7 +55,7 @@ export const Header = () => {
             <HStack gap={2}>
               <Icon as={FiCode} w={8} h={8} color="teal.500" />
               <Heading as="h1" size="md" color={color} letterSpacing="tight">
-                CodeMaster
+                Arugo
               </Heading>
             </HStack>
           </RouterLink>
@@ -129,7 +129,7 @@ export const Header = () => {
             <Drawer.Header borderBottomWidth="1px">
               <HStack gap={2}>
                 <Icon as={FiCode} w={6} h={6} color="teal.500" />
-                <Text fontWeight="bold">CodeMaster</Text>
+                <Text fontWeight="bold">Arugo</Text>
               </HStack>
             </Drawer.Header>
             <Drawer.Body>

@@ -1,33 +1,33 @@
 import {
-  Box,
-  Button,
-  Container,
-  Separator as Divider,
-  Flex,
-  HStack,
-  Heading,
-  Icon,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-  VStack,
-  chakra,
+    Box,
+    Button,
+    Container,
+    Separator as Divider,
+    Flex,
+    HStack,
+    Heading,
+    Icon,
+    Image,
+    SimpleGrid,
+    Stack,
+    Text,
+    VStack,
+    chakra,
 } from "@chakra-ui/react";
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { Link, useLoaderData, createFileRoute } from "@tanstack/react-router";
 
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import {
-  FiAward,
-  FiBookOpen,
-  FiCode,
-  FiMessageSquare,
-  FiPlayCircle,
-  FiStar,
-  FiTarget,
-  FiTrendingUp,
-  FiUsers,
+    FiAward,
+    FiBookOpen,
+    FiCode,
+    FiMessageSquare,
+    FiPlayCircle,
+    FiStar,
+    FiTarget,
+    FiTrendingUp,
+    FiUsers,
 } from "react-icons/fi";
 
 // Header Component
@@ -54,7 +54,7 @@ const Header = () => {
             <HStack borderSpacing={2}>
               <Icon as={FiCode} w={8} h={8} color="teal.500" />
               <Heading as="h1" size="lg" color={color} letterSpacing="tight">
-                CodeMaster
+                Arugo
               </Heading>
             </HStack>
           </Link>
@@ -105,7 +105,7 @@ const HeroSection = () => {
             lineHeight="shorter"
           >
             Nâng Tầm Kỹ Năng Lập Trình Của Bạn với{" "}
-            <chakra.span color="teal.500">CodeMaster</chakra.span>
+            <chakra.span color="teal.500">Arugo</chakra.span>
           </Heading>
           <Text
             fontSize={{ base: "lg", md: "xl" }}
@@ -142,7 +142,7 @@ const HeroSection = () => {
           {/* Placeholder for a relevant image or illustration */}
           <Image
             src="https://placewaifu.com/image/600/300"
-            alt="CodeMaster Illustration"
+            alt="Arugo Illustration"
             rounded="lg"
             boxShadow="xl"
           />
@@ -225,14 +225,14 @@ const FeaturesSection = () => {
       <Container maxW="container.xl">
         <VStack borderSpacing={4} textAlign="center" mb={10}>
           <Heading as="h2" size="xl" fontWeight="bold">
-            Tại Sao Chọn <chakra.span color="teal.500">CodeMaster</chakra.span>?
+            Tại Sao Chọn <chakra.span color="teal.500">Arugo</chakra.span>?
           </Heading>
           <Text
             fontSize="lg"
             color={{ base: "gray.600", _dark: "gray.300" }}
             maxW="2xl"
           >
-            CodeMaster cung cấp một nền tảng toàn diện để bạn không chỉ học lập
+            Arugo cung cấp một nền tảng toàn diện để bạn không chỉ học lập
             trình mà còn trở thành một chuyên gia giải quyết vấn đề.
           </Text>
         </VStack>
@@ -322,7 +322,7 @@ const ProblemsPreviewSection = () => {
         </Heading>
         <Text fontSize="lg" color={{ base: "gray.600", _dark: "gray.300" }}>
           Khám phá một vài ví dụ về các dạng bài tập bạn có thể tìm thấy trên
-          CodeMaster.
+          Arugo.
         </Text>
       </VStack>
       <Stack borderSpacing={4}>
@@ -357,7 +357,7 @@ const CTASection = () => {
             Sẵn Sàng Chinh Phục Thử Thách?
           </Heading>
           <Text fontSize={{ base: "md", md: "lg" }}>
-            Tham gia CodeMaster ngay hôm nay để bắt đầu hành trình trở thành một
+            Tham gia Arugo ngay hôm nay để bắt đầu hành trình trở thành một
             chuyên gia lập trình. Đăng ký miễn phí và trải nghiệm!
           </Text>
           <Button
@@ -403,7 +403,7 @@ const Footer = () => {
             <HStack borderSpacing={2}>
               <Icon as={FiCode} w={7} h={7} color="teal.500" />
               <Heading as="h3" size="md">
-                CodeMaster
+                Arugo
               </Heading>
             </HStack>
             <Text
@@ -458,7 +458,7 @@ const Footer = () => {
           gap={4}
         >
           <Text fontSize="sm">
-            &copy; {year} CodeMaster. Đã đăng ký bản quyền.
+            &copy; {year} Arugo. Đã đăng ký bản quyền.
           </Text>
           <HStack borderSpacing={4}>
             <Link to="#">
@@ -497,7 +497,7 @@ function Landing() {
   );
 }
 
-export const Route = createFileRoute({
+export const Route = createFileRoute("/")({
   component: Landing,
 
   loader: async () => {
