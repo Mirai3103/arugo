@@ -1,5 +1,8 @@
 import { Provider } from "@/components/ui/provider";
 import TanstackQueryLayout from "@/libs/tanstack-query/layout";
+import NotFoundPage from "@/components/common/NotFoundPage";
+import ErrorPage from "@/components/common/ErrorPage";
+import PendingPage from "@/components/common/PendingPage";
 import relativeTime from "dayjs/plugin/relativeTime";
 import duration from "dayjs/plugin/duration";
 import "dayjs/locale/vi";
@@ -38,6 +41,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
   }),
   component: RootComponent,
+  notFoundComponent: NotFoundPage,
+  errorComponent: ({ error, reset }) => (
+    <ErrorPage error={error} resetError={reset} />
+  ),
+  pendingComponent: PendingPage,
 });
 
 function RootComponent() {

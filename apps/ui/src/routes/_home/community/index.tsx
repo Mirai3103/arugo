@@ -1,152 +1,72 @@
+import PendingPage from "@/components/common/PendingPage";
+import { getAllPostsQueryOptions } from "@/libs/queries/post";
+import { getTopTags } from "@/server/transports/server-functions/post";
+import { getAllTopics } from "@/server/transports/server-functions/topic";
 import {
-    Avatar,
-    Badge,
-    Box,
-    Button,
-    Card,
-    Select as ChakraSelect,
-    Container,
-    Flex,
-    Grid,
-    GridItem,
-    HStack,
-    Heading,
-    Icon,
-    IconButton,
-    Image,
-    Input,
-    InputGroup,
-    List,
-    Menu,
-    Portal,
-    Separator,
-    SimpleGrid,
-    Stack,
-    Tabs,
-    Tag,
-    Text,
-    VStack,
-    Wrap,
-    WrapItem,
-    createListCollection,
-    useBreakpointValue,
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  Container,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Heading,
+  Icon,
+  IconButton,
+  Image,
+  Input,
+  InputGroup,
+  List,
+  Menu,
+  Pagination,
+  Separator,
+  SimpleGrid,
+  Stack,
+  Tabs,
+  Tag,
+  Text,
+  VStack,
+  Wrap,
+  WrapItem,
+  useBreakpointValue,
 } from "@chakra-ui/react";
-import { Link, createFileRoute } from "@tanstack/react-router";
-import type React from "react";
-import { useState } from "react";
+import { PostBrief } from "@repo/backend/posts/postService";
+import { getPostQuerySchema } from "@repo/backend/posts/validations/index";
+import { useQuery } from "@tanstack/react-query";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { zodValidator } from "@tanstack/zod-adapter";
+import dayjs from "dayjs";
+import { PageChangeDetails } from "node_modules/@chakra-ui/react/dist/types/components/pagination/namespace";
+import React from "react";
 import { FaAward, FaCrown, FaMedal, FaRegCommentDots } from "react-icons/fa";
 import {
-    FiAward,
-    FiBookOpen,
-    FiBookmark,
-    FiCheckSquare,
-    FiClock,
-    FiCode,
-    FiEdit,
-    FiEye,
-    FiFilter,
-    FiHelpCircle,
-    FiList,
-    FiMessageSquare,
-    FiMoreHorizontal,
-    FiRss,
-    FiSearch,
-    FiShare2,
-    FiShield,
-    FiTag as FiTagIcon,
-    FiThumbsUp,
-    FiTrendingUp,
-    FiUsers,
+  FiAward,
+  FiBookOpen,
+  FiBookmark,
+  FiCheckSquare,
+  FiClock,
+  FiCode,
+  FiEdit,
+  FiEye,
+  FiFilter,
+  FiList,
+  FiMessageSquare,
+  FiMoreHorizontal,
+  FiSearch,
+  FiShare2,
+  FiShield,
+  FiTag as FiTagIcon,
+  FiThumbsUp,
+  FiTrendingUp,
+  FiUsers,
 } from "react-icons/fi";
+import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
 // --- START: Sample Data ---
-interface Post {
-  id: string;
-  author: {
-    name: string;
-    avatarUrl: string;
-    rank: "Expert" | "Intermediate" | "Beginner";
-  };
-  title: string;
-  tags: string[];
-  excerpt: string;
-  likes: number;
-  comments: number;
-  views: number;
-  postedAt: string;
-  category: "Thuật toán" | "Hỏi đáp" | "Thảo luận" | "Tin tức";
-}
-
-const samplePosts: Post[] = [
-  {
-    id: "post1",
-    author: {
-      name: "Thuật Toán Sư",
-      avatarUrl: "https://placewaifu.com/image/40/40?t=a1",
-      rank: "Expert",
-    },
-    title: "Cách tối ưu thuật toán Dynamic Programming cho bài toán X?",
-    tags: ["dynamic-programming", "optimization", "algorithms"],
-    excerpt:
-      "Mình đang gặp khó khăn trong việc tối ưu một bài DP có độ phức tạp O(N^2), liệu có cách nào giảm xuống O(N log N) hoặc O(N) không?",
-    likes: 125,
-    comments: 32,
-    views: 1200,
-    postedAt: "2 giờ trước",
-    category: "Thuật toán",
-  },
-  {
-    id: "post2",
-    author: {
-      name: "Hỏi Đáp Viên",
-      avatarUrl: "https://placewaifu.com/image/40/40?t=a2",
-      rank: "Intermediate",
-    },
-    title: "Lỗi 'Time Limit Exceeded' khi nộp bài tập đồ thị?",
-    tags: ["graphs", "tle", "debugging"],
-    excerpt:
-      "Mình đã thử nhiều cách nhưng vẫn bị TLE với test case lớn. Có ai có kinh nghiệm xử lý vấn đề này không ạ?",
-    likes: 88,
-    comments: 15,
-    views: 850,
-    postedAt: "5 giờ trước",
-    category: "Hỏi đáp",
-  },
-  {
-    id: "post3",
-    author: {
-      name: "Thảo Luận Gia",
-      avatarUrl: "https://placewaifu.com/image/40/40?t=a3",
-      rank: "Intermediate",
-    },
-    title: "Ngôn ngữ lập trình nào tốt nhất cho Competitive Programming?",
-    tags: ["languages", "discussion", "cp"],
-    excerpt:
-      "Theo mọi người thì C++, Java hay Python là lựa chọn tối ưu nhất cho các kỳ thi lập trình cạnh tranh hiện nay?",
-    likes: 210,
-    comments: 78,
-    views: 2500,
-    postedAt: "1 ngày trước",
-    category: "Thảo luận",
-  },
-  {
-    id: "post4",
-    author: {
-      name: "Tin Tức Code",
-      avatarUrl: "https://placewaifu.com/image/40/40?t=a4",
-      rank: "Expert",
-    },
-    title: "Arugo Contest Mùa Hè 2025 chính thức khởi động!",
-    tags: ["contest", "announcement", "news"],
-    excerpt:
-      "Cuộc thi lập trình lớn nhất mùa hè đã quay trở lại với nhiều giải thưởng hấp dẫn. Đăng ký ngay hôm nay!",
-    likes: 500,
-    comments: 150,
-    views: 5200,
-    postedAt: "3 ngày trước",
-    category: "Tin tức",
-  },
-];
 
 const communityStats = {
   members: "15,234",
@@ -178,15 +98,6 @@ const topContributors = [
     rating: 2650,
     medal: "bronze" as "gold" | "silver" | "bronze",
   },
-];
-
-const popularTagsData = [
-  { name: "dynamic-programming", count: 2456 },
-  { name: "graphs", count: 1890 },
-  { name: "data-structures", count: 1532 },
-  { name: "arrays", count: 1200 },
-  { name: "sorting", count: 980 },
-  { name: "python", count: 850 },
 ];
 
 const hotTopicsData = [
@@ -284,15 +195,22 @@ const CommunityBanner = () => {
 
 // --- START: Filters and Search ---
 const PostFilters = () => {
-  const categories = [
-    { value: "all", label: "Tất cả", icon: FiList },
-    { value: "algorithms", label: "Thuật toán", icon: FiCode },
-    { value: "qna", label: "Hỏi đáp", icon: FiHelpCircle },
-    { value: "discussion", label: "Thảo luận", icon: FiMessageSquare },
-    { value: "news", label: "Tin tức", icon: FiRss },
-  ];
-  const [activeTab, setActiveTab] = useState("all");
-  const categoryCollection = createListCollection({ items: categories });
+  const { topics } = Route.useLoaderData();
+  const categories = React.useMemo<
+    { value: string; label: string; icon?: React.ElementType }[]
+  >(() => {
+    return [
+      { value: "all", label: "Tất cả", icon: FiList },
+      ...topics.map((topic) => ({
+        value: topic.id.toString(),
+        label: topic.name,
+      })),
+    ];
+  }, [topics]);
+
+  const navigate = useNavigate();
+  const { topicId = "all" } = Route.useLoaderDeps();
+
   return (
     <VStack gap={4} align="stretch" my={6}>
       <Stack direction={{ base: "column", md: "row" }} gap={3}>
@@ -302,32 +220,7 @@ const PostFilters = () => {
         >
           <Input placeholder="Tìm kiếm bài viết..." variant="subtle" />
         </InputGroup>
-        <ChakraSelect.Root
-          collection={categoryCollection} // Dữ liệu đã được xử lý bởi createListCollection
-          width={{ base: "full", md: "200px" }}
-          variant="subtle"
-        >
-          <ChakraSelect.Control>
-            <ChakraSelect.Trigger>
-              <ChakraSelect.ValueText placeholder="Phân loại" />
-              <ChakraSelect.Indicator />
-            </ChakraSelect.Trigger>
-          </ChakraSelect.Control>
-          <ChakraSelect.HiddenSelect aria-label="Phân loại" />
-          {/* Thêm aria-label cho accessibility */}
-          <Portal>
-            <ChakraSelect.Positioner>
-              <ChakraSelect.Content>
-                {categoryCollection.items.map((cat) => (
-                  <ChakraSelect.Item item={cat} key={cat.value}>
-                    {cat.label} {/* Hiển thị label trực tiếp */}
-                    <ChakraSelect.ItemIndicator />
-                  </ChakraSelect.Item>
-                ))}
-              </ChakraSelect.Content>
-            </ChakraSelect.Positioner>
-          </Portal>
-        </ChakraSelect.Root>
+
         <Button
           variant="outline"
           colorScheme="teal"
@@ -340,8 +233,16 @@ const PostFilters = () => {
         variant="line"
         colorPalette="teal"
         size="sm"
-        value={activeTab}
-        onValueChange={(details) => setActiveTab(details.value as string)}
+        value={topicId?.toString() ?? "all"}
+        onValueChange={(details) =>
+          navigate({
+            to: "/community",
+            search: {
+              topicId:
+                details.value === "all" ? undefined : Number(details.value),
+            },
+          })
+        }
       >
         <Tabs.List overflowX="auto" pb={1}>
           {categories.map((cat) => (
@@ -351,7 +252,7 @@ const PostFilters = () => {
               mr={2}
               whiteSpace="nowrap"
             >
-              <Icon as={cat.icon} mr={1.5} /> {cat.label}
+              {cat.icon && <Icon as={cat.icon} mr={1.5} />} {cat.label}
             </Tabs.Trigger>
           ))}
         </Tabs.List>
@@ -362,13 +263,13 @@ const PostFilters = () => {
 // --- END: Filters and Search ---
 
 // --- START: Post Card ---
-const PostCard = ({ post }: { post: Post }) => {
+const PostCard = ({ post }: { post: PostBrief }) => {
   const rankColors = {
     Expert: "blue.500",
     Intermediate: "green.500",
     Beginner: "gray.500",
   };
-  const cardBg = { base: "white", _dark: "gray.750" };
+  const cardBg = { base: "white", _dark: "gray.800" };
 
   return (
     <Card.Root // Card -> Card.Root
@@ -378,7 +279,7 @@ const PostCard = ({ post }: { post: Post }) => {
       transition="all 0.2s"
       _hover={{ boxShadow: "md", transform: "scale(1.01)" }}
     >
-      <Card.Body>
+      <Card.Body bg={cardBg}>
         {/* CardBody -> Card.Body */}
         <Flex direction={{ base: "column", sm: "row" }} gap={4}>
           <VStack
@@ -390,7 +291,9 @@ const PostCard = ({ post }: { post: Post }) => {
             {/* Avatar đã ở dạng v3 */}
             <Avatar.Root size="md">
               <Avatar.Image
-                src={post.author.avatarUrl}
+                src={
+                  post.author.avatar || "https://placewaifu.com/image/300/300"
+                }
                 alt={post.author.name}
               />
               <Avatar.Fallback
@@ -403,10 +306,10 @@ const PostCard = ({ post }: { post: Post }) => {
               </Text>
               <Text
                 fontSize="xs"
-                color={rankColors[post.author.rank]}
+                color={rankColors["Expert"]}
                 fontWeight="medium"
               >
-                {post.author.rank}
+                {"Expert"}
               </Text>
             </VStack>
           </VStack>
@@ -425,10 +328,12 @@ const PostCard = ({ post }: { post: Post }) => {
               lineClamp={2} // noOfLines -> lineClamp
               _hover={{ color: "teal.500", cursor: "pointer" }}
             >
-              <Link to={`/community/post/${post.id}`}>{post.title}</Link>
+              <Link to={"/community/post/$slug"} params={{ slug: post.slug }}>
+                {post.title}
+              </Link>
             </Heading>
             <Wrap gap={1.5}>
-              {post.tags.map((tag) => (
+              {post?.tags?.map((tag) => (
                 <WrapItem key={tag}>
                   {/* Tag đã ở dạng v3 */}
                   <Tag.Root
@@ -446,7 +351,7 @@ const PostCard = ({ post }: { post: Post }) => {
               color={{ _light: "gray.600", _dark: "gray.300" }} // useColorModeValue -> object syntax
               lineClamp={2} // noOfLines -> lineClamp
             >
-              {post.excerpt}
+              {post.shortDescription}
             </Text>
             <Flex
               justifyContent="space-between"
@@ -464,16 +369,19 @@ const PostCard = ({ post }: { post: Post }) => {
                 fontSize="xs"
               >
                 <HStack gap={0.5}>
-                  <Icon as={FiThumbsUp} /> <Text>{post.likes}</Text>
+                  <Icon as={FiThumbsUp} /> <Text>400</Text>
                 </HStack>
                 <HStack gap={0.5}>
-                  <Icon as={FaRegCommentDots} /> <Text>{post.comments}</Text>
+                  <Icon as={FaRegCommentDots} /> <Text>10</Text>
                 </HStack>
                 <HStack gap={0.5}>
-                  <Icon as={FiEye} /> <Text>{post.views}</Text>
+                  <Icon as={FiEye} /> <Text>{200}</Text>
                 </HStack>
                 <HStack gap={0.5}>
-                  <Icon as={FiClock} /> <Text>{post.postedAt}</Text>
+                  <Icon as={FiClock} />{" "}
+                  <Text>
+                    {dayjs(post.createdAt).format("HH:mm DD/MM/YYYY")}
+                  </Text>
                 </HStack>
               </HStack>
               <HStack gap={1}>
@@ -648,27 +556,30 @@ const TopContributorsCard = () => {
   );
 };
 
-const PopularTagsCard = () => (
-  <SidebarSection title="Tags phổ biến" icon={FiTagIcon}>
-    <Wrap gap={1.5}>
-      {popularTagsData.map((tag) => (
-        <WrapItem key={tag.name}>
-          <Tag.Root
-            size="sm"
-            variant="solid"
-            colorPalette="gray"
-            cursor="pointer"
-            _hover={{ bg: "teal.500", color: "white" }}
-          >
-            <Tag.Label>
-              {tag.name} ({tag.count})
-            </Tag.Label>
-          </Tag.Root>
-        </WrapItem>
-      ))}
-    </Wrap>
-  </SidebarSection>
-);
+const PopularTagsCard = () => {
+  const { topTags } = Route.useLoaderData();
+  return (
+    <SidebarSection title="Tags phổ biến" icon={FiTagIcon}>
+      <Wrap gap={1.5}>
+        {topTags.map((tag) => (
+          <WrapItem key={tag.tag}>
+            <Tag.Root
+              size="sm"
+              variant="solid"
+              colorPalette="gray"
+              cursor="pointer"
+              _hover={{ bg: "teal.500", color: "white" }}
+            >
+              <Tag.Label>
+                {tag.tag} ({tag.count})
+              </Tag.Label>
+            </Tag.Root>
+          </WrapItem>
+        ))}
+      </Wrap>
+    </SidebarSection>
+  );
+};
 
 const HotTopicsCard = () => (
   <SidebarSection title="Chủ đề hot" icon={FiTrendingUp}>
@@ -723,35 +634,6 @@ const HotTopicsCard = () => (
   </SidebarSection>
 );
 
-const LearningResourcesCard = () => (
-  <SidebarSection title="Tài liệu học tập" icon={FiBookOpen}>
-    <VStack gap={3} align="stretch">
-      {learningResourcesData.map((resource) => (
-        <HStack
-          key={resource.id}
-          gap={3}
-          p={1.5}
-          borderRadius="md"
-          _hover={{ bg: { base: "gray.50", _dark: "gray.700" } }}
-        >
-          <Icon as={resource.icon} boxSize={5} color="teal.500" />
-          <Box>
-            <Text fontSize="sm" fontWeight="medium" lineClamp={1}>
-              {resource.title}
-            </Text>
-            <Text fontSize="xs" color={{ base: "gray.500", _dark: "gray.400" }}>
-              Cập nhật: {resource.updated}
-            </Text>
-          </Box>
-        </HStack>
-      ))}
-      <Button variant="outline" colorScheme="teal" size="xs" mt={1}>
-        Xem tất cả tài liệu
-      </Button>
-    </VStack>
-  </SidebarSection>
-);
-
 const CommunityGuidelinesCard = () => (
   <SidebarSection
     title="Nguyên tắc cộng đồng"
@@ -798,7 +680,6 @@ const RightSidebar = () => {
       <TopContributorsCard />
       <PopularTagsCard />
       <HotTopicsCard />
-      <LearningResourcesCard />
       <CommunityGuidelinesCard />
     </VStack>
   );
@@ -808,7 +689,19 @@ const RightSidebar = () => {
 // Main Community Page Component
 function CommunityPage() {
   const mainContentBg = { base: "gray.50", _dark: "gray.900" };
-
+  const deps = Route.useLoaderDeps();
+  const { data: posts } = useQuery(getAllPostsQueryOptions(deps));
+  const navigate = useNavigate();
+  const onPageChange = (detail: PageChangeDetails) => {
+    navigate({
+      to: "/community",
+      search: (prev) =>
+        ({
+          ...prev,
+          page: detail.page,
+        }) as any,
+    });
+  };
   return (
     <Box bg={mainContentBg} minH="100vh">
       <Container
@@ -829,17 +722,41 @@ function CommunityPage() {
             {/* Added overflow hidden */}
             <PostFilters />
             <VStack gap={5} align="stretch">
-              {samplePosts.map((post) => (
+              {posts?.posts?.map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
-              <Button
-                variant="outline"
-                colorScheme="teal"
-                mt={4}
-                alignSelf="center"
+              <Pagination.Root
+                count={posts?.total || 10}
+                pageSize={20}
+                defaultPage={deps.page}
+                page={deps.page}
+                onPageChange={onPageChange}
+                alignSelf={"center"}
               >
-                Tải thêm bài viết
-              </Button>
+                <ButtonGroup variant="ghost" size="sm">
+                  <Pagination.PrevTrigger asChild>
+                    <IconButton>
+                      <LuChevronLeft />
+                    </IconButton>
+                  </Pagination.PrevTrigger>
+
+                  <Pagination.Items
+                    render={(page) => (
+                      <IconButton
+                        variant={{ base: "ghost", _selected: "solid" }}
+                      >
+                        {page.value}
+                      </IconButton>
+                    )}
+                  />
+
+                  <Pagination.NextTrigger asChild>
+                    <IconButton>
+                      <LuChevronRight />
+                    </IconButton>
+                  </Pagination.NextTrigger>
+                </ButtonGroup>
+              </Pagination.Root>
             </VStack>
           </GridItem>
           <GridItem overflow="hidden">
@@ -851,9 +768,19 @@ function CommunityPage() {
   );
 }
 
-export const Route = createFileRoute("/_home/community")({
+export const Route = createFileRoute("/_home/community/")({
   // Adjust this route as needed
   component: CommunityPage,
+  validateSearch: zodValidator(getPostQuerySchema),
+  loaderDeps: ({ search }) => search,
+  loader: async ({ context: { queryClient }, deps }) => {
+    const p1 = queryClient.prefetchQuery(getAllPostsQueryOptions(deps));
+    const p2 = getAllTopics();
+    const p3 = getTopTags();
+    const [_, topics, topTags] = await Promise.all([p1, p2, p3]);
+    return { topics, topTags, deps };
+  },
+
 });
 
 // Define BoxProps if it's not globally available or part of Chakra's exports you're using

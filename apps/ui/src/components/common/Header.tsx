@@ -72,7 +72,7 @@ export const Header = () => {
           ) : (
             <HStack gap={4}>
               <Button asChild variant="ghost" colorScheme="teal" size="sm">
-                <RouterLink to="/problems">Bài tập</RouterLink>
+                <RouterLink to="/home">Bài tập</RouterLink>
               </Button>
               <Button asChild variant="ghost" colorScheme="teal" size="sm">
                 <RouterLink to="/contests">Cuộc thi</RouterLink>
@@ -149,10 +149,9 @@ export const Header = () => {
                   variant="ghost"
                   colorScheme="teal"
                   justifyContent="flex-start"
-                  to="/problems"
                   onClick={onClose}
                 >
-                  <RouterLink to="/problems">Bài tập</RouterLink>
+                  <RouterLink to="/home">Bài tập</RouterLink>
                 </Button>
                 <Button
                   asChild
@@ -175,7 +174,6 @@ export const Header = () => {
                 <Button
                   asChild
                   variant="ghost"
-                  colorScheme="teal"
                   justifyContent="flex-start"
                   to="/leaderboard"
                   onClick={onClose}

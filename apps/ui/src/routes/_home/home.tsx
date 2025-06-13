@@ -4,36 +4,36 @@ import { getAllProblemsQueryOptions } from "@/libs/queries/problems";
 import { getAllTagsQueryOptions } from "@/libs/queries/tag";
 import { problemQuerySchema } from "@repo/backend/problems/validations/problem";
 import {
-    Avatar,
-    Box,
-    Button,
-    Card,
-    Container,
-    Grid,
-    GridItem,
-    HStack,
-    Heading,
-    Icon,
-    SimpleGrid,
-    Stat,
-    Tag,
-    Text,
-    VStack,
-    Wrap,
-    WrapItem,
-    chakra,
-    useBreakpointValue,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Container,
+  Grid,
+  GridItem,
+  HStack,
+  Heading,
+  Icon,
+  SimpleGrid,
+  Stat,
+  Tag,
+  Text,
+  VStack,
+  Wrap,
+  WrapItem,
+  chakra,
+  useBreakpointValue,
 } from "@chakra-ui/react";
-import { } from "@tanstack/react-router";
+import {} from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import {
-    FiAward,
-    FiCalendar,
-    FiCheckCircle,
-    FiGift,
-    FiStar,
-    FiTrendingUp,
-    FiUsers,
+  FiAward,
+  FiCalendar,
+  FiCheckCircle,
+  FiGift,
+  FiStar,
+  FiTrendingUp,
+  FiUsers,
 } from "react-icons/fi";
 
 const sampleProblems: any[] = [

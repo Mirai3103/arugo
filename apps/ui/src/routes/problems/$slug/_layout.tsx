@@ -5,25 +5,25 @@ import type { ProblemSampleTestCase } from "@repo/backend/problems/problemServic
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import { getProblemBySlug } from "@/server/transports/server-functions/problem";
 import {
-    SubmissionTestcaseStatus,
-    SubmissionTestcaseStatusColor,
-    SubmissionTestcaseStatusIcon,
+  SubmissionTestcaseStatus,
+  SubmissionTestcaseStatusColor,
+  SubmissionTestcaseStatusIcon,
 } from "@/types/enum";
 import {
-    Box,
-    Button,
-    Code,
-    Container,
-    Separator as Divider,
-    Flex,
-    HStack,
-    Heading,
-    Icon,
-    Skeleton,
-    Tabs,
-    Text,
-    VStack,
-    useBreakpointValue,
+  Box,
+  Button,
+  Code,
+  Container,
+  Separator as Divider,
+  Flex,
+  HStack,
+  Heading,
+  Icon,
+  Skeleton,
+  Tabs,
+  Text,
+  VStack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import React, { useMemo } from "react";

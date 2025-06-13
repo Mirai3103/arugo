@@ -1,33 +1,33 @@
 import {
-    Box,
-    Button,
-    Container,
-    Separator as Divider,
-    Flex,
-    HStack,
-    Heading,
-    Icon,
-    Image,
-    SimpleGrid,
-    Stack,
-    Text,
-    VStack,
-    chakra,
+  Box,
+  Button,
+  Container,
+  Separator as Divider,
+  Flex,
+  HStack,
+  Heading,
+  Icon,
+  Image,
+  SimpleGrid,
+  Stack,
+  Text,
+  VStack,
+  chakra,
 } from "@chakra-ui/react";
 import { Link, useLoaderData, createFileRoute } from "@tanstack/react-router";
 
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import {
-    FiAward,
-    FiBookOpen,
-    FiCode,
-    FiMessageSquare,
-    FiPlayCircle,
-    FiStar,
-    FiTarget,
-    FiTrendingUp,
-    FiUsers,
+  FiAward,
+  FiBookOpen,
+  FiCode,
+  FiMessageSquare,
+  FiPlayCircle,
+  FiStar,
+  FiTarget,
+  FiTrendingUp,
+  FiUsers,
 } from "react-icons/fi";
 
 // Header Component
@@ -232,8 +232,8 @@ const FeaturesSection = () => {
             color={{ base: "gray.600", _dark: "gray.300" }}
             maxW="2xl"
           >
-            Arugo cung cấp một nền tảng toàn diện để bạn không chỉ học lập
-            trình mà còn trở thành một chuyên gia giải quyết vấn đề.
+            Arugo cung cấp một nền tảng toàn diện để bạn không chỉ học lập trình
+            mà còn trở thành một chuyên gia giải quyết vấn đề.
           </Text>
         </VStack>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={8}>
@@ -331,16 +331,11 @@ const ProblemsPreviewSection = () => {
         ))}
       </Stack>
       <Flex justifyContent="center" mt={8}>
-        <Button
-          as={Link}
-          // @ts-ignore
-          to="/problems"
-          colorScheme="teal"
-          variant="outline"
-          size="lg"
-          rightIcon={<FiCode />}
-        >
-          Xem Tất Cả Bài Tập
+        <Button asChild colorScheme="teal" variant="outline" size="lg">
+          <Link to="/home">
+            Xem Tất Cả Bài Tập
+            <FiCode />
+          </Link>
         </Button>
       </Flex>
     </Container>
@@ -426,7 +421,7 @@ const Footer = () => {
               borderSpacing={3}
             >
               <Text fontWeight="semibold">Sản phẩm</Text>
-              <Link to="/problems">Bài tập</Link>
+              <Link to="/home">Bài tập</Link>
               <Link to="/contests">Cuộc thi</Link>
               <Link to="/community">Cộng đồng</Link>
             </VStack>
@@ -457,9 +452,7 @@ const Footer = () => {
           alignItems="center"
           gap={4}
         >
-          <Text fontSize="sm">
-            &copy; {year} Arugo. Đã đăng ký bản quyền.
-          </Text>
+          <Text fontSize="sm">&copy; {year} Arugo. Đã đăng ký bản quyền.</Text>
           <HStack borderSpacing={4}>
             <Link to="#">
               <Icon as={FaGithub} boxSize={5} />

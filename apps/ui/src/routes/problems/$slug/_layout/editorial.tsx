@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router";
 import { Prose } from "@/components/ui/prose";
 
 import { generateHTMLFromJSON } from "@repo/tiptap";

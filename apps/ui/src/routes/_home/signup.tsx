@@ -1,34 +1,34 @@
 import { signIn } from "@/libs/auth/client";
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import {
-    AbsoluteCenter,
-    Box,
-    Button,
-    Link as ChakraLink,
-    Checkbox,
-    Field,
-    Flex,
-    Heading,
-    Icon,
-    IconButton,
-    Input,
-    InputGroup,
-    Separator,
-    Stack,
-    Text,
-    VStack,
+  AbsoluteCenter,
+  Box,
+  Button,
+  Link as ChakraLink,
+  Checkbox,
+  Field,
+  Flex,
+  Heading,
+  Icon,
+  IconButton,
+  Input,
+  InputGroup,
+  Separator,
+  Stack,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import { Link, redirect, createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import {
-    FiEye,
-    FiEyeOff,
-    FiGithub,
-    FiLock,
-    FiMail,
-    FiUser,
-    FiUserPlus,
+  FiEye,
+  FiEyeOff,
+  FiGithub,
+  FiLock,
+  FiMail,
+  FiUser,
+  FiUserPlus,
 } from "react-icons/fi";
 function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);

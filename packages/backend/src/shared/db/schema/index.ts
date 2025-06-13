@@ -80,7 +80,6 @@ export const topicsRelations = relations(topics, ({ many }) => ({
   posts: many(posts),
 }));
 
-
 export const profilesRelations = relations(profiles, ({ one }) => ({
   user: one(users, { fields: [profiles.userId], references: [users.id] }),
 }));

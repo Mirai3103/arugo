@@ -1,33 +1,33 @@
 import { signIn } from "@/libs/auth/client";
 import { getServerSession } from "@/server/transports/server-functions/auth";
 import {
-    AbsoluteCenter,
-    Box,
-    Button,
-    Checkbox,
-    Field,
-    Flex,
-    HStack,
-    Heading,
-    Icon,
-    IconButton,
-    Input,
-    InputGroup,
-    Separator,
-    Stack,
-    Text,
-    VStack,
+  AbsoluteCenter,
+  Box,
+  Button,
+  Checkbox,
+  Field,
+  Flex,
+  HStack,
+  Heading,
+  Icon,
+  IconButton,
+  Input,
+  InputGroup,
+  Separator,
+  Stack,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import { Link, redirect, createFileRoute } from "@tanstack/react-router";
 import { useState } from "react"; // Added React import
 import { FaGoogle } from "react-icons/fa";
 import {
-    FiEye,
-    FiEyeOff,
-    FiGithub,
-    FiLock,
-    FiLogIn,
-    FiMail,
+  FiEye,
+  FiEyeOff,
+  FiGithub,
+  FiLock,
+  FiLogIn,
+  FiMail,
 } from "react-icons/fi";
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
