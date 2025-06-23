@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_home")({
 
 function RouteComponent() {
   return (
-    <Box>
+    <Box maxH={"100vh"} overflowX={"auto"}>
       <Header />
       <Outlet />
       <Footer />

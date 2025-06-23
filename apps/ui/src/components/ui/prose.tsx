@@ -1,8 +1,7 @@
 "use client";
 
 import { chakra } from "@chakra-ui/react";
-
-export const Prose = chakra("div", {
+export const PROSE_STYLES:any={
   base: {
     color: "fg.muted",
     maxWidth: "65ch",
@@ -261,4 +260,5 @@ export const Prose = chakra("div", {
   defaultVariants: {
     size: "md",
   },
-});
+}
+export const Prose = chakra("div", PROSE_STYLES);
