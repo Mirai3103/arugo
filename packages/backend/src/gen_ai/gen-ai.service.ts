@@ -3,7 +3,7 @@ import { submissions as submissionTable } from "#/shared/db/schema";
 import { z } from "zod";
 import { LLM_REGISTRY } from "./registry";
 import { Eta } from "eta";
-import { generateObject, generateText } from "ai";
+import { generateObject, generateText, streamText } from "ai";
 import { env } from "@repo/env";
 import { generateMarkdownFromJSON } from "@repo/tiptap";
 import { eq } from "drizzle-orm";
@@ -73,12 +73,12 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
       language: true,
     },
   });
-  if(submission?.isTest) {
-   return {
+  if (submission?.isTest) {
+    return {
       details: {
         correctness: 0,
         efficiency: 0,
-        readability: 0, 
+        readability: 0,
         structure: 0,
         best_practices: 0,
       },
@@ -95,11 +95,8 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
   }
   (submission.problem.statement as any) = generateMarkdownFromJSON(
     submission.problem.statement,
-  ) + "pass ratio: " + submission.passRatio + "%";
+  );
   const promptText = eta.compile(prompt.prompt, {});
-  console.log(eta.render(promptText, {
-      submission,
-    }));
 
   const { object, usage, request } = await generateObject({
     model: LLM_REGISTRY.languageModel(
@@ -107,10 +104,11 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
     ),
     prompt: eta.render(promptText, {
       submission,
-    }),
+    }) + "user code pass ratio: " + submission.passRatio + "%",
     maxTokens: 1000,
     schema: responseSchema,
   });
+
   await db
     .update(submissionTable)
     .set({
@@ -126,10 +124,22 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
     .where(eq(submissionTable.id, submissionId));
   return object;
 }
+type AsyncIterableStream<T> = AsyncIterable<T> & ReadableStream<T>;
+type GenAiMode = 'block' | 'stream';
 
+export function getSubmissionReview(
+  submissionId: string,
+  mode: 'block'
+): Promise<string>;
+
+export function getSubmissionReview(
+  submissionId: string,
+  mode: 'stream'
+): Promise<AsyncIterableStream<string>>;
 export async function getSubmissionReview(
   submissionId: string,
-): Promise<string> {
+  mode: GenAiMode = 'block'
+): Promise<string|AsyncIterableStream<string>> {
   const submission = await db.query.submissions.findFirst({
     where: (submissions, { eq }) => eq(submissions.id, submissionId),
     with: {
@@ -151,6 +161,17 @@ export async function getSubmissionReview(
     submission.problem.statement,
   );
   const promptText = eta.compile(prompt.prompt, {});
+  if (mode === 'stream') {
+    const { textStream } = streamText({
+      model: LLM_REGISTRY.languageModel(
+        (env.GEN_AI_PROVIDER + " > " + env.GEN_AI_MODEL) as any,
+      ),
+      prompt: eta.render(promptText, {
+        submission,
+      }),
+    });
+    return textStream;
+  }
   const { text } = await generateText({
     model: LLM_REGISTRY.languageModel(
       (env.GEN_AI_PROVIDER + " > " + env.GEN_AI_MODEL) as any,
@@ -159,5 +180,7 @@ export async function getSubmissionReview(
       submission,
     }),
   });
+
+
   return text; // markdown
 }

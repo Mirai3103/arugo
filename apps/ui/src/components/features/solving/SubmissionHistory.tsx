@@ -27,7 +27,7 @@ import {
 import dayjs from "dayjs"; // Cần cài đặt: npm install dayjs
 import relativeTime from "dayjs/plugin/relativeTime"; // For '5 minutes ago'
 import "dayjs/locale/vi"; // For Vietnamese locale (optional)
-import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpc } from "@/libs/query";
 import { useSession } from "@/libs/auth/client";
 
 import { useQuery } from "@tanstack/react-query"; // Added QueryObserverResult for type clarity

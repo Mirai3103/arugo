@@ -27,7 +27,8 @@ import { getScoreColor } from "../utils/submissionHelpers";
 import { useQuery } from "@tanstack/react-query";
 import { Prose } from "@/components/ui/prose";
 import { generateHTMLFromMarkdown } from "@repo/tiptap";
-import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpc } from "@/libs/query";
+
 
 interface AIScore {
   correctness: number;

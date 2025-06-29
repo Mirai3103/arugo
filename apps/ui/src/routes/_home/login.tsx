@@ -1,5 +1,5 @@
 import { signIn } from "@/libs/auth/client";
-import { trpcClient } from "@/libs/trpc";
+import { trpcClient } from "@/libs/query/trpc";
 
 import {
   AbsoluteCenter,

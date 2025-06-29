@@ -3,7 +3,8 @@ import { toaster } from "@/components/ui/toaster";
 import type { FullProblem } from "@repo/backend/problems/problemService";
 import { usePromiseStore } from "@/stores/usePromiseStore";
 import { useMutation } from "@tanstack/react-query";
-import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpc } from "@/libs/query";
+
 
 export function useCodeTesting(
   problem: FullProblem,

@@ -1,4 +1,4 @@
-import { trpcClient } from "@/libs/trpc";
+import { trpcClient } from "@/libs/query/trpc";
 import {
   Box,
   Button,

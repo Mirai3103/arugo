@@ -1,5 +1,5 @@
 import { Provider } from "@/components/ui/provider";
-import TanstackQueryLayout from "@/libs/tanstack-query/layout";
+import TanstackQueryLayout from "@/libs/query/tanstack-query/layout";
 import NotFoundPage from "@/components/common/NotFoundPage";
 import ErrorPage from "@/components/common/ErrorPage";
 import PendingPage from "@/components/common/PendingPage";

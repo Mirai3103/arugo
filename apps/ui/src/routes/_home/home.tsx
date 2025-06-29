@@ -34,7 +34,8 @@ import {
   FiTrendingUp,
   FiUsers,
 } from "react-icons/fi";
-import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpc } from "@/libs/query";
+
 
 const sampleProblems: any[] = [
   {

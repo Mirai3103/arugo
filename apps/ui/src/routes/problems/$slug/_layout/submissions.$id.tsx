@@ -1,5 +1,6 @@
 import { SubmissionDetailPanel } from "@/components/features/solving/SubmissionDetailPanel";
-import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpc } from "@/libs/query";
+
 import { useQuery } from "@tanstack/react-query";
 import { redirect, createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/problems/$slug/_layout/submissions/$id")(

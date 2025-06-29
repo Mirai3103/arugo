@@ -46,9 +46,9 @@ import React from "react";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { Prose } from "@/components/ui/prose"; // Component từ snippet
 import dayjs from "dayjs";
-import { getPostBySlug } from "@/server/transports/server-functions/post";
 import { PostDetail } from "@repo/backend/posts/postService";
 import { generateHTMLFromJSON } from "@repo/tiptap";
+import { trpcClient } from "@/libs/query/trpc";
 
 interface Comment {
   id: string;
@@ -314,7 +314,6 @@ const AuthorCard = ({ author }: { author: Author }) => (
     {" "}
     {/* Card -> Card.Root */}
     <Card.Body>
-      {" "}
       {/* CardBody -> Card.Body */}
       <VStack gap={4}>
         {/* Avatar đã ở dạng v3 */}
@@ -494,7 +493,7 @@ const PostDetailsPage = () => {
                 <VStack gap={5} align="stretch">
                   <PostHeader
                     author={post.author}
-                    createdAt={post.createdAt.toISOString()}
+                    createdAt={post.createdAt}
                   />
                   <PostContent
                     title={post.title}
@@ -533,7 +532,7 @@ const Spacer = () => <Box flexGrow={1} />;
 export const Route = createFileRoute("/_home/community/post/$slug")({
   component: PostDetailsPage,
   loader: async ({ params }) => {
-    const post = await getPostBySlug({ data: { slug: params.slug } });
+    const post = await trpcClient.post.getPostBySlug.query({ slug: params.slug });
     if (!post) {
       throw redirect({ to: "/community" });
     }

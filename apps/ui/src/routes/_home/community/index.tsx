@@ -1,6 +1,7 @@
 import PendingPage from "@/components/common/PendingPage";
-import { trpc } from "@/libs/tanstack-query/root-provider";
-import { trpcClient } from "@/libs/trpc";
+import { trpc } from "@/libs/query";
+
+import { trpcClient } from "@/libs/query/trpc";
 import {
   Avatar,
   Badge,

@@ -10,7 +10,7 @@ import { ProblemRow } from "./ProblemRow";
 import { generateSkeletonRows } from "./ProblemsTableSkeleton";
 import { SearchFilters } from "./SearchFilters";
 import { useProblemsSearch } from "./hooks";
-import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpc } from "@/libs/query";
 
 // Component chứa tất cả logic liên quan đến problems query
 const ProblemsContent = ({

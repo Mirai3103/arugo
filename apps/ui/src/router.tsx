@@ -1,4 +1,4 @@
-import * as TanstackQuery from "@/libs/tanstack-query/root-provider";
+import * as TanstackQuery from "@/libs/query/tanstack-query/root-provider";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { routerWithQueryClient } from "@tanstack/react-router-with-query";
 import { routeTree } from "./routeTree.gen";

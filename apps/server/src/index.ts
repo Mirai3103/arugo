@@ -49,7 +49,6 @@ app.use(
 			const session = await auth.api.getSession({
 				headers: c.req.headers,
 			});
-      console.log("Session:", session,{headers: c.req.headers});
 			return await createTRPCContext({ session });
 		},
 	})

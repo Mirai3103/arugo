@@ -124,7 +124,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import dayjs from "dayjs";
-import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpc } from "@/libs/query";
+
 // --- START: Featured Contest ---
 const FeaturedContestCard = ({ contest }: { contest: ContestBrief }) => {
   return (

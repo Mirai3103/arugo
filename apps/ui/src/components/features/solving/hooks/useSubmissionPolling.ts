@@ -1,4 +1,5 @@
-import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpc } from "@/libs/query";
+
 import { usePromiseStore } from "@/stores/usePromiseStore";
 import { SubmissionTestcaseStatus } from "@/types/enum"; // Ensure this path is correct
 import { useQuery } from "@tanstack/react-query";

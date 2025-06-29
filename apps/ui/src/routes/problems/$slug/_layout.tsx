@@ -32,8 +32,9 @@ import { usePromiseStore } from "@/stores/usePromiseStore";
 import { useQuery } from "@tanstack/react-query";
 import { ProblemDescriptionPanel } from "@/components/features/solving/ProblemDescriptionPanel";
 import { EditorProvider } from "@/components/features/solving/contexts/EditorContext";
-import { trpcClient } from "@/libs/trpc";
-import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpcClient } from "@/libs/query/trpc";
+import { trpc } from "@/libs/query";
+
 const PageHeader = () => {
   const bg = { base: "white", _dark: "gray.800" };
   const color = { base: "gray.800", _dark: "white" };
@@ -422,6 +423,7 @@ function RouteComponent() {
 
   if (isMobile) {
     return (
+      <EditorProvider>
       <Flex direction="column" minH="100vh" bg={panelBg}>
         <PageHeader />
         <VStack gap={0} flex="1" overflowY="auto" className="con cac">
@@ -438,6 +440,7 @@ function RouteComponent() {
           </Box>
         </VStack>
       </Flex>
+      </EditorProvider>
     );
   }
 
