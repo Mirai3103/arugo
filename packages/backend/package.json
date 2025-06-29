@@ -46,6 +46,7 @@
 		"@google/generative-ai": "^0.24.1",
 		"@repo/env": "workspace:*",
 		"@repo/tiptap": "workspace:*",
+		"@trpc/server": "^11.4.3",
 		"ai": "^4.3.16",
 		"better-auth": "^1.2.8",
 		"drizzle": "^1.4.0",
@@ -55,6 +56,7 @@
 		"nats": "^2.29.3",
 		"postgres": "^3.4.7",
 		"slugify": "^1.6.6",
+		"superjson": "^2.2.2",
 		"uuid": "^11.1.0",
 		"zod": "^3.25.32"
 	},

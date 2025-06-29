@@ -34,6 +34,7 @@ export const auth = betterAuth({
     },
   },
   baseURL: env.VITE_SERVER_URL,
+  trustedOrigins: [env.VITE_SERVER_URL,"http://localhost:3000"],
   plugins: [reactStartCookies()],
 });
 

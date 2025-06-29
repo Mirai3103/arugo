@@ -22,6 +22,7 @@ export interface Problem {
 	incorrect_solutions_count: number;
 	description_vi: string;
 	title_vi: string;
+	tag_vi: string[];
 }
 
 type Id = string;
@@ -285,7 +286,7 @@ async function main() {
 				testcasesToInsert.push(...testcasesToInsertBatch);
 
 				// Prepare problem-tag relationships
-				const problemTags = (rawProblem.cf_tags || [])
+				const problemTags = (rawProblem.tag_vi|| rawProblem.cf_tags || [])
 					.map(tagName => tagMap.get(tagName))
 					.filter(tagId => tagId !== undefined)
 					.map(tagId => ({

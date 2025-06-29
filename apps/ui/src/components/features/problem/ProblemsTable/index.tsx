@@ -1,5 +1,3 @@
-import { getAllProblemsQueryOptions } from "@/libs/queries/problems";
-import { getAllTagsQueryOptions } from "@/libs/queries/tag";
 import type { Tag } from "@repo/backend/schema";
 import { Box, Table, useBreakpointValue } from "@chakra-ui/react";
 import { useFilter, useListCollection } from "@chakra-ui/react";
@@ -12,6 +10,7 @@ import { ProblemRow } from "./ProblemRow";
 import { generateSkeletonRows } from "./ProblemsTableSkeleton";
 import { SearchFilters } from "./SearchFilters";
 import { useProblemsSearch } from "./hooks";
+import { trpc } from "@/libs/tanstack-query/root-provider";
 
 // Component chứa tất cả logic liên quan đến problems query
 const ProblemsContent = ({
@@ -22,8 +21,7 @@ const ProblemsContent = ({
   updateFilters: (updates: Partial<any>) => void;
 }) => {
   const navigate = useNavigate();
-  const problemsQuery = useSuspenseQuery(getAllProblemsQueryOptions(search));
-
+  const problemsQuery = useSuspenseQuery(trpc.problem.getAllProblems.queryOptions(search));
   const handleProblemClick = useCallback(
     (slug: string) => {
       navigate({ to: "/problems/$slug", params: { slug } });
@@ -125,7 +123,7 @@ const ProblemsTable = () => {
   const [searchTerm, setSearchTerm] = useState(search.search || "");
 
   // Chỉ query tags cho filters, không query problems
-  const { data: tags } = useSuspenseQuery(getAllTagsQueryOptions());
+  const { data: tags } = useSuspenseQuery(trpc.tag.getAllTags.queryOptions());
   const { contains } = useFilter({ sensitivity: "base" });
   const {
     collection: tagCollection,

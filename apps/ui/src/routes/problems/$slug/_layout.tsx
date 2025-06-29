@@ -2,8 +2,7 @@ import { UserMenu } from "@/components/common/UserMenu";
 import CodeEditorArea from "@/components/features/solving/CodeEditorArea";
 import { ColorModeButton } from "@/components/ui/color-mode"; // Assuming this path is correct for the project
 import type { ProblemSampleTestCase } from "@repo/backend/problems/problemService";
-import { getServerSession } from "@/server/transports/server-functions/auth";
-import { getProblemBySlug } from "@/server/transports/server-functions/problem";
+
 import {
   SubmissionTestcaseStatus,
   SubmissionTestcaseStatusColor,
@@ -34,6 +33,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
 import { ProblemDescriptionPanel } from "@/components/features/solving/ProblemDescriptionPanel";
 import { EditorProvider } from "@/components/features/solving/contexts/EditorContext";
+import { trpcClient } from "@/libs/trpc";
 const PageHeader = () => {
   const bg = { base: "white", _dark: "gray.800" };
   const color = { base: "gray.800", _dark: "white" };
@@ -64,8 +64,8 @@ const PageHeader = () => {
               <Link to="/home">Trang chủ</Link>
             </Button>
             <ColorModeButton />
-            {session.data?.user ? (
-              <UserMenu isPending={false} user={session.data?.user} />
+            {session?.user ? (
+              <UserMenu isPending={false} user={session?.user} />
             ) : (
               <HStack gap={2}>
                 <Button asChild variant="ghost" colorScheme="teal" size="sm">
@@ -431,7 +431,7 @@ function RouteComponent() {
           </Box>
           <Divider borderColor={handleBg} my={0} />
           <Box w="100%">
-            {session.data?.user ? (
+            {session?.user ? (
               <RightResizablePanel />
             ) : (
               <UnAuthRightResizablePanel />
@@ -485,7 +485,7 @@ function RouteComponent() {
             </PanelResizeHandle>
             <Panel defaultSize={50} minSize={30}>
               <Box h="100%" px={{ base: 1, md: 2 }} overflow="hidden">
-                {session.data?.user ? (
+                {session?.user ? (
                   <RightResizablePanel />
                 ) : (
                   <UnAuthRightResizablePanel />
@@ -502,12 +502,12 @@ function RouteComponent() {
 export const Route = createFileRoute("/problems/$slug/_layout")({
   loader: async ({ params, context }) => {
     const { slug } = params;
-    const session = await getServerSession();
+    const session =await trpcClient.auth.getServerSession.query()
 
     return {
       session,
-      problem: await getProblemBySlug({
-        data: { slug },
+      problem: await trpcClient.problem.getProblemBySlug.query({
+        slug: slug || "",
       }),
     };
   },

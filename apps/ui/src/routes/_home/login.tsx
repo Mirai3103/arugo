@@ -1,5 +1,6 @@
 import { signIn } from "@/libs/auth/client";
-import { getServerSession } from "@/server/transports/server-functions/auth";
+import { trpcClient } from "@/libs/trpc";
+
 import {
   AbsoluteCenter,
   Box,
@@ -206,8 +207,8 @@ export const Route = createFileRoute("/_home/login")({
   // Assuming '/login' is the route
   component: LoginPage,
   async beforeLoad(_ctx) {
-    const session = await getServerSession();
-    if (session.data?.user) {
+    const session = await trpcClient.auth.getServerSession.query()
+    if (session?.user) {
       // Redirect to the home page if already logged in
       throw redirect({ to: "/home" });
     }

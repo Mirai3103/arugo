@@ -11,10 +11,10 @@ export const authMiddleware = createMiddleware({ type: "function" }).server(
     });
     return await next({
       context: {
-        user: session.data?.user
+        user: session?.user
           ? {
-              id: session.data.user.id,
-              email: session.data.user.email,
+              id: session.user.id,
+              email: session.user.email,
             }
           : null,
       },

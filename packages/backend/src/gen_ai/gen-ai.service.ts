@@ -65,6 +65,7 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
   if (!prompt) {
     throw new Error(`this feature is not available yet`);
   }
+
   const submission = await db.query.submissions.findFirst({
     where: (submissions, { eq }) => eq(submissions.id, submissionId),
     with: {
@@ -84,6 +85,10 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
       summary: "Đây là bài test, điểm số được mặc định là 0.",
     }
   }
+  if (submission?.aiScore) {
+    return submission.aiScore as any;
+  }
+
 
   if (!submission) {
     throw new Error(`Submission with id ${submissionId} not found`);
@@ -92,6 +97,9 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
     submission.problem.statement,
   ) + "pass ratio: " + submission.passRatio + "%";
   const promptText = eta.compile(prompt.prompt, {});
+  console.log(eta.render(promptText, {
+      submission,
+    }));
 
   const { object, usage, request } = await generateObject({
     model: LLM_REGISTRY.languageModel(

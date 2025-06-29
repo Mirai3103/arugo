@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import ProblemsTable from "@/components/features/problem/ProblemsTable";
-import { getAllProblemsQueryOptions } from "@/libs/queries/problems";
-import { getAllTagsQueryOptions } from "@/libs/queries/tag";
+
 import { problemQuerySchema } from "@repo/backend/problems/validations/problem";
 import {
   Avatar,
@@ -24,7 +23,7 @@ import {
   chakra,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import {} from "@tanstack/react-router";
+import { } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import {
   FiAward,
@@ -35,6 +34,7 @@ import {
   FiTrendingUp,
   FiUsers,
 } from "react-icons/fi";
+import { trpc } from "@/libs/tanstack-query/root-provider";
 
 const sampleProblems: any[] = [
   {
@@ -473,8 +473,10 @@ export const Route = createFileRoute("/_home/home")({
   validateSearch: zodValidator(problemQuerySchema),
   loaderDeps: ({ search }) => search,
   async loader({ context, deps }) {
-    context.queryClient.prefetchQuery(getAllProblemsQueryOptions(deps));
-    context.queryClient.prefetchQuery(getAllTagsQueryOptions());
+    context.queryClient.prefetchQuery(trpc.problem.getAllProblems.queryOptions(deps,{
+      experimental_prefetchInRender: true,
+    }));
+    context.queryClient.prefetchQuery(trpc.tag.getAllTags.queryOptions());
   },
   component: HomePage,
 });

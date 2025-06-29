@@ -1,3 +1,4 @@
+import { trpcClient } from "@/libs/trpc";
 import {
   Box,
   Button,
@@ -16,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { Link, useLoaderData, createFileRoute } from "@tanstack/react-router";
 
-import { getServerSession } from "@/server/transports/server-functions/auth";
 import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import {
   FiAward,
@@ -59,7 +59,7 @@ const Header = () => {
             </HStack>
           </Link>
           <HStack borderSpacing={{ base: 2, md: 4 }}>
-            {session.data?.user ? (
+            {session?.user ? (
               <Button asChild variant="ghost" colorScheme="teal" size="sm">
                 <Link to="/home">Trang chủ</Link>
               </Button>
@@ -121,7 +121,7 @@ const HeroSection = () => {
             w={{ base: "full", md: "auto" }}
           >
             <Button asChild colorScheme="teal" size="lg" px={8}>
-              <Link to={session.data?.user ? "/home" : "/login"}>
+              <Link to={session?.user ? "/home" : "/login"}>
                 Bắt Đầu Ngay
               </Link>
             </Button>
@@ -494,7 +494,7 @@ export const Route = createFileRoute("/")({
   component: Landing,
 
   loader: async () => {
-    const session = await getServerSession();
+    const session = await trpcClient.auth.getServerSession.query()
     console.log(session);
     return {
       session,
