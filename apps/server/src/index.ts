@@ -5,6 +5,8 @@ import { createTRPCContext } from "@repo/backend/trpc/trpc";
 import type { AuthType } from "@repo/auth/server";
 import { auth } from "@repo/auth/server";
 import { cors } from "hono/cors";
+import { initConsumer } from '@repo/backend/index'
+initConsumer();
 const app = new Hono<{ Variables: AuthType }>({
 	strict: false,
 });

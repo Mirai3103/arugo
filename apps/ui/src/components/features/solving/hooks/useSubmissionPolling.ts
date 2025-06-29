@@ -1,4 +1,4 @@
-import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
+import { trpc } from "@/libs/tanstack-query/root-provider";
 import { usePromiseStore } from "@/stores/usePromiseStore";
 import { SubmissionTestcaseStatus } from "@/types/enum"; // Ensure this path is correct
 import { useQuery } from "@tanstack/react-query";
@@ -10,12 +10,11 @@ export function useSubmissionPolling(
 ) {
   const promiseStore = usePromiseStore();
 
-  const submissionQuery = useQuery({
-    // Specify QueryData type
-    ...getSubmissionByIdQueryOptions(submissionId || ""),
+  const submissionQuery = useQuery(trpc.submission.getSubmissionById.queryOptions({ id: submissionId || "" }, {
     enabled: promiseStore.isPending(),
     refetchInterval: 3000,
-  });
+  }),
+  );
 
   React.useEffect(() => {
     if (!submissionQuery.data || !submissionId) return;

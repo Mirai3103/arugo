@@ -1,4 +1,3 @@
-import { getPublishContestQueryOptions } from "@/libs/queries/contests";
 import {
   Avatar,
   Badge,
@@ -125,6 +124,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import dayjs from "dayjs";
+import { trpc } from "@/libs/tanstack-query/root-provider";
 // --- START: Featured Contest ---
 const FeaturedContestCard = ({ contest }: { contest: ContestBrief }) => {
   return (
@@ -709,7 +709,7 @@ export const Route = createFileRoute("/_home/contests/")({
   component: ContestPage,
   loader: async ({ context }) => {
     const p1 = context.queryClient.ensureQueryData(
-      getPublishContestQueryOptions({
+      trpc.contest.getAllPublishContests.queryOptions({
         isFeatured: true,
         page: 1,
         pageSize: 10,
@@ -717,7 +717,7 @@ export const Route = createFileRoute("/_home/contests/")({
       }),
     );
     const p2 = context.queryClient.ensureQueryData(
-      getPublishContestQueryOptions({
+      trpc.contest.getAllPublishContests.queryOptions({
         isFeatured: undefined,
         page: 1,
         pageSize: 5,
@@ -728,7 +728,7 @@ export const Route = createFileRoute("/_home/contests/")({
       }),
     );
     const p3 = context.queryClient.ensureQueryData(
-      getPublishContestQueryOptions({
+      trpc.contest.getAllPublishContests.queryOptions({
         isFeatured: undefined,
         page: 1,
         pageSize: 5,

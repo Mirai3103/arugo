@@ -27,9 +27,9 @@ import {
 import dayjs from "dayjs"; // Cần cài đặt: npm install dayjs
 import relativeTime from "dayjs/plugin/relativeTime"; // For '5 minutes ago'
 import "dayjs/locale/vi"; // For Vietnamese locale (optional)
-
+import { trpc } from "@/libs/tanstack-query/root-provider";
 import { useSession } from "@/libs/auth/client";
-import { getMySubmissionsOfProblemQueryOptions } from "@/libs/queries/submission";
+
 import { useQuery } from "@tanstack/react-query"; // Added QueryObserverResult for type clarity
 import React from "react"; // Ensure React is imported
 import { Link } from "@tanstack/react-router";
@@ -278,7 +278,7 @@ export default function SubmissionHistory({
     isPending: areSubmissionsPending,
     isError: submissionsError,
     error: submissionFetchError,
-  } = useQuery(getMySubmissionsOfProblemQueryOptions(problemId)); // Pass enabled flag
+  } = useQuery(trpc.submission.getMySubmissionsOfProblem.queryOptions({ problemId })); // Pass enabled flag
   const containerBg = { base: "gray.50", _dark: "gray.800" };
   const titleColor = { base: "gray.700", _dark: "white" };
   if (isSessionPending || areSubmissionsPending) {
@@ -383,7 +383,7 @@ export default function SubmissionHistory({
         {submissionsData.map((submission) => (
           <SubmissionRow
             key={submission.id}
-            submission={submission}
+            submission={submission as SubmissionItemData}
             onViewDetails={
               onSubmissionClick || ((id) => console.log("View submission:", id))
             }

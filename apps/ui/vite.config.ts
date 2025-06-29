@@ -11,7 +11,7 @@ export default defineConfig({
     }),
     tanstackStart({
       target: "node-server",
-      server: {
+      server:{
         entry: "server.ts",
       },
       react: {

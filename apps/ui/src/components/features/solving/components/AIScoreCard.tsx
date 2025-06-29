@@ -24,10 +24,10 @@ import {
 import { FaBrain } from "react-icons/fa";
 import { ScoreCircle } from "./ScoreCircle";
 import { getScoreColor } from "../utils/submissionHelpers";
-import { getAiReviewQueryOptions } from "@/libs/queries/gen-ai";
 import { useQuery } from "@tanstack/react-query";
 import { Prose } from "@/components/ui/prose";
 import { generateHTMLFromMarkdown } from "@repo/tiptap";
+import { trpc } from "@/libs/tanstack-query/root-provider";
 
 interface AIScore {
   correctness: number;
@@ -55,13 +55,13 @@ export const AIScoreCard: React.FC<AIScoreCardProps> = ({
     setIsModalOpen(true);
   };
 
-  const { data: aiReview, isLoading } = useQuery({
-    ...getAiReviewQueryOptions(submissionId),
-    enabled: isModalOpen,
-    select: (data) => generateHTMLFromMarkdown(data),
-    staleTime: Infinity,
-    gcTime: Infinity,
-  });
+  const { data: aiReview, isLoading } = useQuery(
+    trpc.genAi.getAiReview.queryOptions({ submissionId },{enabled: isModalOpen,
+      select: (data) => generateHTMLFromMarkdown(data),
+      staleTime: Infinity,
+      gcTime: Infinity,}),
+    
+  );
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };

@@ -1,7 +1,6 @@
 import PendingPage from "@/components/common/PendingPage";
-import { getAllPostsQueryOptions } from "@/libs/queries/post";
-import { getTopTags } from "@/server/transports/server-functions/post";
-import { getAllTopics } from "@/server/transports/server-functions/topic";
+import { trpc } from "@/libs/tanstack-query/root-provider";
+import { trpcClient } from "@/libs/trpc";
 import {
   Avatar,
   Badge,
@@ -690,7 +689,7 @@ const RightSidebar = () => {
 function CommunityPage() {
   const mainContentBg = { base: "gray.50", _dark: "gray.900" };
   const deps = Route.useLoaderDeps();
-  const { data: posts } = useQuery(getAllPostsQueryOptions(deps));
+  const { data: posts } = useQuery(trpc.post.getPosts.queryOptions(deps));
   const navigate = useNavigate();
   const onPageChange = (detail: PageChangeDetails) => {
     navigate({
@@ -774,9 +773,9 @@ export const Route = createFileRoute("/_home/community/")({
   validateSearch: zodValidator(getPostQuerySchema),
   loaderDeps: ({ search }) => search,
   loader: async ({ context: { queryClient }, deps }) => {
-    const p1 = queryClient.prefetchQuery(getAllPostsQueryOptions(deps));
-    const p2 = getAllTopics();
-    const p3 = getTopTags();
+    const p1 = queryClient.prefetchQuery(trpc.post.getPosts.queryOptions(deps));
+    const p2 = trpcClient.topic.getAllTopics.query();
+    const p3 = trpcClient.post.getTopTags.query();
     const [_, topics, topTags] = await Promise.all([p1, p2, p3]);
     return { topics, topTags, deps };
   },

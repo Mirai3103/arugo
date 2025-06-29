@@ -1,5 +1,5 @@
 import { SubmissionDetailPanel } from "@/components/features/solving/SubmissionDetailPanel";
-import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
+import { trpc } from "@/libs/tanstack-query/root-provider";
 import { useQuery } from "@tanstack/react-query";
 import { redirect, createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/problems/$slug/_layout/submissions/$id")(
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/problems/$slug/_layout/submissions/$id")(
         });
       }
       const res = await queryClient.ensureQueryData(
-        getSubmissionByIdQueryOptions(id || ""),
+        trpc.submission.getSubmissionById.queryOptions({ id: id || "" }),
       );
       if (!res) {
         throw redirect({
@@ -32,6 +32,6 @@ export const Route = createFileRoute("/problems/$slug/_layout/submissions/$id")(
 
 function RouteComponent() {
   const params = Route.useParams();
-  const query = useQuery(getSubmissionByIdQueryOptions(params.id || ""));
+  const query = useQuery(trpc.submission.getSubmissionById.queryOptions({ id: params.id || "" }));
   return <SubmissionDetailPanel submissionData={query.data!} />;
 }

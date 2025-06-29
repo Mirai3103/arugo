@@ -1,11 +1,9 @@
 import { toaster } from "@/components/ui/toaster";
-import {
-  getCreateSubmissionMutationOptions,
-  getTestSubmissionMutationOptions,
-} from "@/libs/queries/submission";
+
 import type { FullProblem } from "@repo/backend/problems/problemService";
 import { usePromiseStore } from "@/stores/usePromiseStore";
 import { useMutation } from "@tanstack/react-query";
+import { trpc } from "@/libs/tanstack-query/root-provider";
 
 export function useCodeTesting(
   problem: FullProblem,
@@ -14,10 +12,11 @@ export function useCodeTesting(
   renewSubmissionId: () => string, // This is renewUuid from useUuid
 ) {
   const { mutateAsync: testCodeAsync, isPending: isTestingCode } = useMutation(
-    getTestSubmissionMutationOptions(),
+    trpc.submission.testSubmission.mutationOptions()
   );
   const { mutateAsync: submitSubmission, isPending: isSubmittingCode } =
-    useMutation(getCreateSubmissionMutationOptions());
+    useMutation(trpc.submission.createSubmission.mutationOptions()
+    );
 
   const promiseStore = usePromiseStore();
 

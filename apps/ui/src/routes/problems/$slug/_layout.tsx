@@ -30,10 +30,10 @@ import { FiCode } from "react-icons/fi";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { usePromiseStore } from "@/stores/usePromiseStore";
 import { useQuery } from "@tanstack/react-query";
-import { getSubmissionByIdQueryOptions } from "@/libs/queries/submission";
 import { ProblemDescriptionPanel } from "@/components/features/solving/ProblemDescriptionPanel";
 import { EditorProvider } from "@/components/features/solving/contexts/EditorContext";
 import { trpcClient } from "@/libs/trpc";
+import { trpc } from "@/libs/tanstack-query/root-provider";
 const PageHeader = () => {
   const bg = { base: "white", _dark: "gray.800" };
   const color = { base: "gray.800", _dark: "white" };
@@ -220,12 +220,11 @@ const TestAndResultPanel: React.FC = () => {
   const { id } = usePromiseStore();
   const firstPending = id;
 
-  const submissionQuery = useQuery({
-    ...getSubmissionByIdQueryOptions(firstPending || ""),
+
+  const submissionQuery = useQuery(trpc.submission.getSubmissionById.queryOptions({ id: firstPending || "" }, {
     enabled: !!firstPending,
     refetchInterval: 3000,
-  });
-
+  }));
   const [cachedSubmission, setCachedSubmission] = React.useState(
     submissionQuery.data,
   );
