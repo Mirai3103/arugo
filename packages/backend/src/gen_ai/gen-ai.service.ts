@@ -72,13 +72,25 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
       language: true,
     },
   });
+  if(submission?.isTest) {
+   return {
+      details: {
+        correctness: 0,
+        efficiency: 0,
+        readability: 0, 
+        structure: 0,
+        best_practices: 0,
+      },
+      summary: "Đây là bài test, điểm số được mặc định là 0.",
+    }
+  }
 
   if (!submission) {
     throw new Error(`Submission with id ${submissionId} not found`);
   }
   (submission.problem.statement as any) = generateMarkdownFromJSON(
     submission.problem.statement,
-  );
+  ) + "pass ratio: " + submission.passRatio + "%";
   const promptText = eta.compile(prompt.prompt, {});
 
   const { object, usage, request } = await generateObject({

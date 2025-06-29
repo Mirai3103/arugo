@@ -90,6 +90,7 @@ export const ProblemDescriptionPanel = ({
         >
           <Tabs.List mb={4}>
             <Tabs.Trigger asChild value="desc">
+              <span>
               <Link
                 to="/problems/$slug/description"
                 params={{
@@ -98,8 +99,10 @@ export const ProblemDescriptionPanel = ({
               >
                 Mô tả
               </Link>
+              </span>
             </Tabs.Trigger>
             <Tabs.Trigger asChild value="editorial">
+              <span>
               <Link
                 to="/problems/$slug/editorial"
                 params={{
@@ -107,9 +110,10 @@ export const ProblemDescriptionPanel = ({
                 }}
               >
                 Hướng dẫn
-              </Link>
+              </Link></span>
             </Tabs.Trigger>
             <Tabs.Trigger asChild value="solutions">
+              <span>
               <Link
                 to="/problems/$slug/solutions"
                 params={{
@@ -118,8 +122,10 @@ export const ProblemDescriptionPanel = ({
               >
                 Giải pháp
               </Link>
+              </span>
             </Tabs.Trigger>
             <Tabs.Trigger asChild value="histories">
+              <span>
               <Link
                 to="/problems/$slug/histories"
                 params={{
@@ -128,8 +134,10 @@ export const ProblemDescriptionPanel = ({
               >
                 Lịch sử
               </Link>
+              </span>
             </Tabs.Trigger>
             <Tabs.Trigger asChild value="ai-chat-help">
+              <span>
               <Link
                 to="/problems/$slug/ai-chat-help"
                 params={{
@@ -138,6 +146,7 @@ export const ProblemDescriptionPanel = ({
               >
                 Chat AI
               </Link>
+              </span>
             </Tabs.Trigger>
             {tab === "submission" && (
               <Tabs.Trigger value="submission">

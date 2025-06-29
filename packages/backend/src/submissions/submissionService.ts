@@ -98,15 +98,24 @@ async function checkAndUpdateSubmissionStatus(
   const maxMemoryUsage = Math.max(
     ...submissionTests.map((tc) => tc.memoryUsedKb),
   );
-
+  const passRatio = Math.round(
+    (submissionTests.filter((tc) =>
+      tc.status === SubmissionTestcaseStatus.Success
+    ).length / 
+      submissionTests.length) *
+      100,
+  );
   await db
     .update(submissions)
     .set({
       status: overallStatus,
       executionTimeMs: maxExecutionTime,
       memoryUsageKb: maxMemoryUsage,
+      passRatio,
+      aiScore: null, // Reset AI score on status update
     })
     .where(eq(submissions.id, submissionId));
+    await  scoreSubmission(submissionId);
 }
 
 async function createSubmission(input: CreateSubmission): Promise<string> {
@@ -198,9 +207,7 @@ async function createSubmission(input: CreateSubmission): Promise<string> {
       withWhitespace: true,
     },
   });
-  if (!input.isTest) {
-    scoreSubmission(id);
-  }
+  
 
   return id;
 }

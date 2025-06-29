@@ -69,10 +69,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono&display=swap"
           rel="stylesheet"
         />
-        <script
-          crossOrigin="anonymous"
-          src="//unpkg.com/react-scan/dist/auto.global.js"
-        ></script>
+     
         <HeadContent />
       </head>
       <body>

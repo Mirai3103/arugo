@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { Prose } from "@/components/ui/prose";
 
 import { generateHTMLFromJSON } from "@repo/tiptap";
@@ -10,9 +10,11 @@ export const Route = createFileRoute("/problems/$slug/_layout/editorial")({
 });
 
 function RouteComponent() {
-  const { problem } = Route.parentRoute.useLoaderData();
+  const { problem } = useLoaderData({
+    from: "/problems/$slug/_layout",
+  });
   const editorial = React.useMemo(() => {
-    return generateHTMLFromJSON((problem.description as JSON) ?? {});
+    return generateHTMLFromJSON((problem.description as JSON) || {});
   }, [problem.description]);
   return (
     <Prose size={"lg"}>

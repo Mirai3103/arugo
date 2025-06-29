@@ -30,6 +30,7 @@ export const submissions = pgTable(
     createdBy: varchar("created_by", { length: 100 })
       .default("system")
       .notNull(),
+    passRatio: integer("pass_ratio").default(0).notNull(),
 
     aiScore: json("ai_score").$type<{
       correctness: number;
