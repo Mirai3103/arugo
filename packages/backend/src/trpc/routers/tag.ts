@@ -1,5 +1,5 @@
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import tagService from "#/problems/tagService";
 import {
     createTagSchema,
@@ -11,23 +11,23 @@ export const tagRouter = createTRPCRouter({
   getAllTags: publicProcedure.query(async () => {
     return tagService.getAllTags();
   }),
-  createTag: publicProcedure
+  createTag: protectedProcedure
     .input(createTagSchema)
     .mutation(async ({ input }) => {
       return tagService.createTag(input);
     }),
-  updateTag: publicProcedure
+  updateTag: protectedProcedure
     .input(updateTagSchema)
     .mutation(async ({ input }) => {
       return tagService.updateTag(input);
     }),
-  deleteTag: publicProcedure
+  deleteTag: protectedProcedure
     .input(z.coerce.number())
     .mutation(async ({ input }) => {
       await tagService.deleteTag(input);
       return { success: true };
     }),
-  getTagById: publicProcedure
+  getTagById: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
       return tagService.getTagById(input.id);

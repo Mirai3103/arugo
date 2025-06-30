@@ -1,4 +1,4 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 
  type Session ={
@@ -34,3 +34,13 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 export type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
 export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
+
+export const protectedProcedure = publicProcedure.use(async (opts) => {
+    const { ctx } = opts;
+    if (!ctx.session?.session?.userId) {
+      throw new TRPCError({ code: 'UNAUTHORIZED' });
+    }
+    return opts.next({
+      ctx: ctx,
+    });
+  });
