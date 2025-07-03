@@ -1,7 +1,7 @@
 import { env } from "@repo/env";
 import * as schema from "@repo/backend/schema";
 import { db } from "@repo/backend/db";
-import { betterAuth } from "better-auth";
+import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { reactStartCookies } from "better-auth/react-start";
 
@@ -9,6 +9,7 @@ export const auth = betterAuth({
   //...
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification:false, // for development
   },
   socialProviders: {
     google: {
@@ -20,13 +21,16 @@ export const auth = betterAuth({
       clientSecret: env.GITHUB_CLIENT_SECRET,
     },
   },
-  database: drizzleAdapter(db, {
-    provider: "pg", // or "mysql", "postgresql", ...etc
-    schema: {
-      ...schema,
-    },
-    usePlural: true,
-  }),
+  database: (options: BetterAuthOptions) => {
+    const adapter = drizzleAdapter(db, {
+      provider: "pg", // or "mysql", "postgresql", ...etc
+      schema: {
+        ...schema,
+      },
+      usePlural: true,
+    })(options)
+    return adapter;
+  },
   session: {
     cookieCache: {
       enabled: true,
@@ -34,8 +38,17 @@ export const auth = betterAuth({
     },
   },
   baseURL: env.VITE_SERVER_URL,
-  trustedOrigins: [env.VITE_SERVER_URL,"http://localhost:3000"],
+  trustedOrigins: [env.VITE_SERVER_URL, "http://localhost:3000"],
   plugins: [reactStartCookies()],
+  user: {
+    additionalFields: {
+      username: {
+        type: "string",
+        input: true,
+        unique: true,
+      }
+    }
+  }
 });
 
 export type AuthType = {
