@@ -15,7 +15,7 @@ export default function CodeEditor({
     "github-light" | "github-dark"
   >("github-light");
 
-  // Determine actual theme based on mode
+  
   useEffect(() => {
     const systemIsDark = window.matchMedia?.(
       "(prefers-color-scheme: dark)",
@@ -25,7 +25,7 @@ export default function CodeEditor({
     else setResolvedTheme(systemIsDark ? "github-dark" : "github-light");
   }, [mode]);
 
-  // Init theme
+  
   const handleEditorWillMount = (monaco: Monaco) => {
     monaco.editor.defineTheme("github-light", githubLight as never);
     monaco.editor.defineTheme("github-dark", githubDark as never);

@@ -10,7 +10,7 @@ export function useCodeTesting(
   problem: FullProblem,
   selectedLanguageId: string,
   getEditorCode: () => string,
-  renewSubmissionId: () => string, // This is renewUuid from useUuid
+  renewSubmissionId: () => string, 
 ) {
   const { mutateAsync: testCodeAsync, isPending: isTestingCode } = useMutation(
     trpc.submission.testSubmission.mutationOptions()
@@ -58,7 +58,7 @@ export function useCodeTesting(
           success: { title: "Code đã pass tất cả testcase" },
           error: (error: any) => ({
             title: "Code không pass tất cả testcase",
-            description: error.message || String(error.error || error), // Try to get a more specific error message
+            description: error.message || String(error.error || error), 
           }),
         });
         return newId;
@@ -69,9 +69,9 @@ export function useCodeTesting(
           description:
             apiError instanceof Error ? apiError.message : String(apiError),
         });
-        // Note: If testCodeAsync fails, the promise might not be in promiseStore.
-        // The renewUuid() was called, so polling might start for an ID that never made it.
-        // The original clearUuid() in the polling effect will eventually clear it.
+        
+        
+        
       });
   };
 

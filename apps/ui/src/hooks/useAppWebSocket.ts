@@ -4,7 +4,7 @@ import { useIsClient } from "usehooks-ts";
 export default function useAppWebSocket() {
   const isClient = useIsClient();
 
-  const socketUrl = isClient ? "ws://localhost:3000/_ws" : null;
+  const socketUrl = isClient ? "ws:
 
   const ws = useWebSocket(socketUrl, {
     share: true,

@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Separator } from "@/components/tiptap-ui-primitive/separator"
 import "@/components/tiptap-ui-primitive/toolbar/toolbar.scss"
+import { cn } from "@/lib/tiptap-utils"
 
 type BaseProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -11,14 +12,14 @@ interface ToolbarProps extends BaseProps {
 }
 
 const mergeRefs = <T,>(
-  refs: Array<React.RefObject<T> | React.Ref<T> | null | undefined>
+  refs: Array<React.Ref<T> | null | undefined>
 ): React.RefCallback<T> => {
   return (value) => {
     refs.forEach((ref) => {
       if (typeof ref === "function") {
         ref(value)
-      } else if (ref != null) {
-        ;(ref as React.MutableRefObject<T | null>).current = value
+      } else if (ref && typeof ref === "object" && "current" in ref) {
+        ;(ref as { current: T | null }).current = value
       }
     })
   }
@@ -157,7 +158,7 @@ const useToolbarKeyboardNav = (
 const useToolbarVisibility = (
   ref: React.RefObject<HTMLDivElement | null>
 ): boolean => {
-  const [isVisible, setIsVisible] = React.useState(true)
+  const [isVisible, setIsVisible] = React.useState<boolean>(true)
   const isMountedRef = React.useRef(false)
 
   React.useEffect(() => {
@@ -192,7 +193,7 @@ const useToolbarVisibility = (
 const useGroupVisibility = (
   ref: React.RefObject<HTMLDivElement | null>
 ): boolean => {
-  const [isVisible, setIsVisible] = React.useState(true)
+  const [isVisible, setIsVisible] = React.useState<boolean>(true)
   const isMountedRef = React.useRef(false)
 
   React.useEffect(() => {
@@ -223,7 +224,7 @@ const useGroupVisibility = (
 const useSeparatorVisibility = (
   ref: React.RefObject<HTMLDivElement | null>
 ): boolean => {
-  const [isVisible, setIsVisible] = React.useState(true)
+  const [isVisible, setIsVisible] = React.useState<boolean>(true)
   const isMountedRef = React.useRef(false)
 
   React.useEffect(() => {
@@ -276,7 +277,7 @@ export const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
         role="toolbar"
         aria-label="toolbar"
         data-variant={variant}
-        className={`tiptap-toolbar ${className || ""}`}
+        className={cn("tiptap-toolbar", className)}
         {...props}
       >
         {children}
@@ -298,7 +299,7 @@ export const ToolbarGroup = React.forwardRef<HTMLDivElement, BaseProps>(
       <div
         ref={mergeRefs([groupRef, ref])}
         role="group"
-        className={`tiptap-toolbar-group ${className || ""}`}
+        className={cn("tiptap-toolbar-group", className)}
         {...props}
       >
         {children}
@@ -309,22 +310,25 @@ export const ToolbarGroup = React.forwardRef<HTMLDivElement, BaseProps>(
 
 ToolbarGroup.displayName = "ToolbarGroup"
 
-export const ToolbarSeparator = React.forwardRef<HTMLDivElement, BaseProps>(
-  ({ ...props }, ref) => {
-    const separatorRef = React.useRef<HTMLDivElement>(null)
-    const isVisible = useSeparatorVisibility(separatorRef)
-
-    if (!isVisible) return null
-
-    return (
-      <Separator
-        ref={mergeRefs([separatorRef, ref])}
-        orientation="vertical"
-        decorative
-        {...props}
-      />
-    )
+export const ToolbarSeparator = React.forwardRef<
+  HTMLDivElement,
+  BaseProps & {
+    fixed?: boolean
   }
-)
+>(({ fixed = false, ...props }, ref) => {
+  const separatorRef = React.useRef<HTMLDivElement>(null)
+  const isVisible = useSeparatorVisibility(separatorRef)
+
+  if (!isVisible && !fixed) return null
+
+  return (
+    <Separator
+      ref={mergeRefs([separatorRef, ref])}
+      orientation="vertical"
+      decorative
+      {...props}
+    />
+  )
+})
 
 ToolbarSeparator.displayName = "ToolbarSeparator"

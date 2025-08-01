@@ -19,46 +19,46 @@ import {
   FiDatabase,
   FiActivity,
   FiCpu,
-  FiTerminal, // Icon for language
-  FiEye, // Icon for View Details
+  FiTerminal, 
+  FiEye, 
   FiAlertCircle,
   FiCode,
 } from "react-icons/fi";
-import dayjs from "dayjs"; // Cần cài đặt: npm install dayjs
-import relativeTime from "dayjs/plugin/relativeTime"; // For '5 minutes ago'
-import "dayjs/locale/vi"; // For Vietnamese locale (optional)
+import dayjs from "dayjs"; 
+import relativeTime from "dayjs/plugin/relativeTime"; 
+import "dayjs/locale/vi"; 
 import { trpc } from "@/libs/query";
 import { useSession } from "@/libs/auth/client";
 
-import { useQuery } from "@tanstack/react-query"; // Added QueryObserverResult for type clarity
-import React from "react"; // Ensure React is imported
+import { useQuery } from "@tanstack/react-query"; 
+import React from "react"; 
 import { Link } from "@tanstack/react-router";
 
 dayjs.extend(relativeTime);
-dayjs.locale("vi"); // Optional: set Vietnamese locale for dayjs
+dayjs.locale("vi"); 
 
-// --- START: Types and Helper Data ---
+
 type SubmissionStatusType =
   | "ACCEPTED"
   | "WRONG_ANSWER"
   | "TIME_LIMIT_EXCEEDED"
   | "MEMORY_LIMIT_EXCEEDED"
   | "PENDING"
-  | "COMPILING" // Added a compiling state
+  | "COMPILING" 
   | "COMPILE_ERROR"
   | "RUNTIME_ERROR"
-  | "JUDGING"; // Another intermediate state
+  | "JUDGING"; 
 
-// This type is based on the user's commented out structure
+
 interface SubmissionItemData {
   id: string;
-  // code: string; // Usually not shown in history list, but available
-  status: SubmissionStatusType; // Assuming status string matches our type
-  // problemId: string; // Parent component has this
+  
+  status: SubmissionStatusType; 
+  
   languageId: number;
-  executionTimeMs: number | null; // Can be null if not run or error
-  memoryUsageKb: number | null; // Can be null
-  submittedAt: Date | string | null; // Allow string for ISO dates
+  executionTimeMs: number | null; 
+  memoryUsageKb: number | null; 
+  submittedAt: Date | string | null; 
 }
 
 interface SubmissionHistoryProps {
@@ -73,8 +73,8 @@ const languageMap: {
   2: { name: "Java", icon: FiCode },
   3: { name: "Python 3", icon: FiTerminal },
   4: { name: "JavaScript", icon: FiTerminal },
-  // Add more as needed
-  50: { name: "Python", icon: FiTerminal }, // Example from some platforms
+  
+  50: { name: "Python", icon: FiTerminal }, 
   54: { name: "C++17", icon: FiCode },
   62: { name: "Java 8", icon: FiCode },
   71: { name: "Python 3.8", icon: FiTerminal },
@@ -143,9 +143,9 @@ const getStatusPresentation = (status: SubmissionStatusType) => {
       return { label: status, colorScheme: "gray", icon: FiClock };
   }
 };
-// --- END: Types and Helper Data ---
 
-// --- START: Submission Item Row ---
+
+
 interface SubmissionRowProps {
   submission: SubmissionItemData;
   onViewDetails: (submissionId: string) => void;
@@ -187,7 +187,7 @@ const SubmissionRow: React.FC<SubmissionRowProps> = ({
                 statusPresentation.animate
                   ? `${statusPresentation.colorScheme}.500`
                   : statusPresentation.colorScheme
-              } // Direct color for non-animated
+              } 
               boxSize={5}
               animation={
                 statusPresentation.animate ? `pulse 1.5s infinite` : undefined
@@ -252,7 +252,7 @@ const SubmissionRow: React.FC<SubmissionRowProps> = ({
         colorScheme="teal"
         size="sm"
         onClick={(e) => {
-          e.stopPropagation(); // Prevent row click if button is clicked
+          e.stopPropagation(); 
           onViewDetails(submission.id);
         }}
         ml={2}
@@ -263,22 +263,22 @@ const SubmissionRow: React.FC<SubmissionRowProps> = ({
     </Flex>
   );
 };
-// --- END: Submission Item Row ---
 
-// --- START: Main Component ---
+
+
 export default function SubmissionHistory({
   problemId,
   onSubmissionClick,
 }: SubmissionHistoryProps) {
-  const { data: sessionData, isPending: isSessionPending } = useSession(); // Renamed to avoid conflict
+  const { data: sessionData, isPending: isSessionPending } = useSession(); 
 
-  // Typed the useQuery result
+  
   const {
     data: submissionsData,
     isPending: areSubmissionsPending,
     isError: submissionsError,
     error: submissionFetchError,
-  } = useQuery(trpc.submission.getMySubmissionsOfProblem.queryOptions({ problemId })); // Pass enabled flag
+  } = useQuery(trpc.submission.getMySubmissionsOfProblem.queryOptions({ problemId })); 
   const containerBg = { base: "gray.50", _dark: "gray.800" };
   const titleColor = { base: "gray.700", _dark: "white" };
   if (isSessionPending || areSubmissionsPending) {
@@ -304,7 +304,7 @@ export default function SubmissionHistory({
   if (!sessionData?.session) {
     return (
       <Box p={5} bg={containerBg} borderRadius="lg" boxShadow="base">
-        <Alert.Root // Alert -> Alert.Root
+        <Alert.Root 
           status="info"
           variant="subtle"
           flexDirection="column"
@@ -320,11 +320,11 @@ export default function SubmissionHistory({
             Bạn cần đăng nhập để xem lịch sử các bài nộp của mình.
           </Alert.Description>
           <Button
-            colorPalette="teal" // colorScheme -> colorPalette
+            colorPalette="teal" 
             variant="solid"
             size="sm"
             mt={4}
-            asChild // Sử dụng asChild để kết hợp với Link từ react-router-dom
+            asChild 
           >
             <Link to="/login">Đăng nhập ngay</Link>
           </Button>
@@ -336,17 +336,17 @@ export default function SubmissionHistory({
   if (submissionsError) {
     return (
       <Box borderRadius="lg" boxShadow="base">
-        <Alert.Root // Alert -> Alert.Root
+        <Alert.Root 
           status="error"
           variant="subtle"
           borderRadius="md"
         >
           <Alert.Title mr={2} fontSize="sm">
-            {/* AlertTitle -> Alert.Title */}
+            
             Lỗi tải lịch sử!
           </Alert.Title>
           <Alert.Description fontSize="xs">
-            {/* AlertDescription -> Alert.Description */}
+            
             {submissionFetchError?.message || "Không thể tải dữ liệu bài nộp."}
           </Alert.Description>
         </Alert.Root>

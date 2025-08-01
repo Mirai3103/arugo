@@ -5,7 +5,7 @@ import { LLM_REGISTRY } from "./registry";
 import { Eta } from "eta";
 import { generateObject, generateText, streamText } from "ai";
 import { env } from "@repo/env";
-import { generateMarkdownFromJSON } from "@repo/tiptap";
+import { generateMarkdownFromJSON } from "@repo/tiptap/server";
 import { eq } from "drizzle-orm";
 
 const eta = new Eta({});
@@ -82,7 +82,7 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
         structure: 0,
         best_practices: 0,
       },
-      summary: "Đây là bài test, điểm số được mặc định là 0.",
+      summary: "Đây là bài test, điểm số được mặc định là 0. tối đa 500 ký tự",
     }
   }
   if (submission?.aiScore) {
@@ -105,7 +105,6 @@ export async function scoreSubmission(submissionId: string): Promise<Response> {
     prompt: eta.render(promptText, {
       submission,
     }) + "user code pass ratio: " + submission.passRatio + "%",
-    maxTokens: 1000,
     schema: responseSchema,
   });
 
@@ -182,5 +181,5 @@ export async function getSubmissionReview(
   });
 
 
-  return text; // markdown
+  return text; 
 }

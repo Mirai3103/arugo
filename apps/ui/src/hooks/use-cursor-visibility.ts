@@ -1,46 +1,35 @@
-"use client"
-
 import * as React from "react"
 import type { Editor } from "@tiptap/react"
 import { useWindowSize } from "@/hooks/use-window-size"
 
-/**
- * Interface defining required parameters for the cursor visibility hook
- */
 export interface CursorVisibilityOptions {
   /**
-   * The TipTap editor instance
+   * The Tiptap editor instance
    */
-  editor: Editor | null
+  editor?: Editor | null
   /**
    * Reference to the toolbar element that may obscure the cursor
    */
   overlayHeight?: number
-  /**
-   * Reference to the element to track for cursor visibility
-   */
-  elementRef?: React.RefObject<HTMLElement> | null
 }
 
-/**
- * Simplified DOMRect type containing only the essential positioning properties
- */
-export type RectState = Pick<DOMRect, "x" | "y" | "width" | "height">
+export type RectState = Omit<DOMRect, "toJSON">
 
 /**
- * Custom hook that ensures the cursor remains visible when typing in a TipTap editor.
+ * Custom hook that ensures the cursor remains visible when typing in a Tiptap editor.
  * Automatically scrolls the window when the cursor would be hidden by the toolbar.
  *
  * This is particularly useful for long-form content editing where the cursor
  * might move out of the visible area as the user types.
  *
  * @param options Configuration options for cursor visibility behavior
+ * @param options.editor The Tiptap editor instance
+ * @param options.overlayHeight Reference to the toolbar element that may obscure the cursor
  * @returns void
  */
 export function useCursorVisibility({
   editor,
   overlayHeight = 0,
-  elementRef = null,
 }: CursorVisibilityOptions) {
   const { height: windowHeight } = useWindowSize()
   const [rect, setRect] = React.useState<RectState>({
@@ -48,17 +37,21 @@ export function useCursorVisibility({
     y: 0,
     width: 0,
     height: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
   })
 
   const updateRect = React.useCallback(() => {
-    const element = elementRef?.current ?? document.body
+    const element = document.body
 
-    const { x, y, width, height } = element.getBoundingClientRect()
-    setRect({ x, y, width, height })
-  }, [elementRef])
+    const DOMRect = element.getBoundingClientRect()
+    setRect(DOMRect)
+  }, [])
 
   React.useEffect(() => {
-    const element = elementRef?.current ?? document.body
+    const element = document.body
 
     updateRect()
 
@@ -67,13 +60,13 @@ export function useCursorVisibility({
     })
 
     resizeObserver.observe(element)
-    window.addEventListener("scroll", updateRect, { passive: true })
+    window.addEventListener("scroll", updateRect, true)
 
     return () => {
       resizeObserver.disconnect()
       window.removeEventListener("scroll", updateRect)
     }
-  }, [elementRef, updateRect])
+  }, [updateRect])
 
   React.useEffect(() => {
     const ensureCursorVisibility = () => {
@@ -90,18 +83,23 @@ export function useCursorVisibility({
       if (windowHeight < rect.height) {
         if (cursorCoords) {
           // Check if there's enough space between cursor and bottom of window
-          const availableSpace =
-            windowHeight - cursorCoords.top - overlayHeight > 0
+          const availableSpace = windowHeight - cursorCoords.top
 
           // If not enough space, scroll to position cursor in the middle of viewport
-          if (!availableSpace) {
-            const targetScrollY =
-              // TODO: Needed?
-              //   window.scrollY + (cursorCoords.top - windowHeight / 2)
-              cursorCoords.top - windowHeight / 2
+          if (availableSpace < overlayHeight) {
+            // Calculate target scroll position to center cursor in viewport
+            // Account for overlay height to ensure cursor is not hidden
+            const targetCursorY = Math.max(windowHeight / 2, overlayHeight)
+
+            // Get current scroll position and cursor's absolute position
+            const currentScrollY = window.scrollY
+            const cursorAbsoluteY = cursorCoords.top + currentScrollY
+
+            // Calculate new scroll position
+            const newScrollY = cursorAbsoluteY - targetCursorY
 
             window.scrollTo({
-              top: targetScrollY,
+              top: Math.max(0, newScrollY),
               behavior: "smooth",
             })
           }

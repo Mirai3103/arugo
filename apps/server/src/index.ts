@@ -44,7 +44,7 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 app.use(
 	"/trpc/*",
 	trpcServer({
-		router: trpcRouter,
+		router: trpcRouter as any,
 		createContext: async (c) => {
 			const session = await auth.api.getSession({
 				headers: c.req.headers,

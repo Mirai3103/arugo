@@ -22,8 +22,8 @@ import {
 import { ContestStatus } from "@repo/backend/contests/validations/enum";
 import { ContestBrief } from "@repo/backend/contests/contests.service";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import React from "react"; // Ensure React is imported
-import { FaCrown, FaMedal } from "react-icons/fa"; // For medals
+import React from "react"; 
+import { FaCrown, FaMedal } from "react-icons/fa"; 
 
 import {
   FiActivity,
@@ -41,15 +41,15 @@ import {
   FiUsers,
 } from "react-icons/fi";
 
-// --- START: Reusable Header ---
 
-// --- END: Reusable Header ---
 
-// --- START: Main Banner ---
 
-// --- END: Main Banner ---
 
-// --- START: Contest Stats Overview ---
+
+
+
+
+
 interface StatCardProps {
   title: string;
   value: string;
@@ -99,7 +99,7 @@ const ContestStatsOverview = () => {
     {
       title: "Xếp hạng toàn cầu",
       value: "#1234",
-      avatar: "https://via.placeholder.com/30?text=U",
+      avatar: "https:
     },
     { title: "Rating", value: "1856", icon: FiTrendingUp },
     { title: "Cuộc thi đã tham gia", value: "25", icon: FiAward },
@@ -115,18 +115,18 @@ const ContestStatsOverview = () => {
     </Box>
   );
 };
-// --- END: Contest Stats Overview ---
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
-// Import Swiper styles
+
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import dayjs from "dayjs";
 import { trpc } from "@/libs/query";
 
-// --- START: Featured Contest ---
+
 const FeaturedContestCard = ({ contest }: { contest: ContestBrief }) => {
   return (
     <Box
@@ -134,8 +134,8 @@ const FeaturedContestCard = ({ contest }: { contest: ContestBrief }) => {
       borderRadius="lg"
       overflow="hidden"
       boxShadow="lg"
-      h={{ base: "280px", md: "320px" }} // Chiều cao cố định cho các card
-      bgImage={`url(${contest.image || "https://placewaifu.com/image/800/600"})`}
+      h={{ base: "280px", md: "320px" }} 
+      bgImage={`url(${contest.image || "https:
       bgSize="cover"
       backgroundPosition="center"
       display="flex"
@@ -145,7 +145,7 @@ const FeaturedContestCard = ({ contest }: { contest: ContestBrief }) => {
       transition="transform 0.3s ease-out, box-shadow 0.3s ease-out"
       color="white"
     >
-      {/* Lớp phủ gradient */}
+      
       <Box
         position="absolute"
         top="0"
@@ -188,9 +188,9 @@ const FeaturedContestCard = ({ contest }: { contest: ContestBrief }) => {
   );
 };
 
-// --- END: Định nghĩa kiểu dữ liệu và Component Card ---
 
-// --- START: Component Slider chính ---
+
+
 export const FeaturedContestsSlider = () => {
   const featuredContests = Route.useLoaderData().featuredContests;
   const navigationButtonStyles = {
@@ -202,7 +202,7 @@ export const FeaturedContestsSlider = () => {
   };
 
   if (!featuredContests || featuredContests.length === 0) {
-    return null; // Không hiển thị gì nếu không có cuộc thi nổi bật
+    return null; 
   }
 
   return (
@@ -220,7 +220,7 @@ export const FeaturedContestsSlider = () => {
           nextEl: ".swiper-button-next-featured",
           prevEl: ".swiper-button-prev-featured",
         }}
-        style={{ paddingBottom: "40px" }} // Thêm padding dưới cho pagination
+        style={{ paddingBottom: "40px" }} 
       >
         {featuredContests.map((contest) => (
           <SwiperSlide key={contest.id}>
@@ -229,7 +229,7 @@ export const FeaturedContestsSlider = () => {
         ))}
       </Swiper>
 
-      {/* Custom Navigation Buttons */}
+      
       <IconButton
         aria-label="Previous slide"
         className="swiper-button-prev-featured"
@@ -259,7 +259,7 @@ export const FeaturedContestsSlider = () => {
 };
 
 const ContestCard = ({ contest }: { contest: ContestBrief }) => {
-  // Không cần useColorModeValue, sẽ áp dụng trực tiếp trong JSX
+  
 
   const statusConfig = {
     ONGOING: {
@@ -292,7 +292,7 @@ const ContestCard = ({ contest }: { contest: ContestBrief }) => {
 
   return (
     <Flex
-      bg={{ _light: "white", _dark: "gray.750" }} // useColorModeValue -> object syntax
+      bg={{ _light: "white", _dark: "gray.750" }} 
       boxShadow="md"
       borderRadius="lg"
       overflow="hidden"
@@ -316,7 +316,7 @@ const ContestCard = ({ contest }: { contest: ContestBrief }) => {
           objectFit="cover"
           src={
             contest.image ||
-            `https://placewaifu.com/image/400/300?id=${contest.id}`
+            `https:
           }
           alt={`Banner cuộc thi ${contest.title}`}
         />
@@ -325,12 +325,12 @@ const ContestCard = ({ contest }: { contest: ContestBrief }) => {
       <Flex direction="column" p={5} flex="1">
         <VStack align="flex-start" gap={3} flex="1">
           {" "}
-          {/* spacing -> gap */}
+          
           <HStack gap={3}>
             {" "}
-            {/* spacing -> gap */}
+            
             <Badge
-              colorPalette={currentStatus.colorPalette} // colorScheme -> colorPalette
+              colorPalette={currentStatus.colorPalette} 
               variant="solid"
               fontSize="xs"
               py={1}
@@ -345,7 +345,7 @@ const ContestCard = ({ contest }: { contest: ContestBrief }) => {
           </HStack>
           <Heading size="md" lineClamp={2} title={contest.title}>
             {" "}
-            {/* noOfLines -> lineClamp */}
+            
             {contest.title}
           </Heading>
           {contest.description && (
@@ -355,14 +355,14 @@ const ContestCard = ({ contest }: { contest: ContestBrief }) => {
               lineClamp={2}
             >
               {" "}
-              {/* noOfLines -> lineClamp, useColorModeValue -> object syntax */}
+              
               {contest.description}
             </Text>
           )}
-          <Separator my={2} /> {/* Divider -> Separator */}
+          <Separator my={2} /> 
           <HStack
-            gap={{ base: 4, md: 6 }} // spacing -> gap
-            color={{ _light: "gray.600", _dark: "gray.300" }} // useColorModeValue -> object syntax
+            gap={{ base: 4, md: 6 }} 
+            color={{ _light: "gray.600", _dark: "gray.300" }} 
             fontSize="sm"
             wrap="wrap"
           >
@@ -389,14 +389,14 @@ const ContestCard = ({ contest }: { contest: ContestBrief }) => {
           mt={4}
           pt={4}
           borderTopWidth="1px"
-          borderColor={{ _light: "gray.200", _dark: "gray.600" }} // useColorModeValue -> object syntax
+          borderColor={{ _light: "gray.200", _dark: "gray.600" }} 
         >
           <HStack>
             <Icon
               as={FiUsers}
               color={{ _light: "gray.600", _dark: "gray.300" }}
             />{" "}
-            {/* useColorModeValue -> object syntax */}
+            
             <Text fontSize="sm" fontWeight="medium">
               {contest.totalParticipants.toLocaleString("vi-VN")}
               <Text
@@ -407,30 +407,30 @@ const ContestCard = ({ contest }: { contest: ContestBrief }) => {
                 {" "}
                 người tham gia
               </Text>{" "}
-              {/* useColorModeValue -> object syntax */}
+              
             </Text>
           </HStack>
 
           {contest.status === "ONGOING" && (
             <Button colorPalette="green" size="sm">
               {" "}
-              {/* colorScheme -> colorPalette, rightIcon bị loại bỏ */}
+              
               Tham Gia Ngay
               <Icon as={FiArrowRight} ml={1.5} />{" "}
-              {/* Icon được đặt làm con trực tiếp */}
+              
             </Button>
           )}
           {contest.status === "UPCOMING" && (
             <Button variant="outline" colorPalette="teal" size="sm">
               {" "}
-              {/* colorScheme -> colorPalette */}
+              
               Đăng Ký
             </Button>
           )}
           {contest.status === "ENDED" && (
             <Button disabled variant="outline" colorPalette="gray" size="sm">
               {" "}
-              {/* isDisabled -> disabled, colorScheme -> colorPalette */}
+              
               Xem kết quả
             </Button>
           )}
@@ -469,15 +469,15 @@ const ContestListSection = () => {
     </VStack>
   );
 };
-// --- END: Contest List ---
 
-// --- START: Right Sidebar ---
+
+
 const TopRankersSidebar = () => {
   const rankers = [
     {
       id: "r1",
       name: "Master Coder",
-      avatar: "https://placewaifu.com/image/50/50?t=r1",
+      avatar: "https:
       problemsSolved: 350,
       rating: 2800,
       medalColor: "gold",
@@ -485,7 +485,7 @@ const TopRankersSidebar = () => {
     {
       id: "r2",
       name: "Algo Virtuoso",
-      avatar: "https://placewaifu.com/image/50/50?t=r2",
+      avatar: "https:
       problemsSolved: 320,
       rating: 2750,
       medalColor: "silver",
@@ -493,10 +493,10 @@ const TopRankersSidebar = () => {
     {
       id: "r3",
       name: "Logic Ninja",
-      avatar: "https://placewaifu.com/image/50/50?t=r3",
+      avatar: "https:
       problemsSolved: 300,
       rating: 2690,
-      medalColor: "#CD7F32" /* Bronze */,
+      medalColor: "#CD7F32" ,
     },
   ];
   return (
@@ -508,7 +508,7 @@ const TopRankersSidebar = () => {
     >
       <Box
         h="150px"
-        bgImage="url('https://placewaifu.com/image/400/200?t=rankbg')"
+        bgImage="url('https:
         bgSize="cover"
         backgroundPosition="center"
         position="relative"
@@ -603,7 +603,7 @@ const RecentResultsSidebar = () => {
     >
       <Box
         h="120px"
-        bgImage="url('https://placewaifu.com/image/400/200?t=resbg')"
+        bgImage="url('https:
         bgSize="cover"
         backgroundPosition="center"
         position="relative"
@@ -664,9 +664,9 @@ const RecentResultsSidebar = () => {
     </Box>
   );
 };
-// --- END: Right Sidebar ---
 
-// --- START: Contest Page Component ---
+
+
 function ContestPage() {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const mainContentBg = { base: "gray.50", _dark: "gray.900" };
@@ -693,7 +693,7 @@ function ContestPage() {
               position={{ lg: "sticky" }}
               top={{ lg: "80px" }}
             >
-              {/* Sticky sidebar for desktop */}
+              
               <TopRankersSidebar />
               <RecentResultsSidebar />
             </VStack>
@@ -703,10 +703,10 @@ function ContestPage() {
     </Box>
   );
 }
-// --- END: Contest Page Component ---
+
 
 export const Route = createFileRoute("/_home/contests/")({
-  // Adjust route as needed
+  
   component: ContestPage,
   loader: async ({ context }) => {
     const p1 = context.queryClient.ensureQueryData(

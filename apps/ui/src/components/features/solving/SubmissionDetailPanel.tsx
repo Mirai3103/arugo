@@ -83,12 +83,12 @@ export const SubmissionDetailPanel: React.FC<SubmissionDetailsPageProps> = ({
   };
 
   const handleResubmit = () => {
-    // Logic for resubmission
+    
     console.log("Resubmit logic");
   };
 
   const handleContinueChallenge = () => {
-    // Logic for continuing challenge
+    
     console.log("Continue challenge logic");
   };
 

@@ -51,7 +51,7 @@ const CodeEditorArea = ({ problem, allowTest = true }: CodeEditorAreaProps) => {
     renewUuid,
   );
 
-  // isPolling can be used to disable buttons or show loading indicators if needed
+  
   const { isPolling } = useSubmissionPolling(uuid, clearUuid);
 
   function handleEditorDidMount(
@@ -163,7 +163,7 @@ const CodeEditorArea = ({ problem, allowTest = true }: CodeEditorAreaProps) => {
             minimap: { enabled: false },
           }}
           onMount={handleEditorDidMount}
-          mode={theme} // theme from next-themes
+          mode={theme} 
         />
       </Box>
     </Flex>

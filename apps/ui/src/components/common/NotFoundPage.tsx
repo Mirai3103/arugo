@@ -25,7 +25,7 @@ export default function NotFoundPage() {
         borderWidth="1px"
         borderColor={{ base: "gray.200", _dark: "gray.700" }}
       >
-        {/* 404 Icon */}
+        
         <Box
           p={6}
           rounded="full"
@@ -40,7 +40,7 @@ export default function NotFoundPage() {
           />
         </Box>
 
-        {/* Main Content */}
+        
         <VStack gap={4} align="center">
           <Heading
             size={{ base: "2xl", md: "3xl" }}
@@ -67,7 +67,7 @@ export default function NotFoundPage() {
           </Text>
         </VStack>
 
-        {/* Action Buttons */}
+        
         <HStack gap={4} wrap="wrap" justify="center">
           <Link to="/home">
             <Button
@@ -100,7 +100,7 @@ export default function NotFoundPage() {
           </Button>
         </HStack>
 
-        {/* Additional Help Text */}
+        
         <Text
           fontSize="sm"
           color={{ base: "gray.500", _dark: "gray.500" }}

@@ -91,7 +91,7 @@ const SidebarContent = ({ ...rest }) => {
       p={4}
       {...rest}
     >
-      {/* Logo */}
+      
       <HStack mb={8} gap={2}>
         <Icon as={FiCode} w={8} h={8} color="teal.500" />
         <Heading as="h1" size="md" letterSpacing="tight">
@@ -99,12 +99,12 @@ const SidebarContent = ({ ...rest }) => {
         </Heading>
       </HStack>
 
-      {/* Search */}
+      
       <InputGroup mb={6} startElement={<Icon as={FiSearch} color="gray.400" />}>
         <Input placeholder="Search" variant="subtle" borderRadius="md" />
       </InputGroup>
 
-      {/* Navigation Links */}
+      
       <VStack gap={1} align="stretch" flex="1">
         {navItems.map((item) => (
           <NavItem key={item.name} icon={item.icon} to={item.to} isActive={item.isActive}>
@@ -128,7 +128,7 @@ const SidebarContent = ({ ...rest }) => {
         ))}
       </VStack>
 
-      {/* User Profile */}
+      
       <Box mt={8}>
         <Separator mb={4} />
         <Flex align="center">
@@ -186,12 +186,12 @@ const AdminDashboardLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <Flex minH="100vh" bg={{ "base": "gray.50", "_dark": "gray.900" }}>
-      {/* Desktop Sidebar */}
+      
       <Box display={{ base: "none", lg: "block" }} w="320px" flexShrink={0}>
         <SidebarContent />
       </Box>
 
-      {/* Mobile Sidebar Drawer */}
+      
       <Drawer.Root open={open} onOpenChange={({ open }) => !open && onClose()}>
         <Portal>
           <Drawer.Backdrop />
@@ -203,9 +203,9 @@ const AdminDashboardLayout = ({ children }: { children: ReactNode }) => {
         </Portal>
       </Drawer.Root>
 
-      {/* Main Content Area */}
+      
       <Box flex="1">
-        {/* Header for main content */}
+        
         <Flex
           as="header"
           align="center"
@@ -237,7 +237,7 @@ const AdminDashboardLayout = ({ children }: { children: ReactNode }) => {
             >
               <FiBell />
             </IconButton>
-            {/* UserMenu can be placed here as well if needed */}
+            
             <Text fontSize="sm" display={{ base: "none", md: "block" }}>
               Welcome, John
             </Text>

@@ -24,7 +24,7 @@ export const profiles = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
     gender: text("gender"),
     location: text("location"),
-    birthdate: timestamp("birthdate", { mode: "date" }), // Prisma @db.Date
+    birthdate: timestamp("birthdate", { mode: "date" }), 
     website: text("website"),
     github: text("github"),
     linkedin: text("linkedin"),

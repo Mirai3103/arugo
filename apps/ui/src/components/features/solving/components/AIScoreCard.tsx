@@ -171,15 +171,15 @@ export const AIScoreCard: React.FC<AIScoreCardProps> = ({
       <Dialog.Root
         open={isModalOpen}
         size={"xl"}
-        onOpenChange={(details) => setIsModalOpen(details.open)} // onOpenChange nhận object details
+        onOpenChange={(details) => setIsModalOpen(details.open)} 
       >
         <Dialog.Backdrop />
         <Dialog.Positioner>
           {" "}
-          {/* Thêm Dialog.Positioner để bao bọc Content */}
+          
           <Dialog.Content>
             {" "}
-            {/* size="xl" được chuyển vào Content */}
+            
             <Dialog.Header>
               <Dialog.Title fontSize={"2xl"}>
                 Đánh giá chi tiết từ AI

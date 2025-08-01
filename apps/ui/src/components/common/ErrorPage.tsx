@@ -49,7 +49,7 @@ export default function ErrorPage({ error, resetError }: ErrorPageProps) {
         borderWidth="1px"
         borderColor={{ base: "gray.200", _dark: "gray.700" }}
       >
-        {/* Error Icon */}
+        
         <Box
           p={6}
           rounded="full"
@@ -64,7 +64,7 @@ export default function ErrorPage({ error, resetError }: ErrorPageProps) {
           />
         </Box>
 
-        {/* Main Content */}
+        
         <VStack gap={4} align="center">
           <Heading
             size={{ base: "xl", md: "2xl" }}
@@ -84,7 +84,7 @@ export default function ErrorPage({ error, resetError }: ErrorPageProps) {
           </Text>
         </VStack>
 
-        {/* Action Buttons */}
+        
         <HStack gap={4} wrap="wrap" justify="center">
           <Button
             colorScheme="teal"
@@ -115,7 +115,7 @@ export default function ErrorPage({ error, resetError }: ErrorPageProps) {
           </Link>
         </HStack>
 
-        {/* Error Details (for development) */}
+        
         {error && (
           <VStack gap={4} w="full" maxW="2xl">
             <Button
@@ -129,17 +129,17 @@ export default function ErrorPage({ error, resetError }: ErrorPageProps) {
 
             <Collapsible.Root open={showDetails}>
               {" "}
-              {/* Collapse -> Collapsible.Root, prop 'open' vẫn giữ nguyên */}
+              
               <Collapsible.Content>
                 {" "}
-                {/* Toàn bộ nội dung được bọc trong Collapsible.Content */}
+                
                 <Box
                   w="full"
                   p={4}
-                  bg={{ _light: "gray.50", _dark: "gray.800" }} // base -> _light
+                  bg={{ _light: "gray.50", _dark: "gray.800" }} 
                   rounded="md"
                   borderWidth="1px"
-                  borderColor={{ _light: "gray.200", _dark: "gray.700" }} // base -> _light
+                  borderColor={{ _light: "gray.200", _dark: "gray.700" }} 
                 >
                   <VStack align="stretch" gap={3}>
                     <Text fontSize="sm" fontWeight="medium" color="red.500">
@@ -149,7 +149,7 @@ export default function ErrorPage({ error, resetError }: ErrorPageProps) {
                       p={3}
                       rounded="md"
                       fontSize="xs"
-                      colorPalette="red" // colorScheme -> colorPalette
+                      colorPalette="red" 
                       variant="subtle"
                       overflowX="auto"
                       whiteSpace="pre-wrap"
@@ -165,7 +165,7 @@ export default function ErrorPage({ error, resetError }: ErrorPageProps) {
                           p={3}
                           rounded="md"
                           fontSize="xs"
-                          colorPalette="red" // colorScheme -> colorPalette
+                          colorPalette="red" 
                           variant="subtle"
                           overflowX="auto"
                           whiteSpace="pre-wrap"
@@ -183,7 +183,7 @@ export default function ErrorPage({ error, resetError }: ErrorPageProps) {
           </VStack>
         )}
 
-        {/* Help Text */}
+        
         <Text
           fontSize="sm"
           color={{ base: "gray.500", _dark: "gray.500" }}

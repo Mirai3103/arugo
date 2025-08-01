@@ -1,6 +1,6 @@
 import { UserMenu } from "@/components/common/UserMenu";
 import CodeEditorArea from "@/components/features/solving/CodeEditorArea";
-import { ColorModeButton } from "@/components/ui/color-mode"; // Assuming this path is correct for the project
+import { ColorModeButton } from "@/components/ui/color-mode"; 
 import type { ProblemSampleTestCase } from "@repo/backend/problems/problemService";
 
 import {
@@ -84,7 +84,7 @@ const PageHeader = () => {
   );
 };
 
-// Problem Description Panel
+
 
 type TestcaseDetails = ProblemSampleTestCase & {
   stdout?: string;
@@ -113,7 +113,7 @@ const TestcaseItem: React.FC<TestcaseItemProps> = ({ testcase }) => {
   const testcaseStatus = testcase.status || SubmissionTestcaseStatus.None;
   const isRunning = testcaseStatus === SubmissionTestcaseStatus.Running;
 
-  // Use useMemo for computed values
+  
   const resultBackground = useMemo(() => {
     if (isRunning) return colors.gray.bg;
 
@@ -309,7 +309,7 @@ const TestAndResultPanel: React.FC = () => {
     </Box>
   );
 };
-// Unauthenticated Right Panel - shows login prompt
+
 const UnAuthRightResizablePanel = () => {
   const panelBg = { base: "white", _dark: "gray.800" };
   const textColor = { base: "gray.600", _dark: "gray.300" };
@@ -364,7 +364,7 @@ const UnAuthRightResizablePanel = () => {
     </Flex>
   );
 };
-// Main Resizable Component for the Right Side
+
 const RightResizablePanel = () => {
   const { problem } = Route.useLoaderData();
   const panelBg = { base: "white", _dark: "gray.800" };
@@ -394,7 +394,7 @@ const RightResizablePanel = () => {
             transition="background-color 0.2s"
             _hover={{ bg: handleActiveBg }}
             _active={{ bg: handleActiveBg }}
-            data-panel-resize-handle-active // Attribute for potential active styling from library
+            data-panel-resize-handle-active 
           >
             <Box
               w="30px"
@@ -416,7 +416,7 @@ const RightResizablePanel = () => {
 
 function RouteComponent() {
   const isMobile = useBreakpointValue({ base: true, lg: false });
-  const panelBg = { base: "gray.100", _dark: "gray.900" }; // Background for the panel group area
+  const panelBg = { base: "gray.100", _dark: "gray.900" }; 
   const handleBg = { base: "gray.300", _dark: "gray.600" };
   const handleActiveBg = { base: "gray.400", _dark: "gray.500" };
   const { session, problem } = Route.useLoaderData();
@@ -475,7 +475,7 @@ function RouteComponent() {
                 transition="background-color 0.2s"
                 _hover={{ bg: handleActiveBg }}
                 _active={{ bg: handleActiveBg }}
-                data-panel-resize-handle-active // For library's active state styling
+                data-panel-resize-handle-active 
               >
                 <Box
                   h="30px"

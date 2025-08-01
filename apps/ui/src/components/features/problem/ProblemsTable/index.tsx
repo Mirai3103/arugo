@@ -12,7 +12,7 @@ import { SearchFilters } from "./SearchFilters";
 import { useProblemsSearch } from "./hooks";
 import { trpc } from "@/libs/query";
 
-// Component chứa tất cả logic liên quan đến problems query
+
 const ProblemsContent = ({
   search,
   updateFilters,
@@ -41,7 +41,7 @@ const ProblemsContent = ({
 
   return (
     <>
-      {/* Table content */}
+      
       <Box overflowX="auto">
         <Table.Root
           variant="line"
@@ -75,7 +75,7 @@ const ProblemsContent = ({
         </Table.Root>
       </Box>
 
-      {/* Pagination */}
+      
       {totalPages > 1 && (
         <PaginationControls
           currentPage={currentPage}
@@ -87,13 +87,13 @@ const ProblemsContent = ({
   );
 };
 
-// Fallback component
+
 const ProblemsContentFallback = () => {
   const skeletonRows = React.useMemo(() => generateSkeletonRows(10), []);
 
   return (
     <>
-      {/* Table skeleton */}
+      
       <Box overflowX="auto">
         <Table.Root
           variant="line"
@@ -112,8 +112,8 @@ const ProblemsContentFallback = () => {
         </Table.Root>
       </Box>
 
-      {/* Pagination skeleton hoặc ẩn đi */}
-      {/* <Box height="40px" /> */}
+      
+      
     </>
   );
 };
@@ -122,7 +122,7 @@ const ProblemsTable = () => {
   const { search, debouncedSearch, updateFilters } = useProblemsSearch();
   const [searchTerm, setSearchTerm] = useState(search.search || "");
 
-  // Chỉ query tags cho filters, không query problems
+  
   const { data: tags } = useSuspenseQuery(trpc.tag.getAllTags.queryOptions());
   const { contains } = useFilter({ sensitivity: "base" });
   const {
@@ -165,7 +165,7 @@ const ProblemsTable = () => {
 
   return (
     <Box>
-      {/* Filters - không bị fallback */}
+      
       <SearchFilters
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
@@ -176,7 +176,7 @@ const ProblemsTable = () => {
         onTagFilter={filter}
       />
 
-      {/* Tất cả nội dung sử dụng problems query - bị fallback */}
+      
       <Suspense fallback={<ProblemsContentFallback />}>
         <ProblemsContent search={search} updateFilters={updateFilters} />
       </Suspense>

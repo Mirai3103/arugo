@@ -8,7 +8,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-// import { users } from './users'; // Optional FK
+
 
 export const auditLogs = pgTable(
   "audit_logs",
@@ -18,8 +18,8 @@ export const auditLogs = pgTable(
       .default(sql`gen_random_uuid()`),
     action: text("action").notNull(),
     tableName: text("table_name").notNull(),
-    recordId: text("record_id").notNull(), // Could be uuid or integer depending on the table
-    userId: varchar("user_id", { length: 100 }), // Nullable
+    recordId: text("record_id").notNull(), 
+    userId: varchar("user_id", { length: 100 }), 
     timestamp: timestamp("timestamp", { mode: "date" }).defaultNow().notNull(),
     details: jsonb("details"),
   },

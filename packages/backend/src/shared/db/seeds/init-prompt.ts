@@ -2,10 +2,10 @@ import { db } from "..";
 import { genAiPrompts } from "../schema";
 
 async function main() {
-  // Xoá dữ liệu cũ
+  
   await db.delete(genAiPrompts);
 
-  // Danh sách prompt khởi tạo
+  
   const prompts = [
     {
       key: "gen_ai_score_submission",
@@ -25,7 +25,7 @@ async function main() {
     },
   ];
 
-  // Thêm các prompt vào cơ sở dữ liệu
+  
   for (const prompt of prompts) {
     await db.insert(genAiPrompts).values(prompt);
   }

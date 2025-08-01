@@ -1,5 +1,5 @@
-import { ColorModeButton } from "@/components/ui/color-mode"; // Assuming this path
-import { signOut, useSession } from "@/libs/auth/client"; // Assuming this path
+import { ColorModeButton } from "@/components/ui/color-mode"; 
+import { signOut, useSession } from "@/libs/auth/client"; 
 import {
     Box,
     Button,
@@ -36,7 +36,7 @@ export const Header = () => {
   const { data: session, isPending } = useSession();
 
   const isMobile = useBreakpointValue({ base: true, lg: false });
-  const user = session?.user; // Get user from session
+  const user = session?.user; 
   const navigate = useNavigate();
   return (
     <Box
@@ -91,7 +91,7 @@ export const Header = () => {
                 position="relative"
               >
                 <FiBell />
-                {/* Example Notification Badge */}
+                
                 <Box
                   as="span"
                   position="absolute"
@@ -101,7 +101,7 @@ export const Header = () => {
                   p="3px"
                   bg="red.500"
                   borderRadius="full"
-                  display={"block"} // Replace true with notification check
+                  display={"block"} 
                 />
               </IconButton>
               {user ? (
@@ -120,7 +120,7 @@ export const Header = () => {
           )}
         </Flex>
       </Container>
-      {/* Mobile Drawer Menu */}
+      
       <Drawer.Root open={isOpen} onOpenChange={onClose} placement="end">
         <Drawer.Backdrop />
         <Drawer.Positioner>
@@ -133,7 +133,7 @@ export const Header = () => {
               </HStack>
             </Drawer.Header>
             <Drawer.Body>
-              {/* [cite: 1580] */}
+              
               <VStack gap={4} align="stretch">
                 <Button
                   asChild

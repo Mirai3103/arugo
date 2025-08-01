@@ -109,20 +109,20 @@ function CreatePostPage() {
           </Text>
         </Box>
 
-        <Card.Root variant="outline" bg={{ _light: "white", _dark: "gray.800" }}> {/* Card -> Card.Root, bg={formBg} -> object syntax */}
-          <Card.Body p={{ base: 4, md: 6 }}> {/* CardBody -> Card.Body */}
+        <Card.Root variant="outline" bg={{ _light: "white", _dark: "gray.800" }}> 
+          <Card.Body p={{ base: 4, md: 6 }}> 
             <VStack as="form" gap={5} onSubmit={(e) => e.preventDefault()}>
 
-              {/* --- Tiêu đề --- */}
-              <Field.Root id="post-title" required> {/* FormControl -> Field.Root, isRequired -> required */}
-                <Field.Label>Tiêu đề</Field.Label> {/* FormLabel -> Field.Label */}
+              
+              <Field.Root id="post-title" required> 
+                <Field.Label>Tiêu đề</Field.Label> 
                 <Input
                   placeholder="Ví dụ: Cách tối ưu thuật toán tìm đường đi ngắn nhất..."
                   css={{ "--focus-color": "var(--chakra-colors-teal-500)" }} // focusBorderColor -> css prop
                 />
               </Field.Root>
 
-              {/* --- Chủ đề --- */}
+              
               <Field.Root id="post-topic" required>
                 <Field.Label>Chủ đề</Field.Label>
                 {/* <ChakraNativeSelect.Root collection={mockTopics}>
@@ -138,10 +138,10 @@ function CreatePostPage() {
         </ChakraNativeSelect.Root> */}
               </Field.Root>
 
-              {/* --- Tags --- */}
+              
               <Field.Root id="post-tags">
                 <Field.Label>Tags</Field.Label>
-                {/* Giả sử CreatableSelect và chakraStyles đã tương thích v3 */}
+                
                 <CreatableSelect
                   isMulti
                   name="tags"
@@ -151,12 +151,12 @@ function CreatePostPage() {
                   tagColorPalette="teal" // colorScheme -> colorPalette
                   chakraStyles={selectStyles} // Giả sử selectStyles đã được migrate
                 />
-                <Field.HelperText> {/* FormHelperText -> Field.HelpText */}
+                <Field.HelperText> 
                   Thêm tối đa 5 tags để mô tả về nội dung của bạn.
                 </Field.HelperText>
               </Field.Root>
 
-              {/* --- Mô tả ngắn --- */}
+              
               <Field.Root id="post-short-description">
                 <Field.Label>Mô tả ngắn</Field.Label>
                 <Box position="relative" w={"100%"}>
@@ -177,7 +177,7 @@ function CreatePostPage() {
                         right="8px"
                         type='button'
                       >
-                        <Icon as={FiZap} mr={1.5} /> {/* leftIcon -> Icon làm con trực tiếp */}
+                        <Icon as={FiZap} mr={1.5} /> 
                         Auto-gen
                       </Button></Tooltip.Trigger>
                     <Tooltip.Content>Tạo mô tả bằng AI (dựa trên tiêu đề và nội dung)</Tooltip.Content>
@@ -185,7 +185,7 @@ function CreatePostPage() {
                 </Box>
               </Field.Root>
 
-              {/* --- Nội dung --- */}
+              
               <Field.Root id="post-content" required>
                 <Field.Label>Nội dung</Field.Label>
                 {/* <Textarea
@@ -196,15 +196,15 @@ function CreatePostPage() {
           p={4}
         /> */}
                 <SimpleEditor />
-                <Field.HelperText> {/* FormHelperText -> Field.HelpText */}
+                <Field.HelperText> 
                   Bạn có thể sử dụng Markdown để định dạng bài viết.
                 </Field.HelperText>
               </Field.Root>
 
-              {/* --- Actions --- */}
+              
               <HStack justifyContent="flex-end" w="full" gap={3} mt={4}>
-                <Button colorPalette="teal"> {/* colorScheme -> colorPalette */}
-                  Đăng bài<Icon as={FiSend} ml={2} /> {/* Thêm margin cho icon */}
+                <Button colorPalette="teal"> 
+                  Đăng bài<Icon as={FiSend} ml={2} /> 
                 </Button>
               </HStack>
             </VStack>

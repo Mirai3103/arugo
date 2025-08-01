@@ -287,7 +287,7 @@ const CommentSection = ({
 }) => (
   <VStack gap={5} align="stretch">
     <Heading size="md">Bình luận ({commentsCount})</Heading>
-    {/* Comment Form */}
+    
     <HStack>
       <Avatar.Root size="sm">
         <Avatar.Fallback name="U" />
@@ -298,7 +298,7 @@ const CommentSection = ({
       Gửi bình luận
     </Button>
     <Separator />
-    {/* Comments List */}
+    
     <VStack gap={6} align="stretch">
       {comments.map((comment) => (
         <CommentCard key={comment.id} comment={comment} />
@@ -312,11 +312,11 @@ const CommentSection = ({
 const AuthorCard = ({ author }: { author: Author }) => (
   <Card.Root variant="outline">
     {" "}
-    {/* Card -> Card.Root */}
+    
     <Card.Body>
-      {/* CardBody -> Card.Body */}
+      
       <VStack gap={4}>
-        {/* Avatar đã ở dạng v3 */}
+        
         <Avatar.Root size="xl">
           <Avatar.Image
             src={author.avatar || "https://placewaifu.com/image/400/400?t=a3"}
@@ -369,7 +369,7 @@ const AuthorCard = ({ author }: { author: Author }) => (
           size="sm"
         >
           <Icon as={FiUserCheck} mr={1.5} />{" "}
-          {/* leftIcon -> Icon làm con trực tiếp */}
+          
           Theo dõi
         </Button>
       </VStack>
@@ -379,15 +379,15 @@ const AuthorCard = ({ author }: { author: Author }) => (
 const RelatedPostsCard = () => (
   <Card.Root variant="outline">
     {" "}
-    {/* Card -> Card.Root */}
+    
     <Card.Header>
       {" "}
-      {/* CardHeader -> Card.Header */}
+      
       <Heading size="sm">Bài viết cùng chủ đề</Heading>
     </Card.Header>
     <Card.Body pt={0}>
       {" "}
-      {/* CardBody -> Card.Body */}
+      
       <VStack
         separator={<Separator />} // Divider -> Separator
         gap={3}
@@ -410,31 +410,31 @@ const RelatedPostsCard = () => (
 const TableOfContents = () => (
   <Card.Root variant="outline">
     {" "}
-    {/* Card -> Card.Root */}
+    
     <Card.Header>
       {" "}
-      {/* CardHeader -> Card.Header */}
+      
       <Heading size="sm">Mục lục</Heading>
     </Card.Header>
     <Card.Body pt={0}>
       {" "}
-      {/* CardBody -> Card.Body */}
+      
       <List.Root gap={1.5} fontSize="sm">
         {" "}
-        {/* List -> List.Root */}
+        
         <List.Item>
           {" "}
-          {/* ListItem -> List.Item */}
+          
           <Link>Hiểu về bản chất của DP</Link>
         </List.Item>
         <List.Item>
           {" "}
-          {/* ListItem -> List.Item */}
+          
           <Link pl={4}>Xác định trạng thái</Link>
         </List.Item>
         <List.Item>
           {" "}
-          {/* ListItem -> List.Item */}
+          
           <Link pl={4}>Tối ưu hóa không gian</Link>
         </List.Item>
       </List.Root>
@@ -454,7 +454,7 @@ const PostDetailsPage = () => {
 
   return (
     <Box bg={{ base: "gray.50", _dark: "gray.900" }}>
-      {/* Header could be here */}
+      
       <Container
         maxW="container.2xl"
         py={{ base: 4, md: 8 }}
@@ -489,7 +489,7 @@ const PostDetailsPage = () => {
             <Card.Root variant="outline">
               <Card.Body p={{ base: 4, md: 6 }}>
                 {" "}
-                {/* CardBody -> Card.Body */}
+                
                 <VStack gap={5} align="stretch">
                   <PostHeader
                     author={post.author}

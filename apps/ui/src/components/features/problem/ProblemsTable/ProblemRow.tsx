@@ -44,7 +44,7 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({ problem, onClick }) => (
       </Wrap>
     </Table.Cell>
     <Table.Cell fontVariantNumeric="tabular-nums">
-      {/* biome-ignore lint/suspicious/noExplicitAny: <explanation> */}
+      
       {(problem?.metadata as any)?.acRate?.toFixed(2)}%
     </Table.Cell>
   </Table.Row>

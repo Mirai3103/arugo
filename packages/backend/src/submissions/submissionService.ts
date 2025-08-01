@@ -112,7 +112,7 @@ async function checkAndUpdateSubmissionStatus(
       executionTimeMs: maxExecutionTime,
       memoryUsageKb: maxMemoryUsage,
       passRatio,
-      aiScore: null, // Reset AI score on status update
+      aiScore: null, 
     })
     .where(eq(submissions.id, submissionId));
     await  scoreSubmission(submissionId);

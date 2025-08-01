@@ -1,4 +1,4 @@
-// src/types/problem.ts (Ví dụ)
+
 export enum ProblemDifficulty {
   Easy = "Easy",
   Medium = "Medium",
@@ -7,18 +7,18 @@ export enum ProblemDifficulty {
 
 export enum ProblemStatus {
   Unsolved = "Unsolved",
-  Attempted = "Attempted", // Đã thử nhưng chưa AC
-  Solved = "Solved", // Accepted
+  Attempted = "Attempted", 
+  Solved = "Solved", 
 }
 
 export interface Problem {
-  id: string; // Hoặc number, dùng string để giống LeetCode ID
+  id: string; 
   title: string;
   difficulty: ProblemDifficulty;
   tags: string[];
-  status: ProblemStatus; // Trạng thái của người dùng hiện tại với bài này
-  acceptance?: string; // Tỷ lệ chấp nhận (ví dụ: '45.6%') - Optional
-  // Thêm các trường khác nếu cần: frequency, isPremium, etc.
+  status: ProblemStatus; 
+  acceptance?: string; 
+  
 }
 
 export const mockProblems: Problem[] = [
@@ -150,7 +150,7 @@ export const mockProblems: Problem[] = [
     status: ProblemStatus.Solved,
     acceptance: "73.1%",
   },
-  // Thêm nhiều bài nữa để test phân trang và filter...
+  
   {
     id: "15",
     title: "3Sum",
@@ -185,7 +185,7 @@ export const mockProblems: Problem[] = [
   },
 ];
 
-// Lấy tất cả các tag duy nhất từ mock data
+
 export const allTags = Array.from(
   new Set(mockProblems.flatMap((p) => p.tags)),
 ).sort();

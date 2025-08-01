@@ -139,7 +139,7 @@ const HeroSection = () => {
           </Stack>
         </VStack>
         <Box flex="1" display={{ base: "none", md: "block" }}>
-          {/* Placeholder for a relevant image or illustration */}
+          
           <Image
             src="https://placewaifu.com/image/600/300"
             alt="Arugo Illustration"
@@ -482,7 +482,7 @@ function Landing() {
         <HeroSection />
         <FeaturesSection />
         <ProblemsPreviewSection />
-        {/* <TestimonialsSection /> */}
+        
         <CTASection />
       </main>
       <Footer />

@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 
-// Import all enums and tables
+
 export * from "./enum";
 export * from "./auth-schema";
 export * from "./profile";
@@ -31,16 +31,16 @@ import { notifications } from "./notifications";
 import { problemRatings } from "./problemRatings";
 import { problemLanguages, problemTags, problems, testcases } from "./problems";
 import { profiles } from "./profile";
-// Import tables for relations
+
 import { roles, userToRoles } from "./rbac";
 import { submissionTestcases, submissions } from "./submissions";
 import { tags } from "./tags";
 import { postComments, postLikes, posts, topics } from "./posts";
-// verificationTokens typically don't have relations to other main tables
 
-// --- Define Relations ---
 
-// User Relations
+
+
+
 export const usersRelations = relations(users, ({ one, many }) => ({
   profile: one(profiles, {
     fields: [users.id],
@@ -53,8 +53,8 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   comments: many(comments),
   problemRatings: many(problemRatings),
   notifications: many(notifications),
-  leaderboards: many(leaderboards), // User can be in many leaderboards
-  auditLogs: many(auditLogs, { relationName: "auditLogsByUser" }), // If userId in auditLogs is a FK
+  leaderboards: many(leaderboards), 
+  auditLogs: many(auditLogs, { relationName: "auditLogsByUser" }), 
   posts: many(posts),
   postLikes: many(postLikes),
   postComments: many(postComments),
@@ -89,28 +89,28 @@ export const rolesRelations = relations(roles, ({ many }) => ({
 }));
 
 export const userToRolesRelations = relations(userToRoles, ({ one }) => ({
-  user: one(users, { fields: [userToRoles.userId], references: [users.id] }), // Add onDelete
-  role: one(roles, { fields: [userToRoles.roleId], references: [roles.id] }), // Add onDelete
+  user: one(users, { fields: [userToRoles.userId], references: [users.id] }), 
+  role: one(roles, { fields: [userToRoles.roleId], references: [roles.id] }), 
 }));
-// Resources and Actions relations if any (e.g., permissions table linking roles, resources, actions)
 
-// Language Relations
+
+
 export const languagesRelations = relations(languages, ({ many }) => ({
   problemLanguages: many(problemLanguages),
   submissions: many(submissions),
 }));
 
-// Tag Relations
+
 export const tagsRelations = relations(tags, ({ many }) => ({
   problemTags: many(problemTags),
 }));
 
-// Problem Relations
+
 export const problemsRelations = relations(problems, ({ many }) => ({
   problemLanguages: many(problemLanguages),
   problemTags: many(problemTags),
   submissions: many(submissions),
-  submissionTestcasesViaProblem: many(submissionTestcases), // Direct relation if needed, though usually via submission
+  submissionTestcasesViaProblem: many(submissionTestcases), 
   testcases: many(testcases),
   problemContests: many(problemContests),
   discussions: many(discussions),
@@ -147,7 +147,7 @@ export const testcasesRelations = relations(testcases, ({ one, many }) => ({
   submissionTestcases: many(submissionTestcases),
 }));
 
-// Submission Relations
+
 export const submissionsRelations = relations(submissions, ({ one, many }) => ({
   user: one(users, {
     fields: [submissions.userId],
@@ -186,7 +186,7 @@ export const submissionTestcasesRelations = relations(
   }),
 );
 
-// Contest Relations
+
 export const contestsRelations = relations(contests, ({ many }) => ({
   problemContests: many(problemContests),
   leaderboards: many(leaderboards),
@@ -204,7 +204,7 @@ export const problemContestsRelations = relations(
       fields: [problemContests.problemId],
       references: [problems.id],
     }),
-    submissions: many(submissions), // submissions can reference problemContestId
+    submissions: many(submissions), 
   }),
 );
 
@@ -230,7 +230,7 @@ export const contestParticipantsRelations = relations(
   }),
 );
 
-// Discussion Relations
+
 export const discussionsRelations = relations(discussions, ({ one, many }) => ({
   problem: one(problems, {
     fields: [discussions.problemId],
@@ -248,7 +248,7 @@ export const commentsRelations = relations(comments, ({ one }) => ({
   user: one(users, { fields: [comments.userId], references: [users.id] }),
 }));
 
-// ProblemRating Relations
+
 export const problemRatingsRelations = relations(problemRatings, ({ one }) => ({
   problem: one(problems, {
     fields: [problemRatings.problemId],
@@ -260,7 +260,7 @@ export const problemRatingsRelations = relations(problemRatings, ({ one }) => ({
   }),
 }));
 
-// Notification Relations
+
 export const notificationsRelations = relations(notifications, ({ one }) => ({
   user: one(users, {
     fields: [notifications.userId],
@@ -268,15 +268,15 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
   }),
 }));
 
-// AuditLog Relations (Optional, if userId is a strict FK)
+
 export const auditLogsRelations = relations(auditLogs, ({ one }) => ({
   user: one(users, {
     fields: [auditLogs.userId],
     references: [users.id],
     relationName: "auditLogsByUser",
-  }), // onDelete can be 'no action' or 'set null'
+  }), 
 }));
 
-// Combine all schemas for Drizzle client
-// (This part is often done directly in drizzle.ts by importing '*' from this file)
-// export const schema = { ...all imported tables and relations };
+
+
+

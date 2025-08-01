@@ -29,22 +29,22 @@ type Id = string;
 
 function codesByTier(tier: number) {
 	switch (tier) {
-		case 1: // easy
+		case 1: 
 			return [1, 7, 8];
 
-		case 2: // medium
+		case 2: 
 			return [2, 9, 10];
 
-		case 3: // hard
+		case 3: 
 			return [
-				3, 4, 5, // HARD, HARDER, HARDEST
+				3, 4, 5, 
 				11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
 			];
 
-		case 0: // unknown / external
+		case 0: 
 			return [0, 6];
 
-		default: // tier không hợp lệ
+		default: 
 			return [];
 	}
 }
@@ -74,7 +74,7 @@ export interface Testcase {
 
 export type ProblemId = string;
 
-// Tag cache to avoid repeated database queries
+
 const tagCache = new Map<string, number>();
 
 async function getOrCreateTagIfNotExist(tagName: string): Promise<number> {
@@ -105,12 +105,12 @@ async function getOrCreateTagIfNotExist(tagName: string): Promise<number> {
 	return newTag.id;
 }
 
-// Batch create tags to reduce database calls
+
 async function createTagsBatch(tagNames: string[]): Promise<Map<string, number>> {
 	const uniqueTagNames = [...new Set(tagNames)];
 	const tagMap = new Map<string, number>();
 	
-	// Check existing tags first
+	
 	const existingTags = await drizzleDb.query.tags.findMany({
 		where: (tags, { inArray }) => inArray(tags.name, uniqueTagNames),
 	});
@@ -120,7 +120,7 @@ async function createTagsBatch(tagNames: string[]): Promise<Map<string, number>>
 		tagCache.set(tag.name, tag.id);
 	}
 	
-	// Create missing tags
+	
 	const missingTagNames = uniqueTagNames.filter(name => !tagMap.has(name));
 	
 	if (missingTagNames.length > 0) {
@@ -161,19 +161,19 @@ async function main() {
 	console.log("🚀 Starting database seed...");
 
 	try {
-		// Delete old data
+		
 		console.log("🗑️  Deleting existing data...");
 		const deleteStart = Date.now();
 		
 		await drizzleDb.transaction(async (tx) => {
-			await tx.delete(problemTags); // Delete problem tags first due to foreign key
+			await tx.delete(problemTags); 
 			await tx.delete(problems);
 			await tx.delete(tags);
 		});
 		
 		console.log(`✅ Deleted existing data in ${Date.now() - deleteStart}ms`);
 
-		// Fetch all problems at once with optimized aggregation
+		
 		console.log("📊 Fetching problems from MongoDB...");
 		const fetchStart = Date.now();
 		const aggregate=[
@@ -218,7 +218,7 @@ async function main() {
 		console.log(`✅ Fetched ${allProblemsData.length} problem groups`);
 		console.log(`📝 Fetched problems data in ${Date.now() - fetchStart}ms`);
 
-		// Process each tier
+		
 		for (const tierGroup of allProblemsData) {
 			const tier = tierGroup._id as keyof typeof tierCodes;
 			const rawProblems = tierGroup.problems;
@@ -231,14 +231,14 @@ async function main() {
 			const tierStart = Date.now();
 			console.log(`📊 Processing ${rawProblems.length} ${tier} problems...`);
 
-			// Collect all unique tags for batch creation
+			
 			const allTags = rawProblems.flatMap(p => p.cf_tags || []);
 			const uniqueTags = [...new Set(allTags)];
 			
 			console.log(`🏷️  Creating ${uniqueTags.length} unique tags for ${tier} tier...`);
 			const tagMap = await createTagsBatch(uniqueTags);
 			type ProblemInsert = typeof problems.$inferInsert;
-			// Prepare batch data
+			
 			const problemsToInsert:ProblemInsert[] = [];
 			const problemTagsToInsert:any = [];
 			const testcasesToInsert:TestcaseInsert[] = [];
@@ -253,7 +253,7 @@ async function main() {
 					console.log(`⚠️ Problem with slug "${slug}" already exists, skipping...`);
 					continue;
 				}
-				// Prepare problem data
+				
 				problemsToInsert.push({
 					slug: slugify(rawProblem.title_vi, { lower: true, strict: true }),
 					title: rawProblem.title_vi,
@@ -285,7 +285,7 @@ async function main() {
 				}) as TestcaseInsert);
 				testcasesToInsert.push(...testcasesToInsertBatch);
 
-				// Prepare problem-tag relationships
+				
 				const problemTags = (rawProblem.tag_vi|| rawProblem.cf_tags || [])
 					.map(tagName => tagMap.get(tagName))
 					.filter(tagId => tagId !== undefined)
@@ -297,7 +297,7 @@ async function main() {
 				problemTagsToInsert.push(...problemTags);
 			}
 
-			// Batch insert with transaction
+			
 			console.log(`💾 Inserting ${problemsToInsert.length} problems and ${problemTagsToInsert.length} problem-tag relationships for ${tier} tier...`);
 			const insertStart = Date.now();
 			
@@ -320,7 +320,7 @@ async function main() {
 		const totalTime = Date.now() - startTime;
 		console.log(`🎉 Seed completed successfully in ${totalTime}ms (${(totalTime / 1000).toFixed(2)}s)`);
 		
-		// Show final statistics
+		
 		const finalStats = await drizzleDb.transaction(async (tx) => {
 			const problemCount = await tx.select({ count: problems.id }).from(problems);
 			const tagCount = await tx.select({ count: tags.id }).from(tags);
@@ -342,7 +342,7 @@ async function main() {
 		console.error("❌ Error during seed:", error);
 		throw error;
 	} finally {
-		// Close MongoDB connection
+		
 		await mongoClient.close();
 		console.log("🔌 MongoDB connection closed");
 	}

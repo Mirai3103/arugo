@@ -63,9 +63,9 @@ export const UserMenu = ({ user, isPending }: UserMenuProps) => {
         <Button
           variant="ghost"
           size="sm"
-          px={1} // Reduce padding for a tighter fit around avatar
+          px={1} 
           py={1}
-          rounded="full" // Make the button trigger itself rounded
+          rounded="full" 
           _hover={{
             bg: menuItemHoverBg,
           }}
@@ -76,19 +76,19 @@ export const UserMenu = ({ user, isPending }: UserMenuProps) => {
           <Avatar.Root size="sm">
             <Avatar.Image
               alt={user.name ?? "User Avatar"}
-              borderRadius="full" // Ensure image within avatar is also fully rounded
-              boxSize="30px" // Consistent with fallback
+              borderRadius="full" 
+              boxSize="30px" 
               objectFit="cover"
               src={
                 user.image ??
-                `https://ui-avatars.com/api/?name=${user.name || "U"}&background=random`
+                `https:
               }
             />
             <Avatar.Fallback
               bg="teal.500"
               color="white"
               fontSize="0.8rem"
-              boxSize="30px" // Ensure fallback has explicit size
+              boxSize="30px" 
               rounded="full"
             >
               {user.name ? (

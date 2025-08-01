@@ -100,9 +100,9 @@ function LoginPage() {
           </Text>
 
           <Field.Root id="email" invalid={!!form.formState.errors.email}>
-            {/* FormControl -> Field.Root, id được giữ lại */}
+            
             <Field.Label fontSize="sm">Email</Field.Label>
-            {/* FormLabel -> Field.Label */}
+            
             <InputGroup startElement={<Icon as={FiMail} color="gray.400" />}>
               <Input
                 type="text"
@@ -122,9 +122,9 @@ function LoginPage() {
 
           <Field.Root id="password" invalid={!!form.formState.errors.password}>
 
-            {/* FormControl -> Field.Root */}
+            
             <Field.Label fontSize="sm">Mật khẩu</Field.Label>
-            {/* FormLabel -> Field.Label */}
+            
             <InputGroup
               startElement={<Icon as={FiLock} color="gray.400" />}
               endElement={
@@ -165,7 +165,7 @@ function LoginPage() {
               <Checkbox.Label>Ghi nhớ đăng nhập</Checkbox.Label>
             </Checkbox.Root>
             <Link to="/forgot-password">
-              {/* Adjust route as needed */}
+              
               <Text
                 as="span"
                 fontSize="sm"

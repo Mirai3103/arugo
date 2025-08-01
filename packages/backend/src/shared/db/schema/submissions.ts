@@ -18,12 +18,12 @@ export const submissions = pgTable(
     id: uuid("id")
       .primaryKey()
       .default(sql`gen_random_uuid()`),
-    userId: varchar("user_id", { length: 100 }).notNull(), // FKs defined in index.ts or after all tables
+    userId: varchar("user_id", { length: 100 }).notNull(), 
     problemId: uuid("problem_id").notNull(),
     languageId: integer("language_id").notNull(),
     code: text("code").notNull(),
     status: varchar("status", { length: 50 }).notNull(),
-    executionTimeMs: integer("execution_time_ms").notNull(), // Should not have default if always set
+    executionTimeMs: integer("execution_time_ms").notNull(), 
     memoryUsageKb: integer("memory_usage_kb").default(256000).notNull(),
     submittedAt: timestamp("submitted_at", { mode: "date", precision: 6 }),
     createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
@@ -63,7 +63,7 @@ export const submissionTestcases = pgTable(
     testcaseId: uuid("testcase_id").notNull(),
     status: varchar("status", { length: 50 }).notNull(),
     stdout: text("stdout"),
-    problemId: uuid("problem_id").notNull(), // Prisma has this, though seems redundant if submission has problemId
+    problemId: uuid("problem_id").notNull(), 
     runtimeMs: integer("runtime_ms").default(1000).notNull(),
     memoryUsedKb: integer("memory_used_kb").default(256000).notNull(),
     createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),

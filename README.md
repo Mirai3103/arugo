@@ -1,84 +1,117 @@
-# Turborepo starter
+# Arugo 🚀
 
-This Turborepo starter is maintained by the Turborepo core team.
+A modern competitive programming platform built with TypeScript, featuring real-time code execution, AI-powered code review, and comprehensive contest management.
 
-## Using this example
+## ✨ Features
 
-Run the following command:
+- **🧩 Problem Solving**: Extensive library of coding problems with multiple difficulty levels
+- **🏆 Contests**: Organized programming contests with leaderboards and rankings
+- **🤖 AI Code Review**: Intelligent code analysis and scoring using multiple AI providers
+- **⚡ Real-time Execution**: Live code testing with immediate feedback
+- **📝 Rich Text Editor**: TipTap-based editor with syntax highlighting
+- **👥 User Management**: Complete authentication and user profile system
+- **📊 Analytics**: Detailed submission history and performance tracking
+- **🎯 Multi-language Support**: Support for various programming languages
 
-```sh
-npx create-turbo@latest
-```
+## 🏗️ Architecture
 
-## What's inside?
+This project is built as a monorepo using Turborepo with the following structure:
 
-This Turborepo includes the following packages/apps:
+### Apps
 
-### Apps and Packages
+- **`ui`**: Frontend application built with TanStack Start, Vite, and Chakra UI
+- **`server`**: Backend API server using Hono and Bun runtime
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Packages
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- **`@repo/backend`**: Core backend services, database schema, and business logic
+- **`@repo/auth`**: Authentication system using Better Auth
+- **`@repo/tiptap`**: Custom TipTap editor extensions and components
+- **`@repo/env`**: Environment configuration and validation
+- **`@repo/eslint-config`**: Shared ESLint configurations
+- **`@repo/typescript-config`**: Shared TypeScript configurations
 
-### Utilities
+## 🛠️ Tech Stack
 
-This Turborepo has some additional tools already setup for you:
+### Frontend
+- **Framework**: TanStack Start for SSR + React
+- **Styling**: Chakra UI v3 + Emotion
+- **Build Tool**: Vite
+- **Type Safety**: TypeScript
+- **State Management**: TanStack Query + Zustand
+- **Editor**: TipTap
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+### Backend
+- **Runtime**: Bun
+- **Framework**: Hono
+- **API**: tRPC
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: Better Auth
+- **Message Queue**: NATS
+- **AI Integration**: Multiple providers (OpenAI, Google AI, Mistral, etc.)
 
-### Build
+### DevOps & Tools
+- **Monorepo**: Turborepo
+- **Package Manager**: pnpm
+- **Linting**: ESLint + Prettier
+- **Database Migrations**: Drizzle Kit
 
-To build all apps and packages, run the following command:
+## 🚀 Getting Started
 
-```
-cd my-turborepo
-pnpm build
-```
+### Prerequisites
 
-### Develop
+- Node.js 18+
+- pnpm 10.14.0+
+- PostgreSQL database
+- Bun runtime
 
-To develop all apps and packages, run the following command:
+### Installation
 
-```
-cd my-turborepo
-pnpm dev
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Mirai3103/code-stack.git
+   cd code-stack
+   ```
 
-### Remote Caching
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+3. **Environment Setup**
+   - Copy `.env.example` to `.env` in each app/package that requires it
+   - Configure database connection strings
+   - Set up AI provider API keys
+   - Configure authentication providers
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+4. **Database Setup**
+   ```bash
+   # Generate database schema
+   pnpm run drizzle:generate
+   
+   # Push schema to database
+   pnpm run drizzle:push
+   ```
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+5. **Development**
+   ```bash
+   # Start all services in development mode
+   pnpm dev
+   
+   # Or start specific services
+   pnpm dev --filter=ui      # Frontend only
+   pnpm dev --filter=server  # Backend only
+   ```
 
-```
-cd my-turborepo
-npx turbo login
-```
+The application will be available at:
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:8000`
+- Database Studio: `pnpm drizzle:studio`
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Demo screen
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+https://res.cloudinary.com/dkvga054t/video/upload/v1754073274/cursorful-video-1754072797070_bw4czb.mp4
 
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+![Mô tả ảnh](./docs/readme/250802_00h46m53s_screenshot.png)
+![Mô tả ảnh](./docs/readme/250802_00h50m14s_screenshot.png)
+![Mô tả ảnh](./docs/readme/250802_00h50m36s_screenshot.png)

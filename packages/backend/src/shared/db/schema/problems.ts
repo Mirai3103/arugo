@@ -45,8 +45,8 @@ export const problems = pgTable(
 export const problemLanguages = pgTable(
   "problem_languages",
   {
-    problemId: uuid("problem_id").notNull(), // .references(() => problems.id, { onDelete: 'cascade' }),
-    languageId: integer("language_id").notNull(), // .references(() => languages.id, { onDelete: 'cascade' }),
+    problemId: uuid("problem_id").notNull(), 
+    languageId: integer("language_id").notNull(), 
     templateCode: text("template_code"),
     timeLimitMs: integer("time_limit_ms").default(1000).notNull(),
     memoryLimitKb: integer("memory_limit_kb").default(256000).notNull(),
@@ -68,8 +68,8 @@ export const problemLanguages = pgTable(
 export const problemTags = pgTable(
   "problem_tags",
   {
-    problemId: uuid("problem_id").notNull(), // .references(() => problems.id, { onDelete: 'cascade' }),
-    tagId: integer("tag_id").notNull(), // .references(() => tags.id, { onDelete: 'cascade' }),
+    problemId: uuid("problem_id").notNull(), 
+    tagId: integer("tag_id").notNull(), 
     createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
     createdBy: varchar("created_by", { length: 100 })
       .default("system")
@@ -92,7 +92,7 @@ export const testcases = pgTable(
       .primaryKey()
       .default(sql`gen_random_uuid()`),
     index: smallint("index").default(1).notNull(),
-    problemId: uuid("problem_id").notNull(), // .references(() => problems.id, { onDelete: 'cascade' }),
+    problemId: uuid("problem_id").notNull(), 
     inputData: text("input_data").notNull(),
     expectedOutput: text("expected_output").notNull(),
     isSample: boolean("is_sample").default(false).notNull(),

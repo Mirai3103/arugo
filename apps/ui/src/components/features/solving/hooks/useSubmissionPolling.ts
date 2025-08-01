@@ -1,7 +1,7 @@
 import { trpc } from "@/libs/query";
 
 import { usePromiseStore } from "@/stores/usePromiseStore";
-import { SubmissionTestcaseStatus } from "@/types/enum"; // Ensure this path is correct
+import { SubmissionTestcaseStatus } from "@/types/enum"; 
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
@@ -36,7 +36,7 @@ export function useSubmissionPolling(
     } else {
       promiseStore.rejectPending({
         status: "error",
-        error: submissionQuery.data?.status, // Or a more descriptive error from submissionQuery.data
+        error: submissionQuery.data?.status, 
       });
     }
   }, [submissionQuery.data, submissionId, promiseStore]);

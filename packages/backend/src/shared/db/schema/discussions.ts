@@ -7,8 +7,8 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-// import { users } from './users';
-// import { problems } from './problems';
+
+
 
 export const discussions = pgTable(
   "discussions",

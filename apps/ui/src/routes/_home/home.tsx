@@ -466,7 +466,7 @@ function HomePage() {
       </Grid>
       <PersonalizedRecommendationsSection />
 
-      {/* Sections that can appear below the main grid */}
+      
     </Container>
   );
 }

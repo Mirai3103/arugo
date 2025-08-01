@@ -59,7 +59,7 @@ export const ProblemDescriptionPanel = ({
           return value;
         }
       }
-      return "desc"; // Default value if no match found
+      return "desc"; 
     },
   });
   const params = useParams({
@@ -75,7 +75,7 @@ export const ProblemDescriptionPanel = ({
       h="100%"
       bg={bgColor}
       rounded={{ md: "lg" }}
-      overflowY="auto" // Allow scrolling within this panel
+      overflowY="auto" 
     >
       <Box p={{ base: 4, md: 6 }} flexGrow={1}>
         <Heading as="h1" size="lg" mb={4}>
@@ -191,7 +191,7 @@ export const ProblemDescriptionPanel = ({
             <FiThumbsUp />
           </IconButton>
           <Text fontSize="sm" color={subduedTextColor}>
-            {/* {problem.} */}
+            
           </Text>
           <IconButton aria-label="Không thích" variant="ghost" size="sm">
             <FiThumbsDown />
@@ -207,7 +207,7 @@ export const ProblemDescriptionPanel = ({
             <FiMessageCircle />
           </IconButton>
           <Text fontSize="sm" color={subduedTextColor}>
-            {/* {problem.comments} */}
+            
           </Text>
         </HStack>
         <IconButton aria-label="Chia sẻ" variant="ghost" size="sm">

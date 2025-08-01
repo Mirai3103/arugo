@@ -22,7 +22,7 @@ export function generateSkeletonRows(count = 10) {
         <Skeleton height="20px" width="60px" />
       </Table.Cell>
 
-      {/* Tags column */}
+      
       <Table.Cell>
         <HStack gap={1}>
           {Array.from(
@@ -49,19 +49,19 @@ export const ProblemsTableSkeleton = () => {
   const skeletonRows = React.useMemo(() => generateSkeletonRows(10), []);
   return (
     <Box>
-      {/* Search and Filters Skeleton */}
+      
       <Stack direction={{ base: "column", md: "row" }} gap={4} mb={6}>
-        {/* Search input skeleton */}
+        
         <Skeleton height="40px" width={{ base: "full", md: "300px" }} />
 
-        {/* Difficulty select skeleton */}
+        
         <Skeleton height="40px" width={{ base: "full", md: "200px" }} />
 
-        {/* Tags combobox skeleton */}
+        
         <Skeleton height="40px" width={{ base: "full", md: "200px" }} />
       </Stack>
 
-      {/* Table skeleton */}
+      
       <Box overflowX="auto">
         <Table.Root
           variant="line"
@@ -93,7 +93,7 @@ export const ProblemsTableSkeleton = () => {
         </Table.Root>
       </Box>
 
-      {/* Pagination skeleton */}
+      
       <HStack gap={2} mt={6} justifyContent="center">
         <Skeleton height="32px" width="32px" />
         <Skeleton height="32px" width="32px" />

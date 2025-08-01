@@ -6,7 +6,7 @@ interface EditorContextProps {
   monaco: React.RefObject<Monaco | null>;
   editor: React.RefObject<editor.IStandaloneCodeEditor | null>;
   language: string;
-  setLanguage: (lang: string) => void; // Optional: function to set the current language
+  setLanguage: (lang: string) => void; 
 }
 export const EditorContext = createContext<EditorContextProps | undefined>(
   undefined,
@@ -16,7 +16,7 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const monaco = useRef<Monaco | null>(null);
   const editor = useRef<editor.IStandaloneCodeEditor | null>(null);
-  const [language, setLanguage] = React.useState<string>("plaintext"); // Default language can be set here
+  const [language, setLanguage] = React.useState<string>("plaintext"); 
 
   return (
     <EditorContext.Provider value={{ monaco, editor, language, setLanguage }}>

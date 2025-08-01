@@ -148,6 +148,7 @@ const learningResourcesData = [
 
 // --- START: Main Banner ---
 const CommunityBanner = () => {
+  const navigate = useNavigate();
   return (
     <Box
       position="relative"
@@ -183,6 +184,7 @@ const CommunityBanner = () => {
           colorScheme="teal"
           size="lg"
           _hover={{ transform: "scale(1.05)", shadow: "lg" }}
+          onClick={() => navigate({ to: "/community/create" })}
         >
           <FiEdit />
           Tạo Bài Viết Mới
@@ -280,7 +282,7 @@ const PostCard = ({ post }: { post: PostBrief }) => {
       _hover={{ boxShadow: "md", transform: "scale(1.01)" }}
     >
       <Card.Body bg={cardBg}>
-        {/* CardBody -> Card.Body */}
+        
         <Flex direction={{ base: "column", sm: "row" }} gap={4}>
           <VStack
             alignItems={{ base: "flex-start", sm: "center" }}
@@ -288,7 +290,7 @@ const PostCard = ({ post }: { post: PostBrief }) => {
             w={{ base: "full", sm: "120px" }}
             flexShrink={0}
           >
-            {/* Avatar đã ở dạng v3 */}
+            
             <Avatar.Root size="md">
               <Avatar.Image
                 src={
@@ -335,7 +337,7 @@ const PostCard = ({ post }: { post: PostBrief }) => {
             <Wrap gap={1.5}>
               {post?.tags?.map((tag) => (
                 <WrapItem key={tag}>
-                  {/* Tag đã ở dạng v3 */}
+                  
                   <Tag.Root
                     size="sm"
                     variant="subtle"
@@ -386,25 +388,25 @@ const PostCard = ({ post }: { post: PostBrief }) => {
               </HStack>
               <HStack gap={1}>
                 <IconButton aria-label="Lưu bài viết" variant="ghost" size="sm">
-                  <FiBookmark /> {/* icon prop -> children */}
+                  <FiBookmark /> 
                 </IconButton>
                 <IconButton aria-label="Chia sẻ" variant="ghost" size="sm">
-                  <FiShare2 /> {/* icon prop -> children */}
+                  <FiShare2 /> 
                 </IconButton>
                 <Menu.Root>
-                  {/* Menu -> Menu.Root */}
+                  
                   <Menu.Trigger asChild>
-                    {/* MenuButton -> Menu.Trigger asChild */}
+                    
                     <IconButton variant="ghost" size="sm" aria-label="Tùy chọn">
-                      <FiMoreHorizontal /> {/* icon prop -> children */}
+                      <FiMoreHorizontal /> 
                     </IconButton>
                   </Menu.Trigger>
                   <Menu.Positioner>
-                    {/* Thêm Positioner */}
+                    
                     <Menu.Content>
-                      {/* MenuList -> Menu.Content */}
+                      
                       <Menu.Item value="report">Báo cáo</Menu.Item>
-                      {/* MenuItem -> Menu.Item, thêm value */}
+                      
                     </Menu.Content>
                   </Menu.Positioner>
                 </Menu.Root>
@@ -642,7 +644,7 @@ const CommunityGuidelinesCard = () => (
     _dark={{ bgGradient: "linear(to-br, blue.900, indigo.800)" }}
   >
     <List.Root gap={1.5}>
-      {/* List -> List.Root, prop 'gap' được giữ nguyên */}
+      
       {[
         "Tôn trọng và hỗ trợ thành viên khác.",
         "Không spam hoặc đăng nội dung quảng cáo.",
@@ -719,7 +721,7 @@ function CommunityPage() {
           mt={6}
         >
           <GridItem overflow="hidden">
-            {/* Added overflow hidden */}
+            
             <PostFilters />
             <VStack gap={5} align="stretch">
               {posts?.posts?.map((post) => (

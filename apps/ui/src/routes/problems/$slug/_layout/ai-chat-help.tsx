@@ -25,16 +25,16 @@ import {
 import React from "react";
 import { useSession } from "@/libs/auth/client";
 
-// Định nghĩa kiểu dữ liệu cho một thẻ gợi ý
+
 interface SuggestionCardProps {
   text: string;
   icon: React.ElementType;
 }
 
-// Component cho mỗi thẻ gợi ý
+
 const SuggestionCard: React.FC<SuggestionCardProps> = ({ text, icon }) => {
   return (
-    // Sử dụng Card.Root từ snippets của Chakra UI v3
+    
     <Card.Root
       bg={{ _light: "teal.100", _dark: "rgba(45, 212, 191, 0.1)" }}
       p={4}
@@ -60,9 +60,9 @@ const SuggestionCard: React.FC<SuggestionCardProps> = ({ text, icon }) => {
   );
 };
 
-// Component chính của giao diện Chat
+
 const ChatUI = () => {
-  // Dữ liệu cho các thẻ gợi ý
+  
   const suggestions: SuggestionCardProps[] = [
     { text: "What's the weather like today?", icon: LuSun },
     { text: "Share the closest coffee shop around me", icon: LuCoffee },
@@ -106,10 +106,10 @@ const ChatUI = () => {
         </SimpleGrid>
       </VStack>
 
-      {/* Spacer đẩy input xuống dưới cùng */}
+      
       <Spacer />
 
-      {/* Phần Input và footer */}
+      
       <VStack gap={2} w="100%" pb={4}>
         <HStack
           w="100%"
@@ -128,7 +128,7 @@ const ChatUI = () => {
           />
           <IconButton
             aria-label="Send message"
-            colorPalette="teal" // v3 sử dụng colorPalette
+            colorPalette="teal" 
             rounded="full"
           >
             <LuSend />

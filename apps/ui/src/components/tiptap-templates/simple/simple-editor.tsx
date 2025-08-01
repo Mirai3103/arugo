@@ -4,19 +4,13 @@ import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
 import { Image } from "@tiptap/extension-image"
-import { TaskItem } from "@tiptap/extension-task-item"
-import { TaskList } from "@tiptap/extension-task-list"
+import { TaskItem, TaskList } from "@tiptap/extension-list"
 import { TextAlign } from "@tiptap/extension-text-align"
 import { Typography } from "@tiptap/extension-typography"
 import { Highlight } from "@tiptap/extension-highlight"
 import { Subscript } from "@tiptap/extension-subscript"
 import { Superscript } from "@tiptap/extension-superscript"
-import { Underline } from "@tiptap/extension-underline"
-
-// --- Custom Extensions ---
-import { Link } from "@/components/tiptap-extension/link-extension"
-import { Selection } from "@/components/tiptap-extension/selection-extension"
-import { TrailingNode } from "@/components/tiptap-extension/trailing-node-extension"
+import { Selection } from "@tiptap/extensions"
 
 // --- UI Primitives ---
 import { Button } from "@/components/tiptap-ui-primitive/button"
@@ -29,16 +23,20 @@ import {
 
 // --- Tiptap Node ---
 import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
+import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
+import "@/components/tiptap-node/blockquote-node/blockquote-node.scss"
 import "@/components/tiptap-node/code-block-node/code-block-node.scss"
+import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss"
 import "@/components/tiptap-node/list-node/list-node.scss"
 import "@/components/tiptap-node/image-node/image-node.scss"
+import "@/components/tiptap-node/heading-node/heading-node.scss"
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss"
 
 // --- Tiptap UI ---
 import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
 import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button"
 import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu"
-import { BlockQuoteButton } from "@/components/tiptap-ui/blockquote-button"
+import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button"
 import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button"
 import {
   ColorHighlightPopover,
@@ -60,9 +58,10 @@ import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon"
 import { LinkIcon } from "@/components/tiptap-icons/link-icon"
 
 // --- Hooks ---
-import { useMobile } from "@/hooks/use-mobile"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { useWindowSize } from "@/hooks/use-window-size"
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
+import { useScrolling } from "@/hooks/use-scrolling"
 
 // --- Components ---
 import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
@@ -74,8 +73,6 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 import "@/components/tiptap-templates/simple/simple-editor.scss"
 
 import content from "@/components/tiptap-templates/simple/data/content.json"
-import { chakra } from "@chakra-ui/react"
-import { PROSE_STYLES } from "@/components/ui/prose"
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -98,9 +95,12 @@ const MainToolbarContent = ({
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <HeadingDropdownMenu levels={[1, 2, 3, 4]} />
-        <ListDropdownMenu types={["bulletList", "orderedList", "taskList"]} />
-        <BlockQuoteButton />
+        <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
+        <ListDropdownMenu
+          types={["bulletList", "orderedList", "taskList"]}
+          portal={isMobile}
+        />
+        <BlockquoteButton />
         <CodeBlockButton />
       </ToolbarGroup>
 
@@ -181,10 +181,9 @@ const MobileToolbarContent = ({
     )}
   </>
 )
-const ChakraEditorContent = chakra(EditorContent,PROSE_STYLES)
 
 export function SimpleEditor() {
-  const isMobile = useMobile()
+  const isMobile = useIsMobile()
   const windowSize = useWindowSize()
   const [mobileView, setMobileView] = React.useState<
     "main" | "highlighter" | "link"
@@ -193,18 +192,26 @@ export function SimpleEditor() {
 
   const editor = useEditor({
     immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
     editorProps: {
       attributes: {
         autocomplete: "off",
         autocorrect: "off",
         autocapitalize: "off",
         "aria-label": "Main content area, start typing to enter text.",
+        class: "simple-editor",
       },
     },
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        horizontalRule: false,
+        link: {
+          openOnClick: false,
+          enableClickSelection: true,
+        },
+      }),
+      HorizontalRule,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Underline,
       TaskList,
       TaskItem.configure({ nested: true }),
       Highlight.configure({ multicolor: true }),
@@ -212,7 +219,6 @@ export function SimpleEditor() {
       Typography,
       Superscript,
       Subscript,
-
       Selection,
       ImageUploadNode.configure({
         accept: "image/*",
@@ -221,13 +227,12 @@ export function SimpleEditor() {
         upload: handleImageUpload,
         onError: (error) => console.error("Upload failed:", error),
       }),
-      TrailingNode,
-      Link.configure({ openOnClick: false }),
     ],
-    content: content,
+    content,
   })
 
-  const bodyRect = useCursorVisibility({
+  const isScrolling = useScrolling()
+  const rect = useCursorVisibility({
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
   })
@@ -239,41 +244,41 @@ export function SimpleEditor() {
   }, [isMobile, mobileView])
 
   return (
-    <EditorContext.Provider value={{ editor }}>
-      <Toolbar
-        ref={toolbarRef}
-        style={
-          isMobile
-            ? {
-                bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-              }
-            : {}
-        }
-      >
-        {mobileView === "main" ? (
-          <MainToolbarContent
-            onHighlighterClick={() => setMobileView("highlighter")}
-            onLinkClick={() => setMobileView("link")}
-            isMobile={isMobile}
-          />
-        ) : (
-          <MobileToolbarContent
-            type={mobileView === "highlighter" ? "highlighter" : "link"}
-            onBack={() => setMobileView("main")}
-          />
-        )}
-      </Toolbar>
+    <div className="simple-editor-wrapper">
+      <EditorContext.Provider value={{ editor }}>
+        <Toolbar
+          ref={toolbarRef}
+          style={{
+            ...(isScrolling && isMobile
+              ? { opacity: 0, transition: "opacity 0.1s ease-in-out" }
+              : {}),
+            ...(isMobile
+              ? {
+                  bottom: `calc(100% - ${windowSize.height - rect.y}px)`,
+                }
+              : {}),
+          }}
+        >
+          {mobileView === "main" ? (
+            <MainToolbarContent
+              onHighlighterClick={() => setMobileView("highlighter")}
+              onLinkClick={() => setMobileView("link")}
+              isMobile={isMobile}
+            />
+          ) : (
+            <MobileToolbarContent
+              type={mobileView === "highlighter" ? "highlighter" : "link"}
+              onBack={() => setMobileView("main")}
+            />
+          )}
+        </Toolbar>
 
-      <div className="content-wrapper">
-        <ChakraEditorContent
+        <EditorContent
           editor={editor}
           role="presentation"
           className="simple-editor-content"
-          w={"100%"}
-          maxW={'99%'}
-          size={"lg"}
         />
-      </div>
-    </EditorContext.Provider>
+      </EditorContext.Provider>
+    </div>
   )
 }

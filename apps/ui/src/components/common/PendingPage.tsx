@@ -37,9 +37,9 @@ export default function PendingPage({
         minH="400px"
         justify="center"
       >
-        {/* Loading Animation */}
+        
         <Box position="relative">
-          {/* Outer Ring */}
+          
           <Box
             w={24}
             h={24}
@@ -51,17 +51,17 @@ export default function PendingPage({
             left={0}
           />
 
-          {/* Spinner */}
+          
           <Spinner
-            borderWidth="4px" // thickness -> borderWidth
-            animationDuration="0.8s" // speed -> animationDuration
+            borderWidth="4px" 
+            animationDuration="0.8s" 
             color="teal.500"
             size="xl"
             w={24}
             h={24}
           />
 
-          {/* Center Icon */}
+          
           <Box
             position="absolute"
             top="50%"
@@ -80,7 +80,7 @@ export default function PendingPage({
           </Box>
         </Box>
 
-        {/* Content */}
+        
         <VStack gap={4} align="center">
           <Heading
             size={{ base: "lg", md: "xl" }}
@@ -100,7 +100,7 @@ export default function PendingPage({
           </Text>
         </VStack>
 
-        {/* Progress Bar */}
+        
         {showProgress && (
           <VStack gap={3} w="full" maxW="md">
             <Progress.Root
@@ -126,7 +126,7 @@ export default function PendingPage({
           </VStack>
         )}
 
-        {/* Loading Dots Animation */}
+        
         <HStack gap={2}>
           {[0, 1, 2].map((index) => (
             <Box
@@ -154,7 +154,7 @@ export default function PendingPage({
           ))}
         </HStack>
 
-        {/* Subtle Help Text */}
+        
         <Text
           fontSize="xs"
           color={{ base: "gray.400", _dark: "gray.600" }}

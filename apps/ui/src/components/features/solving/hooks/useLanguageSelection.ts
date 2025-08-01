@@ -1,5 +1,5 @@
 import { createListCollection } from "@chakra-ui/react";
-import type { ValueChangeDetails } from "node_modules/@chakra-ui/react/dist/types/components/select/namespace"; // Verify this path
+import type { ValueChangeDetails } from "node_modules/@chakra-ui/react/dist/types/components/select/namespace"; 
 import { useCallback, useMemo } from "react";
 import { useEditorContext } from "../contexts/EditorContext";
 
