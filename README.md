@@ -13,24 +13,6 @@ A modern competitive programming platform built with TypeScript, featuring real-
 - **📊 Analytics**: Detailed submission history and performance tracking
 - **🎯 Multi-language Support**: Support for various programming languages
 
-## 🏗️ Architecture
-
-This project is built as a monorepo using Turborepo with the following structure:
-
-### Apps
-
-- **`ui`**: Frontend application built with TanStack Start, Vite, and Chakra UI
-- **`server`**: Backend API server using Hono and Bun runtime
-
-### Packages
-
-- **`@repo/backend`**: Core backend services, database schema, and business logic
-- **`@repo/auth`**: Authentication system using Better Auth
-- **`@repo/tiptap`**: Custom TipTap editor extensions and components
-- **`@repo/env`**: Environment configuration and validation
-- **`@repo/eslint-config`**: Shared ESLint configurations
-- **`@repo/typescript-config`**: Shared TypeScript configurations
-
 ## 🛠️ Tech Stack
 
 ### Frontend
