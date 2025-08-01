@@ -10,24 +10,24 @@
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-	out: "./src/server/db/migrations",
-	dialect: "postgresql",
-	schema: "./src/server/db/schema/index.ts",
+  out: "./src/shared/db/migrations",
+  dialect: "postgresql",
+  schema: "./src/shared/db/schema/index.ts",
 
-	dbCredentials: {
-		url: process.env.DATABASE_URL || "postgres://localhost:5432/leetcode_clone",
-	},
-	schemaFilter: "public",
-	tablesFilter: "*",
-	introspect: {
-		casing: "camel",
-	},
-	migrations: {
-		prefix: "timestamp",
-		table: "__drizzle_migrations__",
-		schema: "public",
-	},
-	breakpoints: true,
-	strict: true,
-	verbose: true,
+  dbCredentials: {
+    url: process.env.DATABASE_URL || "postgres://localhost:5432/leetcode_clone",
+  },
+  schemaFilter: "public",
+  tablesFilter: "*",
+  introspect: {
+    casing: "camel",
+  },
+  migrations: {
+    prefix: "timestamp",
+    table: "__drizzle_migrations__",
+    schema: "public",
+  },
+  breakpoints: true,
+  strict: true,
+  verbose: true,
 });

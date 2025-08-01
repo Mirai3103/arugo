@@ -4,15 +4,15 @@ import { Box } from "@chakra-ui/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_home")({
-	component: RouteComponent,
+  component: RouteComponent,
 });
 
 function RouteComponent() {
-	return (
-		<Box>
-			<Header />
-			<Outlet />
-			<Footer />
-		</Box>
-	);
+  return (
+    <Box maxH={"100vh"} overflowX={"auto"}>
+      <Header />
+      <Outlet />
+      <Footer />
+    </Box>
+  );
 }

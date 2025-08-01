@@ -1,0 +1,1 @@
+ALTER TABLE "submissions" ADD COLUMN "pass_ratio" integer DEFAULT 0 NOT NULL;

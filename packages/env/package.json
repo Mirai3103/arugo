@@ -4,11 +4,7 @@
 	"type": "module",
 	"private": true,
 	"exports": {
-		".": {
-			"import":"./dist/index.js",
-			"types": "./dist/index.d.ts"
-			
-		}
+		".": "./src/index.ts"
 	},
 	"devDependencies": {
 		"@repo/eslint-config": "workspace:*",
@@ -19,12 +15,8 @@
 		"typescript": "^5"
 	},
 	"dependencies": {
-	
-		"@t3-oss/env-core": "^0.13.6",	
-		"zod": "^3.25.32"
-	},
-	"scripts": {
-		"build": "mkdir -p dist",
-		"build:dev": "mkdir -p dist"
+		"@t3-oss/env-core": "^0.13.8",
+		"zod": "^4.0.14"
 	}
+
 }

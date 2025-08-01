@@ -2,23 +2,31 @@
   "name": "code-stack",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
+    "build": "turbo run build ",
+    "dev": "turbo run dev ",
+    "package:dev": "turbo run build:dev --filter='./packages/*'",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "tsup": "^8.5.0",
-    "turbo": "^2.5.3",
-    "typescript": "5.8.3"
+    "turbo": "^2.5.5",
+    "typescript": "5.9.2"
   },
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.14.0",
   "engines": {
     "node": ">=18"
   },
   "module": "index.ts",
-  "type": "module"
+  "type": "module",
+  "pnpm": {
+  "overrides": {
+    "@tiptap/core": "3.0.9",
+    "@tiptap/extension-horizontal-rule": "3.0.9"
+  }
+}
+
 }

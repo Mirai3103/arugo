@@ -1,46 +1,53 @@
 import { create } from "zustand";
+
+interface PendingPromise {
+  resolve: (data: any) => void;
+  reject: (error: any) => void;
+}
+
 interface PromiseStore {
-	pending: Map<
-		string,
-		{
-			resolve: (data: any) => void;
-			reject: (err: any) => void;
-		}
-	>;
-	addPending: (id: string, handlers: { resolve: any; reject: any }) => void;
-	resolvePending: (id: string, result: any) => void;
-	rejectPending: (id: string, error: any) => void;
-	isPending: (id: string) => boolean;
-	getFirstPending: () => string | null;
+  pending?: PendingPromise;
+  type?: "test" | "submit";
+  id?: string;
+
+  addPending: (
+    id: string,
+    handlers: PendingPromise,
+    type: "test" | "submit",
+  ) => void;
+  resolvePending: (result: any) => void;
+  rejectPending: (error: any) => void;
+  isPending: () => boolean;
+  getFirstPending: () => string | null;
+  clearPending: () => void;
 }
 
 export const usePromiseStore = create<PromiseStore>((set, get) => ({
-	pending: new Map(),
+  addPending: (id, handlers, type) => {
+    set({ id, pending: handlers, type });
+  },
 
-	addPending: (id, handlers) => {
-		get().pending.set(id, handlers);
-		set({ pending: new Map(get().pending) });
-	},
+  resolvePending: (result) => {
+    const { pending } = get();
+    if (pending) {
+      pending.resolve(result);
+      get().clearPending();
+    }
+  },
 
-	resolvePending: (id, result) => {
-		const handlers = get().pending.get(id);
-		if (handlers) {
-			handlers.resolve(result);
-			get().pending.delete(id);
-			set({ pending: new Map(get().pending) });
-		}
-	},
+  rejectPending: (error) => {
+    const { pending } = get();
+    if (pending) {
+      pending.reject(error);
+      get().clearPending();
+    }
+  },
 
-	rejectPending: (id, error) => {
-		const handlers = get().pending.get(id);
-		if (handlers) {
-			handlers.reject(error);
-			get().pending.delete(id);
-			set({ pending: new Map(get().pending) });
-		}
-	},
-	isPending: (id) => get().pending.has(id),
-	getFirstPending: () => {
-		return get().pending.keys().next().value || null;
-	},
+  clearPending: () => {
+    set({ pending: undefined, id: undefined, type: undefined });
+  },
+
+  isPending: () => !!get().pending,
+
+  getFirstPending: () => get().id ?? null,
 }));

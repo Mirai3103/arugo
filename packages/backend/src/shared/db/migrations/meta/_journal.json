@@ -1,20 +1,69 @@
 {
-	"version": "7",
-	"dialect": "postgresql",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "7",
-			"when": 1748158701360,
-			"tag": "20250525073821_simple_boomer",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "7",
-			"when": 1748190190502,
-			"tag": "20250525162310_strange_madame_masque",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1748158701360,
+      "tag": "20250525073821_simple_boomer",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1748190190502,
+      "tag": "20250525162310_strange_madame_masque",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749379514286,
+      "tag": "20250608104514_jittery_spectrum",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1749484321049,
+      "tag": "20250609155201_stormy_captain_america",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1749536849047,
+      "tag": "20250610062729_icy_groot",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1749801310993,
+      "tag": "20250613075510_naive_mordo",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1749806079160,
+      "tag": "20250613091439_fixed_the_watchers",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1751207939322,
+      "tag": "20250629143859_zippy_scarlet_witch",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1751355876998,
+      "tag": "20250701074436_grey_triton",
+      "breakpoints": true
+    }
+  ]
 }

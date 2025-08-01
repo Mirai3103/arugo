@@ -1,16 +1,32 @@
 import { Hono } from "hono";
 import { trpcServer } from "@hono/trpc-server";
-import { appRouter } from "@repo/trpc";
-import { auth, type AuthType } from "@repo/auth/server";
+import { trpcRouter } from "@repo/backend/trpc/routers/index";
+import { createTRPCContext } from "@repo/backend/trpc/trpc";
+import type { AuthType } from "@repo/auth/server";
+import { auth } from "@repo/auth/server";
 import { cors } from "hono/cors";
-import { createTRPCContext } from "@repo/trpc/caller";
-const app = new Hono<{ Variables: AuthType }>();
+import { initConsumer } from '@repo/backend/index'
+initConsumer();
+const app = new Hono<{ Variables: AuthType }>({
+	strict: false,
+});
+// app.use('*',async (c, next) => {
+//  const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
+//   	if (!session) {
+//     	c.set("user", null);
+//     	c.set("session", null);
+//     	return next();
+//   	}
 
+//   	c.set("user", session.user);
+//   	c.set("session", session.session);
+//   	return next();
+// })
 app.use(
-	"/api/auth/*",
+	"*", // or replace with "*" to enable cors for all routes
 	cors({
-		origin: "http://localhost:3000",
+		origin: "http://localhost:3000", // replace with your origin
 		allowHeaders: ["Content-Type", "Authorization"],
 		allowMethods: ["POST", "GET", "OPTIONS"],
 		exposeHeaders: ["Content-Length"],
@@ -18,46 +34,27 @@ app.use(
 		credentials: true,
 	})
 );
-
-app.on(["POST", "GET"], "/auth/*", (c) => {
+app.use("*", (c, next) => {
+  console.log("Request received:", c.req.method, c.req.url);
+  return next();
+});
+app.on(["POST", "GET"], "/api/auth/*", (c) => {
 	return auth.handler(c.req.raw);
 });
-app.use("*", async (c, next) => {
-	const session = await auth.api.getSession({ headers: c.req.raw.headers });
-
-	if (!session) {
-		c.set("user", null);
-		c.set("session", null);
-		return next();
-	}
-
-	c.set("user", session.user);
-	c.set("session", session.session);
-	return next();
-});
-
 app.use(
-	"/api/trpc/*",
-	cors({
-		origin: "*",
-		allowMethods: ["*"],
-		allowHeaders: ["*"],
-	})
-).use(
-	"/api/trpc/*",
+	"/trpc/*",
 	trpcServer({
-		endpoint: "/api/trpc",
-		router: appRouter,
-		createContext(opts, c) {
-			return createTRPCContext({
-				headers: c.req.raw.headers,
-				auth: {
-					user: c.get("user"),
-					session: c.get("session"),
-				},
+		router: trpcRouter as any,
+		createContext: async (c) => {
+			const session = await auth.api.getSession({
+				headers: c.req.headers,
 			});
+			return await createTRPCContext({ session });
 		},
 	})
 );
-export type AppType = typeof app;
-export default { port: 8080, fetch: app.fetch };
+
+export default {
+	port: 8080,
+	fetch: app.fetch,
+};
