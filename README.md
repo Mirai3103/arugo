@@ -92,7 +92,7 @@ The application will be available at:
 
 ## Demo screen
 
-https://res.cloudinary.com/dkvga054t/video/upload/v1754073274/cursorful-video-1754072797070_bw4czb.mp4
+[![Demo Video](https://img.youtube.com/vi/Nvf0jh8Utwc/0.jpg)](https://res.cloudinary.com/dkvga054t/video/upload/v1754073274/cursorful-video-1754072797070_bw4czb.mp4)
 
 ![Mô tả ảnh](./docs/readme/250802_00h46m53s_screenshot.png)
 ![Mô tả ảnh](./docs/readme/250802_00h50m14s_screenshot.png)
